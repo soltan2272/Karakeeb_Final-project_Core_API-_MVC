@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\.editorconfig" Link=".editorconfig" />
+	  <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
+	  <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
   <ItemGroup>
