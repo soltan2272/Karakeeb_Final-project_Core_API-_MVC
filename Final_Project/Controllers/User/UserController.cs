@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using Reposotries;
 using System;
 using System.Collections.Generic;
@@ -15,10 +16,18 @@ namespace Final_Project.Controllers.User
     {
      
         IUserRepository UserRepository;
+        IGenericRepostory<Order> OrderRepo;
+        IGenericRepostory<Feedback> FeedbackRepo;
+
+        IUnitOfWork UnitOfWork;
+        ResultViewModel result = new ResultViewModel();
+
         public UserController(IUserRepository userRepository, IUnitOfWork unitOfWork)
         {
+            UnitOfWork = unitOfWork;
             UserRepository = userRepository;
-           
+            OrderRepo = UnitOfWork.GetOrderRepo();
+            FeedbackRepo = UnitOfWork.GetFeedbackRepo();
         }
 
 
@@ -50,6 +59,56 @@ namespace Final_Project.Controllers.User
             return Ok(result);
         }
 
-    
+
+        [HttpPost("addorder")]
+        public ResultViewModel AddOrder(Order order)
+        {
+            result.Message = "Add User Order";
+
+            OrderRepo.Add(order);
+            UnitOfWork.Save();
+            result.Data = order;
+
+            return result;
+
+        }
+
+        [HttpDelete("deleteorder")]
+        public ResultViewModel DeleteOrder(int id)
+        {
+            result.Message = " Order Deleted";
+            result.Data = OrderRepo.GetByID(id);
+            OrderRepo.Remove(new Order { ID = id});
+            UnitOfWork.Save();
+
+            return result;
+
+        }
+
+        [HttpPut("editorder")]
+        public ResultViewModel EditOrder(Order order)
+        {
+
+            result.Message = "edit order";
+            result.Data = order;
+            OrderRepo.Update(order);
+            UnitOfWork.Save();
+            return result;
+        }
+
+        [HttpPost("addfeedback")]
+        public ResultViewModel AddFeedback(Feedback feedback)
+        {
+            result.Message = "Add User Feedback";
+
+            FeedbackRepo.Add(feedback);
+            UnitOfWork.Save();
+            result.Data = feedback;
+
+            return result;
+
+        }
+
+
     }
 }
