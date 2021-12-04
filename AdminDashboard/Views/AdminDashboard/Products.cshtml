@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewData["Title"] = "Products";
+}
+
+<button id="btn">products</button>
+<table class="table">
+    <thead>
+        <tr>
+
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Rate</th>
+            <th scope="col">Image</th>
+            <th scope="col">Display</th>
+            <th scope="col">Update</th>
+            <th scope="col">Delete</th>
+        </tr>
+    </thead>
+    <tbody id="products">
+    </tbody>
+</table>
+
+<script>
+    function Display(id) {
+        $.get("https://localhost:44354/api/product/" + id, function (data, status) {
+            var Data = data.data;
+            console.log(Data);
+        })
+    }
+     function Update( id) {
+         $.get("https://localhost:44354/api/product/" + id, function (data, status) {
+                    var Data = data.data;
+                    console.log(Data);
+      })
+     }
+    function Delete(id) {
+        //$.post("https://localhost:44354/product/delete" + id, function (data, status) {
+        //    var Data = data.data;
+        //    console.log(Data);
+        //})
+    }
+    $(document).ready(function () {
+                            $("#btn").click(function () {
+                                $.get("https://localhost:44354/api/product", function (data, status) {
+                                    var Data = data.data;
+
+                                    Data.forEach(function (dt) {
+                                        $("#products").append("<tr>" +
+                                            "<td>" + dt.id + "</td>" +
+                                            "<td>" + dt.name + "</td>" +
+                                            "<td>" + dt.price + "</td>" +
+                                            "<td>" + dt.rate + "</td>" +
+                                            "<td><img width='30vw' height='30vw' src='" + dt.image + "' /></td>" +
+                                            "<td><button class='btn btn-dark'onclick='Display(" + dt.id + ")'>Display </button> </td>" +
+                                            "<td><button class='btn btn-primary'onclick='Update(" + dt.id + ")'>Update </button> </td>" +
+                                            "<td><button class='btn btn-danger'onclick='Delete(" + dt.id + ")'>Delete </button> </td>" +
+
+
+
+
+
+
+                                            + "</tr>")
+                                    })
+                                })
+                            })
+                        })
+    //function viewProduct() {
+    //    $.ajax({
+    //        url: "https://localhost:44354/product",
+    //        method: "Get",
+    //        success: function (data) {
+    //            console.log(data);
+    //            $(".id").append("<tr><td>" + data + "<td/> </tr>");
+
+    //        },
+    //        error: function (error) {
+    //            console.error(error);
+
+    //        },
+    //    })
+    //}
+</script>

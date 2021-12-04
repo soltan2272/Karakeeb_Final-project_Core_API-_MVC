@@ -37,9 +37,7 @@ namespace Final_Project
             services.AddControllers();
             services.Configure<MailSetting>(Configuration.GetSection("MailSettings"));
             services.AddTransient<IEmailService, MailingService>();
-
-
-            services.AddDbContext<Project_Context>(options => {
+          services.AddDbContext<Project_Context>(options => {
                 options.UseSqlServer(Configuration.GetConnectionString("KaraKeep"));
             });
             services.AddIdentity<User,Role>()
@@ -89,23 +87,22 @@ namespace Final_Project
 
             app.UseCors(builer =>
             {
-                builer.WithOrigins("https://localhost:44393");
+                builer.WithOrigins("https://localhost:44331");
                 builer.AllowAnyMethod();
                 builer.AllowAnyHeader();
 
-
-
-                app.UseAuthentication();
-                app.UseAuthorization();
-
-                app.UseEndpoints(endpoints =>
-                {
-                    endpoints.MapControllers();
-                });
-
-                app.UseSwagger();
-                app.UseSwaggerUI();
             });
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
     }
 }
