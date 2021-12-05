@@ -15,7 +15,5 @@ namespace Models
         public User User { get; set; }
         public IList<ProductFeedback> productFeedbacks { get; set; }
 
-
-
     }
 }

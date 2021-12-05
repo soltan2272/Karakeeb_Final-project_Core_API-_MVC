@@ -9,6 +9,7 @@
 	  <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
 	  <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.12" />
+<<<<<<< HEAD
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
   </ItemGroup>
@@ -19,6 +20,9 @@
     <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\Reposotries\Reposotries.csproj" />
     <ProjectReference Include="..\ViewModels\ViewModels.csproj" />
+=======
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+>>>>>>> 2aada4b6ce84a4d67486acc26bbe9b34f4d401dd
   </ItemGroup>
 
 </Project>

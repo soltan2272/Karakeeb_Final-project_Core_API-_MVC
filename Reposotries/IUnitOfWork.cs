@@ -9,7 +9,7 @@ namespace Reposotries
 {
     public interface IUnitOfWork
     {
-        IGenericRepostory<Admin> GetAdminRepo();
+       // IGenericRepostory<Admin> GetAdminRepo();
         IGenericRepostory<Category> GetCategoryRepo();
         IGenericRepostory<Contact> GetContactRepo();
         IGenericRepostory<Courier> GetCourierRepo();
@@ -19,7 +19,7 @@ namespace Reposotries
         IGenericRepostory<Payment> GetPaymentRepo();
         IGenericRepostory<Product> GetProductRepo();
         IGenericRepostory<Store> GetStoreRepo();
-        IGenericRepostory<Supplier> GetSupplierRepo();
+      //  IGenericRepostory<Supplier> GetSupplierRepo();
        /*IGenericRepostory<User> GetUserRepo();*/
         Task Save();
 
