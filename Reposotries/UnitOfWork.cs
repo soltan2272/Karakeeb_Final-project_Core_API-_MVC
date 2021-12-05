@@ -13,7 +13,7 @@ namespace Reposotries
         Project_Context Context;
 
         IGenericRepostory<Category> CategoryRepo;
-        IGenericRepostory<Contact> ContactRepo;
+      //  IGenericRepostory<Contact> ContactRepo;
         IGenericRepostory<Courier> CourierRepo;
         IGenericRepostory<Feedback> FeedbackRepo;
         IGenericRepostory<Offer> OfferRepo;
@@ -22,7 +22,7 @@ namespace Reposotries
         IGenericRepostory<Product> ProductRepo;
         IGenericRepostory<Store> StoreRepo;
         public UnitOfWork(Project_Context context,
-                            IGenericRepostory<Category> categoryRepo, IGenericRepostory<Contact> contactRepo,
+                            IGenericRepostory<Category> categoryRepo,// IGenericRepostory<Contact> contactRepo,
                             IGenericRepostory<Courier> courierRepo, IGenericRepostory<Feedback> feedbackRepo,
                             IGenericRepostory<Offer> offerRepo, IGenericRepostory<Order> orderRepo,
                             IGenericRepostory<Payment> paymentRepo, IGenericRepostory<Product> productRepo,
@@ -30,7 +30,7 @@ namespace Reposotries
         {
             Context = context;
             CategoryRepo = categoryRepo;
-            ContactRepo = contactRepo;
+           // ContactRepo = contactRepo;
             CourierRepo = courierRepo;
             FeedbackRepo = feedbackRepo;
             OfferRepo = offerRepo;
@@ -45,11 +45,11 @@ namespace Reposotries
             return CategoryRepo;
 
         }
-        public IGenericRepostory<Contact> GetContactRepo()
+      /*  public IGenericRepostory<Contact> GetContactRepo()
         {
             return ContactRepo;
 
-        }
+        }*/
         public IGenericRepostory<Courier> GetCourierRepo()
         {
             return CourierRepo;

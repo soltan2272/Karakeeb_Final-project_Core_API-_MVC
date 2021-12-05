@@ -28,9 +28,5 @@ namespace Models
 
         public ICollection<Product> Products { get; set; }
 
-        public Contact Contacts { get; set; }
-
-        public int CurrentContactID { get; set; }
-
     }
 }

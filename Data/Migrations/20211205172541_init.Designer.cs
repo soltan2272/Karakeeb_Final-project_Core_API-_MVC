@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(Project_Context))]
-    [Migration("20211205151116_init")]
+    [Migration("20211205172541_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -172,35 +172,6 @@ namespace Data.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Category");
-                });
-
-            modelBuilder.Entity("Models.Contact", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Facebook")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Twitter")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Contact");
                 });
 
             modelBuilder.Entity("Models.Courier", b =>
@@ -557,9 +528,6 @@ namespace Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CurrentContactID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Date_Of_Birth")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -619,8 +587,6 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CurrentContactID");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -874,25 +840,9 @@ namespace Data.Migrations
                     b.Navigation("supplier");
                 });
 
-            modelBuilder.Entity("Models.User", b =>
-                {
-                    b.HasOne("Models.Contact", "Contacts")
-                        .WithMany("Admins")
-                        .HasForeignKey("CurrentContactID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Contacts");
-                });
-
             modelBuilder.Entity("Models.Category", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("Models.Contact", b =>
-                {
-                    b.Navigation("Admins");
                 });
 
             modelBuilder.Entity("Models.Courier", b =>

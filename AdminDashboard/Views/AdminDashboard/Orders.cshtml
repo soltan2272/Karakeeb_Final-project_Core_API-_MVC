@@ -5,7 +5,89 @@
 
 <h1>Orders</h1>
 
+<<<<<<< HEAD
 @section Orders
 {
     active
 }
+=======
+<table class="table">
+    <thead>
+        <tr>
+
+            <th scope="col">Index</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Delivery_Status</th>
+            <th scope="col">CurrentPaymentID</th>
+            <th scope="col">Order_Date</th>
+            <th scope="col">Display</th>
+            <th scope="col">Update</th>
+            <th scope="col">Delete</th>
+        </tr>
+    </thead>
+    <tbody id="Orders">
+    </tbody>
+</table>
+
+<script>
+    function Display(id) {
+        $.get("https://localhost:44354/User/" + id, function (data, status) {
+            var Data = data.data;
+            console.log(Data);
+        })
+    }
+     function Update( id) {
+      $.get("https://localhost:44354/User/" + id, function (data, status) {
+                    var Data = data.data;
+                    console.log(Data);
+      })
+     }
+    function Delete(id) {
+        $.post("https://localhost:44354/User/delete" + id, function (data, status) {
+            var Data = data.data;
+            console.log(Data);
+        })
+    }
+    $(document).ready(function () {
+                            $("#btn").click(function () {
+                                $.get("https://localhost:44354/User", function (data, status) {
+                                    var Data = data.data;
+                                    var i = 0;
+                                    Data.forEach(function (dt) {
+                                        $("#Orders").append("<tr>" +
+                                            "<td>" + i+1  + "</td>" +
+                                            "<td>" + dt.Quantity + "</td>" +
+                                            "<td>" + dt.Delivery_Status + "</td>" +
+                                            "<td>" + dt.CurrentPaymentID + "</td>" +
+                                            "<td>" + dt.Order_Date + "</td>" +
+                                            "<td><button class='btn btn-dark'onclick='Display(" + dt.id + ")'>Display </button> </td>" +
+                                            "<td><button class='btn btn-primary'onclick='Update(" + dt.id + ")'>Update </button> </td>" +
+                                            "<td><button class='btn btn-danger'onclick='Delete(" + dt.id + ")'>Delete </button> </td>" +
+                                            "<td><a class='btn btn-dark' asp-action='Detiles' asp-route=" + dt.id + ">Display</a></td>"
+
+
+                                            + "</tr>")
+                                    })
+                                })
+                            })
+                        })
+    //function viewProduct() {
+    //    $.ajax({
+    //        url: "https://localhost:44354/product",
+    //        method: "Get",
+    //        success: function (data) {
+    //            console.log(data);
+    //            $(".id").append("<tr><td>" + data + "<td/> </tr>");
+
+    //        },
+    //        error: function (error) {
+    //            console.error(error);
+
+    //        },
+    //    })
+    //}
+</script>
+
+
+
+>>>>>>> 0b92d999796dfebe11e3b237bcc8fc830039c5f9
