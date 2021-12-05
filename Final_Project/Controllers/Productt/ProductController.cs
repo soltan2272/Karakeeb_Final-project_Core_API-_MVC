@@ -21,6 +21,8 @@ namespace Final_Project.Controllers
         IGenericRepostory<Store> StoreRepo;
         IUnitOfWork UnitOfWork;
 
+        IGenericRepostory<Offer> OfferRepo;
+
         ResultViewModel result = new ResultViewModel();
 
         public ProductController(IUnitOfWork unitOfWork)
@@ -28,6 +30,7 @@ namespace Final_Project.Controllers
             UnitOfWork = unitOfWork;
             ProductRepo = UnitOfWork.GetProductRepo();
             StoreRepo = UnitOfWork.GetStoreRepo();
+            OfferRepo = UnitOfWork.GetOfferRepo();
         }
 
         [HttpGet("")]
@@ -51,8 +54,43 @@ namespace Final_Project.Controllers
             return result;
 
         }
-        
 
 
+        [HttpPost("addoffer")]
+        public ResultViewModel AddOffer(Offer offer)
+        {
+            result.Message = "Add Offer To Product";
+
+            OfferRepo.Add(offer);
+            UnitOfWork.Save();
+            result.Data = offer;
+
+            return result;
+
+        }
+
+        [HttpDelete("deleteoffer")]
+        public ResultViewModel DeleteOffer(int id)
+        {
+            result.Message = " offer Deleted";
+            result.Data = OfferRepo.GetByID(id);
+            OfferRepo.Remove(new Offer{ID = id});
+            UnitOfWork.Save();
+
+            return result;
+
+        }
+
+        [HttpPut("editoffer")]
+        public ResultViewModel EditOffer(Offer offer)
+        {
+
+            result.Message = "edit offer";
+            result.Data = offer;
+            OfferRepo.Update(offer);
+            UnitOfWork.Save();
+            return result;
+        }
+
+        }
     }
-}
