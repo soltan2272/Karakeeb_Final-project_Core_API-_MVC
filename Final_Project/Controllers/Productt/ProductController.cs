@@ -91,19 +91,7 @@ namespace Final_Project.Controllers
             return result;
 
         }
-<<<<<<< HEAD
 
-        [HttpDelete("Delete")]
-        public ResultViewModel DeleteProduct(int id)
-        {
-            result.Message = "Delete Product";
-            result.Data =  id;
-            ProductRepo.Remove(new Product { ID=id});
-            UnitOfWork.Save();
-            return result;
-        }
-=======
->>>>>>> 2aada4b6ce84a4d67486acc26bbe9b34f4d401dd
 
 
         [HttpPost("addoffer")]
