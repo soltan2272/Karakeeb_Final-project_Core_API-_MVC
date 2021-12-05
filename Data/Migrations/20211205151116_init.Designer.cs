@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(Project_Context))]
-    [Migration("20211204062734_seedRoles")]
-    partial class seedRoles
+    [Migration("20211205151116_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -122,38 +122,6 @@ namespace Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Models.Admin", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CurrentContactID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("CurrentContactID");
-
-                    b.ToTable("Admin");
-                });
-
             modelBuilder.Entity("Models.AdminProduct", b =>
                 {
                     b.Property<int>("Product_ID")
@@ -181,37 +149,7 @@ namespace Data.Migrations
 
                     b.HasIndex("Admin_ID");
 
-                    b.ToTable("AdminStore");
-                });
-
-            modelBuilder.Entity("Models.AdminSupplier", b =>
-                {
-                    b.Property<int>("Admin_ID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Supplier_ID")
-                        .HasColumnType("int");
-
-                    b.HasKey("Admin_ID", "Supplier_ID");
-
-                    b.HasIndex("Supplier_ID");
-
-                    b.ToTable("AdminSuppliers");
-                });
-
-            modelBuilder.Entity("Models.AdminUser", b =>
-                {
-                    b.Property<int>("User_ID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Admin_ID")
-                        .HasColumnType("int");
-
-                    b.HasKey("User_ID", "Admin_ID");
-
-                    b.HasIndex("Admin_ID");
-
-                    b.ToTable("AdminUsers");
+                    b.ToTable("AdminStores");
                 });
 
             modelBuilder.Entity("Models.Category", b =>
@@ -497,6 +435,9 @@ namespace Data.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("real");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
                     b.Property<int>("Rate")
                         .HasMaxLength(5)
                         .HasColumnType("int");
@@ -582,51 +523,6 @@ namespace Data.Migrations
                     b.ToTable("storeProducts");
                 });
 
-            modelBuilder.Entity("Models.Supplier", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("Credit_Card")
-                        .HasMaxLength(50)
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
-
-                    b.Property<int>("SSN")
-                        .HasMaxLength(14)
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Supplier");
-                });
-
             modelBuilder.Entity("Models.SupplierStore", b =>
                 {
                     b.Property<int>("Store_ID")
@@ -661,8 +557,10 @@ namespace Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("CurrentContactID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Date_Of_Birth")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -697,7 +595,7 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Phone")
-                        .HasMaxLength(15)
+                        .HasMaxLength(11)
                         .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
@@ -707,7 +605,7 @@ namespace Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<int>("SSN")
-                        .HasMaxLength(14)
+                        .HasMaxLength(12)
                         .HasColumnType("int");
 
                     b.Property<string>("SecurityStamp")
@@ -721,6 +619,8 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CurrentContactID");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -784,29 +684,18 @@ namespace Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Models.Admin", b =>
-                {
-                    b.HasOne("Models.Contact", "Contact")
-                        .WithMany("Admins")
-                        .HasForeignKey("CurrentContactID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Contact");
-                });
-
             modelBuilder.Entity("Models.AdminProduct", b =>
                 {
-                    b.HasOne("Models.Admin", "Admin")
+                    b.HasOne("Models.User", "Admin")
                         .WithMany("AdminProducts")
                         .HasForeignKey("Admin_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Models.Product", "Product")
                         .WithMany("AdminProducts")
                         .HasForeignKey("Product_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Admin");
@@ -816,7 +705,7 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Models.AdminStore", b =>
                 {
-                    b.HasOne("Models.Admin", "Admin")
+                    b.HasOne("Models.User", "Admin")
                         .WithMany("AdminStores")
                         .HasForeignKey("Admin_ID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -831,44 +720,6 @@ namespace Data.Migrations
                     b.Navigation("Admin");
 
                     b.Navigation("Store");
-                });
-
-            modelBuilder.Entity("Models.AdminSupplier", b =>
-                {
-                    b.HasOne("Models.Admin", "Admin")
-                        .WithMany("AdminSuppliers")
-                        .HasForeignKey("Admin_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.Supplier", "Supplier")
-                        .WithMany("AdminSuppliers")
-                        .HasForeignKey("Supplier_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Admin");
-
-                    b.Navigation("Supplier");
-                });
-
-            modelBuilder.Entity("Models.AdminUser", b =>
-                {
-                    b.HasOne("Models.Admin", "Admin")
-                        .WithMany("AdminUsers")
-                        .HasForeignKey("Admin_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.User", "User")
-                        .WithMany("AdminUsers")
-                        .HasForeignKey("User_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Admin");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Models.Feedback", b =>
@@ -887,13 +738,13 @@ namespace Data.Migrations
                     b.HasOne("Models.Order", "Order")
                         .WithMany("productOrders")
                         .HasForeignKey("Order_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Models.Product", "product")
                         .WithMany("productOrders")
                         .HasForeignKey("Product_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Order");
@@ -936,7 +787,7 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Models.Supplier", "supplier")
+                    b.HasOne("Models.User", "supplier")
                         .WithMany("Products")
                         .HasForeignKey("CurrentSupplierID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -952,13 +803,13 @@ namespace Data.Migrations
                     b.HasOne("Models.Feedback", "Feedback")
                         .WithMany("productFeedbacks")
                         .HasForeignKey("Feedback_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Models.Product", "Product")
                         .WithMany("productFeedbacks")
                         .HasForeignKey("Product_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Feedback");
@@ -1012,7 +863,7 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Models.Supplier", "supplier")
+                    b.HasOne("Models.User", "supplier")
                         .WithMany("SupllierStores")
                         .HasForeignKey("Supllier_ID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1023,15 +874,15 @@ namespace Data.Migrations
                     b.Navigation("supplier");
                 });
 
-            modelBuilder.Entity("Models.Admin", b =>
+            modelBuilder.Entity("Models.User", b =>
                 {
-                    b.Navigation("AdminProducts");
+                    b.HasOne("Models.Contact", "Contacts")
+                        .WithMany("Admins")
+                        .HasForeignKey("CurrentContactID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("AdminStores");
-
-                    b.Navigation("AdminSuppliers");
-
-                    b.Navigation("AdminUsers");
+                    b.Navigation("Contacts");
                 });
 
             modelBuilder.Entity("Models.Category", b =>
@@ -1091,22 +942,19 @@ namespace Data.Migrations
                     b.Navigation("SupllierStores");
                 });
 
-            modelBuilder.Entity("Models.Supplier", b =>
-                {
-                    b.Navigation("AdminSuppliers");
-
-                    b.Navigation("Products");
-
-                    b.Navigation("SupllierStores");
-                });
-
             modelBuilder.Entity("Models.User", b =>
                 {
-                    b.Navigation("AdminUsers");
+                    b.Navigation("AdminProducts");
+
+                    b.Navigation("AdminStores");
 
                     b.Navigation("Feedbacks");
 
                     b.Navigation("Orders");
+
+                    b.Navigation("Products");
+
+                    b.Navigation("SupllierStores");
                 });
 #pragma warning restore 612, 618
         }

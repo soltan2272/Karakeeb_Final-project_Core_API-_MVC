@@ -15,7 +15,9 @@ namespace Models
         public string Image { get; set; }
         public int Rate { get; set; }
         public int CurrentSupplierID { get; set; }
-        public Supplier supplier { get; set; }
+        public User supplier { get; set; }
+
+        public int Quantity { get; set; }
         public IList<StoreProduct> StoresProducts { get; set; }
         public IList<ProductOffer> ProductOffers { get; set; }
         public IList<ProductFeedback> productFeedbacks { get; set; }

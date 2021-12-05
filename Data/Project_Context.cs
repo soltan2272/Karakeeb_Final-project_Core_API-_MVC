@@ -24,7 +24,7 @@ namespace Data
         }
 
         
-        public DbSet<Supplier> Suplliers { get; set; }
+     //   public DbSet<Supplier> Suplliers { get; set; }
         public DbSet<Store> Stores { get; set; }
         public DbSet<Offer> Offers { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -37,11 +37,12 @@ namespace Data
         public DbSet<StoreProduct> storeProducts { get; set; }
         public DbSet<ProductOffer> productOffers { get; set; }
         public DbSet<SupplierStore> SupplierStores { get; set; }
-        public DbSet<Admin> Admins { get; set; }
+       // public DbSet<Admin> Admins { get; set; }
         public DbSet<Contact> Contacts { get; set; }
-        public DbSet<AdminUser> AdminUsers { get; set; }
+       
         public DbSet<AdminProduct> AdminProducts { get; set; }
-        public DbSet<AdminSupplier> AdminSuppliers { get; set; }
+
+        public DbSet<AdminStore> AdminStores { get; set; }
 
 
 
@@ -49,7 +50,7 @@ namespace Data
         {
             modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
             modelBuilder.ApplyConfiguration(new StoreEntityConfiguration());
-            modelBuilder.ApplyConfiguration(new SupplierEntityConfiguration());
+          //  modelBuilder.ApplyConfiguration(new SupplierEntityConfiguration());
             modelBuilder.ApplyConfiguration(new OfferEntityConfiguration());
             modelBuilder.ApplyConfiguration(new ProductEntityConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryEntityConfiguration());
@@ -57,12 +58,12 @@ namespace Data
             modelBuilder.ApplyConfiguration(new CourierEntityConfiguration());
             modelBuilder.ApplyConfiguration(new PaymentEnityConfiguration());
             modelBuilder.ApplyConfiguration(new FeedbackEntityConfiguration());
-            modelBuilder.ApplyConfiguration(new AdminEntityConfiguration());
+          //  modelBuilder.ApplyConfiguration(new AdminEntityConfiguration());
             modelBuilder.ApplyConfiguration(new ContactEntityConfiguration());
 
             modelBuilder.Entity<SupplierStore>().HasKey(ss => new { ss.Store_ID, ss.Supllier_ID });
             modelBuilder.Entity<SupplierStore>()
-            .HasOne<Supplier>(s => s.supplier)
+            .HasOne<User>(s => s.supplier)
             .WithMany(sp => sp.SupllierStores)
             .HasForeignKey(sp => sp.Supllier_ID);
 
@@ -98,50 +99,48 @@ namespace Data
             modelBuilder.Entity<ProductFeedback>()
             .HasOne<Product>(p => p.Product)
             .WithMany(pf => pf.productFeedbacks)
-            .HasForeignKey(pf => pf.Product_ID);
+            .HasForeignKey(pf => pf.Product_ID)
+             .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<ProductFeedback>()
             .HasOne<Feedback>(f => f.Feedback)
             .WithMany(pf => pf.productFeedbacks)
-            .HasForeignKey(pf => pf.Feedback_ID);
+            .HasForeignKey(pf => pf.Feedback_ID)
+             .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<ProductOrder>().HasKey(pf => new { pf.Order_ID, pf.Product_ID });
             modelBuilder.Entity<ProductOrder>()
             .HasOne<Product>(p => p.product)
             .WithMany(pf => pf.productOrders)
-            .HasForeignKey(pf => pf.Product_ID);
+            .HasForeignKey(pf => pf.Product_ID)
+             .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<ProductOrder>()
             .HasOne<Order>(f => f.Order)
             .WithMany(pf => pf.productOrders)
-            .HasForeignKey(pf => pf.Order_ID);
+            .HasForeignKey(pf => pf.Order_ID)
+             .OnDelete(DeleteBehavior.Restrict);
 
-
-            modelBuilder.Entity<AdminUser>().HasKey(Au => new { Au.User_ID, Au.Admin_ID });
-            modelBuilder.Entity<AdminUser>()
-            .HasOne<Admin>(a => a.Admin)
-            .WithMany(Au => Au.AdminUsers)
-            .HasForeignKey(a => a.Admin_ID);
-
-            modelBuilder.Entity<AdminUser>()
-            .HasOne<User>(u => u.User)
-            .WithMany(Au => Au.AdminUsers)
-            .HasForeignKey(u => u.User_ID);
 
             modelBuilder.Entity<AdminProduct>().HasKey(Ap => new { Ap.Product_ID, Ap.Admin_ID });
+              
             modelBuilder.Entity<AdminProduct>()
-            .HasOne<Admin>(a => a.Admin)
+            .HasOne<User>(a => a.Admin)
             .WithMany(Ap => Ap.AdminProducts)
-            .HasForeignKey(a => a.Admin_ID);
+            .HasForeignKey(a => a.Admin_ID)
+            .OnDelete(DeleteBehavior.Restrict);
+
+
 
             modelBuilder.Entity<AdminProduct>()
             .HasOne<Product>(p => p.Product)
             .WithMany(Ap => Ap.AdminProducts)
-            .HasForeignKey(p => p.Product_ID);
+            .HasForeignKey(p => p.Product_ID)
+            .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<AdminStore>().HasKey(As => new { As.Store_ID, As.Admin_ID });
             modelBuilder.Entity<AdminStore>()
-            .HasOne<Admin>(a => a.Admin)
+            .HasOne<User>(a => a.Admin)
             .WithMany(As => As.AdminStores)
             .HasForeignKey(a => a.Admin_ID);
 
@@ -149,24 +148,12 @@ namespace Data
             .HasOne<Store>(s => s.Store)
             .WithMany(As => As.AdminStores)
             .HasForeignKey(a => a.Store_ID);
-            modelBuilder.Entity<AdminSupplier>().HasKey(sa => new { sa.Admin_ID, sa.Supplier_ID });
-            modelBuilder.Entity<AdminSupplier>()
-            .HasOne<Admin>(a => a.Admin)
-            .WithMany(sa => sa.AdminSuppliers)
-            .HasForeignKey(sa => sa.Admin_ID);
+           
 
-            modelBuilder.Entity<AdminSupplier>()
-            .HasOne<Supplier>(s => s.Supplier)
-            .WithMany(sa => sa.AdminSuppliers)
-            .HasForeignKey(sa => sa.Supplier_ID);
 
-          /*  modelBuilder.Entity<Product>()
-           .HasOne<User>(s => s.User)
-           .WithMany(g => g.Products)
-           .HasForeignKey(s => s.CurrentUserID);*/
 
             modelBuilder.Entity<Product>()
-            .HasOne<Supplier>(s => s.supplier)
+            .HasOne<User>(s => s.supplier)
             .WithMany(g => g.Products)
             .HasForeignKey(s => s.CurrentSupplierID);
 
@@ -195,8 +182,8 @@ namespace Data
             .WithMany(f => f.Feedbacks)
             .HasForeignKey(u => u.CurrentUserID);
 
-            modelBuilder.Entity<Admin>()
-            .HasOne<Contact>(c=>c.Contact)
+            modelBuilder.Entity<User>()
+            .HasOne<Contact>(c=>c.Contacts)
             .WithMany(a => a.Admins)
             .HasForeignKey(a => a.CurrentContactID);
 

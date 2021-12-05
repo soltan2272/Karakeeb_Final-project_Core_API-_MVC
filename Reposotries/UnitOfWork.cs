@@ -11,7 +11,7 @@ namespace Reposotries
     public class UnitOfWork : IUnitOfWork
     {
         Project_Context Context;
-        IGenericRepostory<Admin> AdminRepo;
+
         IGenericRepostory<Category> CategoryRepo;
         IGenericRepostory<Contact> ContactRepo;
         IGenericRepostory<Courier> CourierRepo;
@@ -21,20 +21,14 @@ namespace Reposotries
         IGenericRepostory<Payment> PaymentRepo;
         IGenericRepostory<Product> ProductRepo;
         IGenericRepostory<Store> StoreRepo;
-        IGenericRepostory<Supplier> SupplierRepo;
-       // IGenericRepostory<User> UserRepo;
-        public UnitOfWork(Project_Context context, IGenericRepostory<Admin> adminRepo,
+        public UnitOfWork(Project_Context context,
                             IGenericRepostory<Category> categoryRepo, IGenericRepostory<Contact> contactRepo,
                             IGenericRepostory<Courier> courierRepo, IGenericRepostory<Feedback> feedbackRepo,
                             IGenericRepostory<Offer> offerRepo, IGenericRepostory<Order> orderRepo,
                             IGenericRepostory<Payment> paymentRepo, IGenericRepostory<Product> productRepo,
-                            IGenericRepostory<Store> storeRepo, IGenericRepostory<Supplier> supplierRepo)
-                           // IGenericRepostory<User> userRepo)
+                            IGenericRepostory<Store> storeRepo)
         {
-
-
             Context = context;
-            AdminRepo = adminRepo;
             CategoryRepo = categoryRepo;
             ContactRepo = contactRepo;
             CourierRepo = courierRepo;
@@ -44,15 +38,8 @@ namespace Reposotries
             PaymentRepo = paymentRepo;
             ProductRepo = productRepo;
             StoreRepo = storeRepo;
-            SupplierRepo = supplierRepo;
-           // UserRepo = userRepo;
         }
 
-        public IGenericRepostory<Admin> GetAdminRepo()
-        {
-            return AdminRepo;
-
-        }
         public IGenericRepostory<Category> GetCategoryRepo()
         {
             return CategoryRepo;
@@ -98,16 +85,6 @@ namespace Reposotries
             return StoreRepo;
 
         }
-        public IGenericRepostory<Supplier> GetSupplierRepo()
-        {
-            return SupplierRepo;
-
-        }
-     /*   public IGenericRepostory<User> GetUserRepo()
-        {
-            return UserRepo;
-
-        }*/
 
         public async Task Save()
         {
