@@ -34,6 +34,7 @@ namespace Final_Project.Controllers
         public ResultViewModel PriceLessThan(int price)
         {
 
+
             result.Message = "Products Less Than "+price;
             result.Data = ProductRepo.Get().Where(p => p.Price<=price).Select(p => p.ToViewModel());
             return result;
@@ -53,9 +54,18 @@ namespace Final_Project.Controllers
         [HttpGet("{Rate}")]
         public ResultViewModel Rate(int Rate)
         {
+            if(Rate<=5&& Rate >= 0)
+            {
+                result.Message = "Products Where Rate = " + Rate;
+                result.Data = ProductRepo.Get().Where(p => p.Rate == Rate).Select(p => p.ToViewModel());
 
-            result.Message = "Products Where Rate = " + Rate;
-            result.Data = ProductRepo.Get().Where(p => p.Rate == Rate).Select(p => p.ToViewModel());
+            }
+            else
+            {
+                result.ISuccessed = false;
+                result.Data = "error Rate not valied ";
+
+            }
             return result;
 
         }

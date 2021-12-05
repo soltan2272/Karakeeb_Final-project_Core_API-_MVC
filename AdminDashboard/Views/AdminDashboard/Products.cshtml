@@ -1,27 +1,111 @@
-﻿
+﻿@using Models;
+@model IList<Product>;
 @{
     ViewData["Title"] = "Products";
-}
 
+}
+<style>
+    .checked {
+        color: orange;
+    }
+</style>
 <button id="btn">products</button>
-<table class="table">
+<table id="tabel" class="table">
     <thead>
+
         <tr>
 
-            <th scope="col">ID</th>
             <th scope="col">Name</th>
             <th scope="col">Price</th>
+            <th scope="col">Quantaty</th>
             <th scope="col">Rate</th>
-            <th scope="col">Image</th>
+            @*<th scope="col">Supplier</th>
+            <th scope="col">Store</th>*@
             <th scope="col">Display</th>
             <th scope="col">Update</th>
             <th scope="col">Delete</th>
+
         </tr>
+
     </thead>
     <tbody id="products">
+        @foreach (Product product in Model)
+        {
+        <tr>
+
+            <td>@product.Name</td>
+            <td>@product.Price LE</td>
+            <td>@product.Rate </td>
+            <td>
+                @switch (product.Rate)
+                {
+                    case 1:
+                        <span id="s1" class="s1 fa fa-star checked"></span>
+                        <span id="s2" class="s2 fa fa-star "></span>
+                        <span id="s3" class="s3 fa fa-star "></span>
+                        <span id="s4" class="s4 fa fa-star"></span>
+                        <span id="s5" class="s5 fa fa-star"></span>
+
+                        break;
+
+                    case 2:
+                        <span id="s1" class="s1 fa fa-star checked"></span>
+                        <span id="s2" class="s2 fa fa-star checked"></span>
+                        <span id="s3" class="s3 fa fa-star "></span>
+                        <span id="s4" class="s4 fa fa-star"></span>
+                        <span id="s5" class="s5 fa fa-star"></span>
+
+                        break;
+
+                    case 3:
+                        <span id="s1" class="s1 fa fa-star checked"></span>
+                        <span id="s2" class="s2 fa fa-star checked"></span>
+                        <span id="s3" class="s3 fa fa-star checked"></span>
+                        <span id="s4" class="s4 fa fa-star"></span>
+                        <span id="s5" class="s5 fa fa-star"></span>
+
+                        break;
+                    case 4:
+                        <span id="s1" class="s1 fa fa-star checked"></span>
+                        <span id="s2" class="s2 fa fa-star checked"></span>
+                        <span id="s3" class="s3 fa fa-star checked"></span>
+                        <span id="s4" class="s4 fa fa-star checked"></span>
+                        <span id="s5" class="s5 fa fa-star"></span>
+
+                        break;
+
+                    case 5:
+                        <span id="s1" class="s1 fa fa-star checked"></span>
+                        <span id="s2" class="s2 fa fa-star checked"></span>
+                        <span id="s3" class="s3 fa fa-star checked"></span>
+                        <span id="s4" class="s4 fa fa-star checked"></span>
+                        <span id="s5" class="s5 fa fa-star checked"></span>
+
+                        break;
+
+
+                }
+            </td>
+
+            <td>
+                @Html.ActionLink("Display", "Detiles", new { ID = @product.ID }, new { @class = "btn btn-dark" })
+            </td>
+            <td>
+                @Html.ActionLink("Update", "Update", @product, new { @class = "btn btn-success" })
+
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "Delete", new { ID = @product.ID }, new { @class = "btn btn-danger" })
+
+            </td>
+        </tr>
+        }
     </tbody>
 </table>
-
+@section Products
+{
+    active
+}
 <script>
     function Display(id) {
         $.get("https://localhost:44354/api/product/" + id, function (data, status) {
@@ -29,44 +113,63 @@
             console.log(Data);
         })
     }
-     function Update( id) {
-         $.get("https://localhost:44354/api/product/" + id, function (data, status) {
-                    var Data = data.data;
-                    console.log(Data);
-      })
-     }
+    function Update(id) {
+        $.get("https://localhost:44354/api/product/" + id, function (data, status) {
+            var Data = data.data;
+            console.log(Data);
+        })
+    }
     function Delete(id) {
         //$.post("https://localhost:44354/product/delete" + id, function (data, status) {
         //    var Data = data.data;
         //    console.log(Data);
         //})
     }
-    $(document).ready(function () {
-                            $("#btn").click(function () {
-                                $.get("https://localhost:44354/api/product", function (data, status) {
-                                    var Data = data.data;
+    fetch("https://localhost:44354/api/product").then((res) => {
+        return res.data.json();
+    }).then((resjson) => {
 
-                                    Data.forEach(function (dt) {
-                                        $("#products").append("<tr>" +
-                                            "<td>" + dt.id + "</td>" +
-                                            "<td>" + dt.name + "</td>" +
-                                            "<td>" + dt.price + "</td>" +
-                                            "<td>" + dt.rate + "</td>" +
-                                            "<td><img width='30vw' height='30vw' src='" + dt.image + "' /></td>" +
-                                            "<td><button class='btn btn-dark'onclick='Display(" + dt.id + ")'>Display </button> </td>" +
-                                            "<td><button class='btn btn-primary'onclick='Update(" + dt.id + ")'>Update </button> </td>" +
-                                            "<td><button class='btn btn-danger'onclick='Delete(" + dt.id + ")'>Delete </button> </td>" +
+        let tbody = document.getElementById("products");
+
+        resjson.forEach(dt => {
+            let tr = document.createElement("tr");
+            tr.innerHTML = "<td>" + dt.id + "</td>" +
+                "<td>" + dt.name + "</td>" +
+                "<td>" + dt.price + "</td>" +
+                "<td>" + dt.rate + "</td>" +
+                "<td><img width='30vw' height='30vw' src='" + dt.image + "' /></td>" +
+                "<td><button class='btn btn-dark'onclick='Display(" + dt.id + ")'>Display </button> </td>" +
+                "<td><button class='btn btn-primary'onclick='Update(" + dt.id + ")'>Update </button> </td>" +
+                "<td><button class='btn btn-danger'onclick='Delete(" + dt.id + ")'>Delete </button> </td>";
+            tbody.append(tr);
+
+        });
+        $(document).ready(function () {
+            $("#btn").click(function () {
+                $.get("https://localhost:44354/api/product", function (data, status) {
+                    var Data = data.data;
+
+                    Data.forEach(function (dt) {
+                        $("#products").append("<tr>" +
+                            "<td>" + dt.id + "</td>" +
+                            "<td>" + dt.name + "</td>" +
+                            "<td>" + dt.price + "</td>" +
+                            "<td>" + dt.rate + "</td>" +
+                            "<td><img width='30vw' height='30vw' src='" + dt.image + "' /></td>" +
+                            "<td><button class='btn btn-dark'onclick='Display(" + dt.id + ")'>Display </button> </td>" +
+                            "<td><button class='btn btn-primary'onclick='Update(" + dt.id + ")'>Update </button> </td>" +
+                            "<td><button class='btn btn-danger'onclick='Delete(" + dt.id + ")'>Delete </button> </td>" +
 
 
 
 
 
 
-                                            + "</tr>")
-                                    })
-                                })
-                            })
-                        })
+                            + "</tr>")
+                    })
+                })
+            })
+        })
     //function viewProduct() {
     //    $.ajax({
     //        url: "https://localhost:44354/product",

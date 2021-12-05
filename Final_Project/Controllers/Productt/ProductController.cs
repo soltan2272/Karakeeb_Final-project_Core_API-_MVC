@@ -30,28 +30,74 @@ namespace Final_Project.Controllers
             StoreRepo = UnitOfWork.GetStoreRepo();
         }
 
-        [HttpGet("")]
-
-       
-        public  ResultViewModel Get()
+        [HttpGet("userProducts")]
+        public  ResultViewModel GetforUser()
         {
 
             result.Message = "All Products";
             result.Data = ProductRepo.Get().Select(p => p.ToViewModel());
             return result;
         }
+        [HttpGet("AdminProducts")]
+
+
+        public ResultViewModel GetforAdmin()
+        {
+            result.Message = "All Products";
+            result.Data = ProductRepo.Get();
+            return result;
+        }
+
 
         [HttpGet("{id}")]
         public ResultViewModel GetProductByID(int id)
         {
+            Product product = ProductRepo.GetByID(id);
+            if (product == null)
+            {
+                result.ISuccessed = false;
+                return result;
+
+            }
+
             result.Message = " Product By ID";
+                result.Data = ProductRepo.GetByID(id).ToViewModel();
+
            
-            result.Data = ProductRepo.GetByID(id).ToViewModel();
+            
+            return result;
+
+        }
+
+        [HttpGet("AdminProduct/{id}")]
+        public ResultViewModel GetProductByIDForAdmin(int id)
+        {
+            Product product = ProductRepo.GetByID(id);
+            if (product == null)
+            {
+                result.ISuccessed = false;
+                return result;
+
+            }
+
+            result.Message = " Product By ID";
+            result.Data = ProductRepo.GetByID(id);
+
+
 
             return result;
 
         }
-        
+
+        [HttpDelete("Delete")]
+        public ResultViewModel DeleteProduct(int id)
+        {
+            result.Message = "Delete Product";
+            result.Data =  id;
+            ProductRepo.Remove(new Product { ID=id});
+            UnitOfWork.Save();
+            return result;
+        }
 
 
     }
