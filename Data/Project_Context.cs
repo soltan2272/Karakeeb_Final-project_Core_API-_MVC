@@ -38,7 +38,7 @@ namespace Data
         public DbSet<ProductOffer> productOffers { get; set; }
         public DbSet<SupplierStore> SupplierStores { get; set; }
        // public DbSet<Admin> Admins { get; set; }
-        public DbSet<Contact> Contacts { get; set; }
+       // public DbSet<Contact> Contacts { get; set; }
        
         public DbSet<AdminProduct> AdminProducts { get; set; }
 
@@ -59,7 +59,7 @@ namespace Data
             modelBuilder.ApplyConfiguration(new PaymentEnityConfiguration());
             modelBuilder.ApplyConfiguration(new FeedbackEntityConfiguration());
           //  modelBuilder.ApplyConfiguration(new AdminEntityConfiguration());
-            modelBuilder.ApplyConfiguration(new ContactEntityConfiguration());
+           // modelBuilder.ApplyConfiguration(new ContactEntityConfiguration());
 
             modelBuilder.Entity<SupplierStore>().HasKey(ss => new { ss.Store_ID, ss.Supllier_ID });
             modelBuilder.Entity<SupplierStore>()
@@ -182,10 +182,11 @@ namespace Data
             .WithMany(f => f.Feedbacks)
             .HasForeignKey(u => u.CurrentUserID);
 
-            modelBuilder.Entity<User>()
+         /*   modelBuilder.Entity<User>()
             .HasOne<Contact>(c=>c.Contacts)
             .WithMany(a => a.Admins)
-            .HasForeignKey(a => a.CurrentContactID);
+            .HasForeignKey(a => a.CurrentContactID)
+            .OnDelete(DeleteBehavior.Restrict);*/
 
             base.OnModelCreating(modelBuilder);
         }

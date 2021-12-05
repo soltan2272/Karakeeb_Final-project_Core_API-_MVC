@@ -11,7 +11,7 @@ namespace Reposotries
     {
        // IGenericRepostory<Admin> GetAdminRepo();
         IGenericRepostory<Category> GetCategoryRepo();
-        IGenericRepostory<Contact> GetContactRepo();
+       // IGenericRepostory<Contact> GetContactRepo();
         IGenericRepostory<Courier> GetCourierRepo();
         IGenericRepostory<Feedback> GetFeedbackRepo();
         IGenericRepostory<Offer> GetOfferRepo();
