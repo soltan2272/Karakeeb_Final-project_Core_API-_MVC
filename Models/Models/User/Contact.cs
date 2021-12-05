@@ -13,7 +13,7 @@ namespace Models
         public string Email { get; set; }
         public string Facebook { get; set; }
         public string Twitter { get; set; }
-        public ICollection<Admin> Admins { get; set; }
+        public ICollection<User> Admins { get; set; }
 
     }
 }

@@ -3,7 +3,7 @@ using System;
 
 namespace Data.Migrations
 {
-    public partial class seedRoles : Migration
+    public partial class RoleSeed : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

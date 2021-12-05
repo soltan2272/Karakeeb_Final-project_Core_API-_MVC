@@ -9,7 +9,7 @@ namespace Models
    public class SupplierStore
     {
         public int Supllier_ID { set; get; }
-        public Supplier supplier { set; get; }
+        public User supplier { set; get; }
 
         public int Store_ID { set; get; }
         public Store store { set; get; }
