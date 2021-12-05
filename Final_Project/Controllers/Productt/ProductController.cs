@@ -21,8 +21,6 @@ namespace Final_Project.Controllers
         IGenericRepostory<Store> StoreRepo;
         IUnitOfWork UnitOfWork;
 
-        IGenericRepostory<Offer> OfferRepo;
-
         ResultViewModel result = new ResultViewModel();
 
         public ProductController(IUnitOfWork unitOfWork)
@@ -30,7 +28,6 @@ namespace Final_Project.Controllers
             UnitOfWork = unitOfWork;
             ProductRepo = UnitOfWork.GetProductRepo();
             StoreRepo = UnitOfWork.GetStoreRepo();
-            OfferRepo = UnitOfWork.GetOfferRepo();
         }
 
         [HttpGet("")]
@@ -55,42 +52,119 @@ namespace Final_Project.Controllers
 
         }
 
-
-        [HttpPost("addoffer")]
-        public ResultViewModel AddOffer(Offer offer)
+        [HttpPost("addProduct")]
+        public ResultViewModel addProduct(InsertProductViewModel pro)
         {
-            result.Message = "Add Offer To Product";
+            result.Message = "Add Product";
 
-            OfferRepo.Add(offer);
+            var product = new Product()
+            {
+                ID = pro.ID,
+                Name = pro.Name,
+                Image = pro.Image,
+                Rate = pro.Rate,
+                Description = pro.Description,
+                Price = pro.Price,
+                CurrentCategoryID = pro.CurrentCategoryID,
+                CurrentSupplierID = pro.CurrentSupplierID,
+            };
+
+            ProductRepo.Add(product);
             UnitOfWork.Save();
-            result.Data = offer;
+            result.Data = pro;
 
             return result;
 
         }
 
-        [HttpDelete("deleteoffer")]
-        public ResultViewModel DeleteOffer(int id)
+        [HttpPut("editProduct")]
+        public ResultViewModel editProduct(int id, InsertProductViewModel pro)
         {
-            result.Message = " offer Deleted";
-            result.Data = OfferRepo.GetByID(id);
-            OfferRepo.Remove(new Offer{ID = id});
+            //if (id == null)
+            //{
+            //    result.Message = "Not Found Product";
+            //}
+            var product = ProductRepo.GetByID(id);
+            product.ID = pro.ID;
+            product.Name = pro.Name;
+            product.Image = pro.Image;
+            product.Rate = pro.Rate;
+            product.Description = pro.Description;
+            product.Price = pro.Price;
+            product.CurrentCategoryID = pro.CurrentCategoryID;
+            product.CurrentSupplierID = pro.CurrentSupplierID;
+
+
+            if (product == null)
+            {
+                result.Message = "NotFound Product";
+            }
+            ProductRepo.Update(product);
             UnitOfWork.Save();
+            return result;
+        }
+        [HttpDelete("{id}")]
+        public ResultViewModel deleteProduct(int id)
+        {
+            result.Message = "Deleted Product";
+
+            result.Data = ProductRepo.GetByID(id);
+            ProductRepo.Remove(new Product { ID = id });
+            UnitOfWork.Save();
+            return result;
+        }
+
+        [HttpPost("addStore")]
+        public ResultViewModel addStore(StoreViewModel sto)
+        {
+            result.Message = "Add Store";
+            var store = new Store()
+            {
+
+                Name = sto.Name,
+                Address = sto.Address,
+                Phone = sto.Phone
+            };
+
+            StoreRepo.Add(store);
+            UnitOfWork.Save();
+            result.Data = store;
 
             return result;
 
         }
-
-        [HttpPut("editoffer")]
-        public ResultViewModel EditOffer(Offer offer)
+        [HttpPut("editStore")]
+        public ResultViewModel editStore(int id, StoreViewModel sto)
         {
+            var store = StoreRepo.GetByID(id);
+            result.Data = ProductRepo.GetByID(id).ToViewModel();
 
-            result.Message = "edit offer";
-            result.Data = offer;
-            OfferRepo.Update(offer);
+            store.Name = sto.Name;
+            store.Address = sto.Address;
+            store.Phone = sto.Phone;
+
+            if (store == null)
+            {
+                result.Message = "NotFound Store";
+            }
+            result.Data = store;
+            StoreRepo.Update(store);
             UnitOfWork.Save();
             return result;
         }
 
+        
+        [HttpDelete("deleteStore/{id}")]
+        public ResultViewModel deleteStore(int id)
+        {
+            result.Data = StoreRepo.GetByID(id);
+            StoreRepo.Remove(new Store {ID = id});
+            UnitOfWork.Save();
+            result.Message = "Store Deleted";
+            return result;
         }
+
+
+
     }
+}
