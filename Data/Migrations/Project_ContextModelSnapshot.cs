@@ -433,6 +433,9 @@ namespace Data.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("real");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
                     b.Property<int>("Rate")
                         .HasMaxLength(5)
                         .HasColumnType("int");

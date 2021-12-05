@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(Project_Context))]
-    [Migration("20211205140130_init")]
-    partial class init
+    [Migration("20211205151213_RoleSeed")]
+    partial class RoleSeed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -434,6 +434,9 @@ namespace Data.Migrations
                     b.Property<float>("Price")
                         .HasMaxLength(20)
                         .HasColumnType("real");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.Property<int>("Rate")
                         .HasMaxLength(5)

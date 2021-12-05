@@ -353,6 +353,7 @@ namespace Data.Migrations
                     Image = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     Rate = table.Column<int>(type: "int", maxLength: 5, nullable: false),
                     CurrentSupplierID = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
                     CurrentCategoryID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
