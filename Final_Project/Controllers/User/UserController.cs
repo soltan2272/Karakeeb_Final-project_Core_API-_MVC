@@ -7,8 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ViewModels;
+using ViewModels.Userr;
 
-namespace Final_Project.Controllers.User
+namespace Final_Project.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -19,6 +20,8 @@ namespace Final_Project.Controllers.User
         IGenericRepostory<Order> OrderRepo;
         IGenericRepostory<Feedback> FeedbackRepo;
 
+        
+
         IUnitOfWork UnitOfWork;
         ResultViewModel result = new ResultViewModel();
 
@@ -28,6 +31,7 @@ namespace Final_Project.Controllers.User
             UserRepository = userRepository;
             OrderRepo = UnitOfWork.GetOrderRepo();
             FeedbackRepo = UnitOfWork.GetFeedbackRepo();
+            
         }
 
 
@@ -39,9 +43,7 @@ namespace Final_Project.Controllers.User
 
             var result = await UserRepository.SignUp(signupModel);
             if(!result.IsAuthenticated)
-                return BadRequest(result.Message);
-          
-
+                return BadRequest(result.Message);         
 
             return Ok(result);
 
@@ -60,17 +62,37 @@ namespace Final_Project.Controllers.User
         }
 
 
-        [HttpPost("addorder")]
-        public ResultViewModel AddOrder(Order order)
+        [HttpGet("getusers")]
+        public async Task<dynamic> GetAllUsers()
         {
-            result.Message = "Add User Order";
-
-            OrderRepo.Add(order);
-            UnitOfWork.Save();
-            result.Data = order;
-
+            
+           var res = await UserRepository.GetUsersAsync();
+          
+            result.Data = res;
+            result.Message = "Succedd";
+            result.ISuccessed = true;
             return result;
+        }
 
+        [HttpGet("getuser/{id}")]
+        public async Task<ResultViewModel> GetUserByID(int id)
+        {
+            ViewUser res = await UserRepository.GetUserBYIDAsync(id);
+           // User view = usr.ToModel();
+           result.Data = res;
+            result.Message = "Succedd";
+            result.ISuccessed = true;
+            return result;
+        }
+
+        [HttpDelete("deleteuser/{id}")]
+        public async Task<dynamic> DeleteUser(int id)
+        {
+            var res = await UserRepository.DeleteUser(id);
+            result.ISuccessed = true;
+            result.Data = res;
+            result.Message = "Deleted Successfully";
+            return result;
         }
 
         [HttpDelete("deleteorder")]

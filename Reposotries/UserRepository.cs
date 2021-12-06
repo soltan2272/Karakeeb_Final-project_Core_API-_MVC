@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Models;
@@ -12,6 +14,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using ViewModels;
+using ViewModels.Userr;
 
 namespace Reposotries
 {
@@ -19,13 +22,16 @@ namespace Reposotries
     {
        UserManager<User> UserManager;
        RoleManager<Role> roleManager;
+        Project_Context Context;
         public IConfiguration Configuration { get; }
         public UserRepository(UserManager<User> userManager,
-            IConfiguration configuration, RoleManager<Role> _roleManager)
+            IConfiguration configuration, RoleManager<Role> _roleManager,
+            Project_Context context)
         {
             UserManager = userManager;
             Configuration = configuration;
             roleManager = _roleManager;
+            Context=context;
         }
 
 
@@ -165,6 +171,50 @@ namespace Reposotries
 
             return result.Succeeded ? string.Empty : "Sonething went wrong";
         }
+        public async Task<List<ViewUser>> GetUsersAsync()
+        {
+            var user =  UserManager.Users;
+            List <ViewUser> users = new List<ViewUser>();
+
+            foreach (User r in user)
+            {
+                ViewUser usr = new ViewUser();
+                usr.id = r.Id;
+                usr.Full_Name = r.Full_Name;
+                usr.Email = r.Email;
+                usr.Adrress = r.Adrress;
+                usr.SSN = r.SSN;
+                usr.Phone = r.Phone;
+                usr.Date_Of_Birth = r.Date_Of_Birth;
+                users.Add(usr);
+            }
+            return users;
+        }
+
+        public async Task<ViewUser> GetUserBYIDAsync(int id)
+        {
+            var res= await UserManager.FindByIdAsync(id.ToString());
+            ViewUser usr = new ViewUser();
+            usr.id = res.Id;
+            usr.Full_Name = res.Full_Name;
+            usr.Email = res.Email;
+            usr.Adrress = res.Adrress;
+            usr.SSN = res.SSN;
+            usr.Phone = res.Phone;
+            usr.Date_Of_Birth = res.Date_Of_Birth;
+            return usr;
+            
+        }
+
+        public async Task<List<User>> DeleteUser(int id)
+        {
+            var usr = await UserManager.FindByIdAsync(id.ToString());
+            var res = await UserManager.DeleteAsync(usr);
+            var users = Context.Users.ToList();
+            return users;
+
+        }
+
     }
 
    

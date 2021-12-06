@@ -12,8 +12,10 @@ using ViewModels;
 
 namespace Final_Project.Controllers
 {
+   // [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/[controller]")]
+  
     public class ProductController : ControllerBase
     {
         IGenericRepostory<Product> ProductRepo;
