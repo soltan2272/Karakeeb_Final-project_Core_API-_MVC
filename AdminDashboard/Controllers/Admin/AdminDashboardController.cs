@@ -228,8 +228,12 @@ namespace AdminDashboard.Controllers
         {
             return View();
         }
+        public IActionResult DisplayContact(int id)
+        {
+            return View();
+        }
 
-       
+
         public IActionResult NotFound()
         {
             return View();
