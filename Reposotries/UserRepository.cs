@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Models;
@@ -12,6 +15,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using ViewModels;
+using ViewModels.Userr;
 
 namespace Reposotries
 {
@@ -19,13 +23,18 @@ namespace Reposotries
     {
        UserManager<User> UserManager;
        RoleManager<Role> roleManager;
+        Project_Context Context;
+        private readonly IMapper _mapper;
         public IConfiguration Configuration { get; }
         public UserRepository(UserManager<User> userManager,
-            IConfiguration configuration, RoleManager<Role> _roleManager)
+            IConfiguration configuration, RoleManager<Role> _roleManager,
+            Project_Context context, IMapper mapper)
         {
             UserManager = userManager;
             Configuration = configuration;
             roleManager = _roleManager;
+            Context=context;
+            _mapper = mapper;
         }
 
 
@@ -165,6 +174,31 @@ namespace Reposotries
 
             return result.Succeeded ? string.Empty : "Sonething went wrong";
         }
+        public async Task<List<ViewUser>> GetUsersAsync()
+        {
+            var user =  UserManager.Users;
+            List<ViewUser> users = _mapper.Map<List<ViewUser>>(user);
+          
+            return users;
+        }
+
+        public async Task<ViewUser> GetUserBYIDAsync(int id)
+        {
+            var res= await UserManager.FindByIdAsync(id.ToString());
+            ViewUser usr = _mapper.Map<ViewUser>(res);
+            return usr;
+            
+        }
+
+        public async Task<List<User>> DeleteUser(int id)
+        {
+            var usr = await UserManager.FindByIdAsync(id.ToString());
+            var res = await UserManager.DeleteAsync(usr);
+            var users = Context.Users.ToList();
+            return users;
+
+        }
+
     }
 
    

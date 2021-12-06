@@ -25,19 +25,40 @@ namespace AdminDashboard.Controllers
         {
             _logger = logger;
         }
-
+        [HttpGet]
         public IActionResult Login()
         {
             return View();
-        }
+
+            }
+            [HttpPost]
+         /*   public IActionResult Login()
+            {
+               // return View();
+                HttpClient http = new HttpClient();
+                http.BaseAddress = new Uri(Global.API);
+                var productcontroller = http.GetAsync("product/AdminProducts");
+                productcontroller.Wait();
+                var resltproduct = productcontroller.Result;
+                if (resltproduct.IsSuccessStatusCode)
+                {
+                    var tabel = resltproduct.Content.ReadAsAsync<ResultViewModel>();
+                    tabel.Wait();
+                    var ser = tabel.Result.Data;
+                    string jsonString = JsonConvert.SerializeObject(ser);
+
+                    products = JsonConvert.DeserializeObject<IList<Product>>(jsonString);
+                }
+
+                return View(products);
+        }*/
         public IActionResult Index()
         {
             return View();
         }
        
         public IActionResult Orders()
-        {
-            
+        { 
             return View();
         }
         public IActionResult Products()

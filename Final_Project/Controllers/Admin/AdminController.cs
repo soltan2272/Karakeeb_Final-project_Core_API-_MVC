@@ -21,7 +21,7 @@ namespace Final_Project.Controllers.Admin
         }
 
 
-        [HttpPost("adduser")]
+        [HttpPost("addadmin")]
         public async Task<IActionResult> SignUp([FromBody] SignUpModel signupModel)
         {
             if (!ModelState.IsValid)

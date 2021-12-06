@@ -1,10 +1,12 @@
-﻿using Models.Models;
+﻿using Models;
+using Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ViewModels;
+using ViewModels.Userr;
 
 namespace Reposotries
 {
@@ -15,5 +17,10 @@ namespace Reposotries
         Task<AuthModel> Login(LoginModel loginModel);
 
         Task<string> AddRole(AddRoleModel Model);
+        Task<List<ViewUser>> GetUsersAsync();
+
+        Task<ViewUser> GetUserBYIDAsync(int id);
+
+        Task<List<User>> DeleteUser(int id);
     }
 }
