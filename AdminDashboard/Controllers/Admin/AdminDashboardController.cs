@@ -121,6 +121,11 @@ namespace AdminDashboard.Controllers
                 return View(product);
         }
 
+        [HttpGet]
+        public IActionResult StoreProduct(IList<Product> StoreProduct)
+        {
+            return View(StoreProduct);
+        }
         public IActionResult Users()
         {
             return View();
@@ -177,6 +182,43 @@ namespace AdminDashboard.Controllers
             return Redirect("/AdminDashboard/Stores");
         }
 
+        
+        [HttpGet]
+       public IActionResult StoreDetiles(int id)
+        {
+            Product product = null;
+            HttpClient http = new HttpClient();
+            http.BaseAddress = new Uri(Global.API);
+            var productcontroller = http.GetAsync("product/AdminProduct/" + id);
+            productcontroller.Wait();
+            var resltproduct = productcontroller.Result;
+            if (resltproduct.IsSuccessStatusCode)
+            {
+
+                var tabel = resltproduct.Content.ReadAsAsync<ResultViewModel>();
+                tabel.Wait();
+                if(tabel.Result.ISuccessed==false)
+                    return View("NotFound");
+
+                var data = tabel.Result.Data;
+                string jsonString = JsonConvert.SerializeObject(data);
+                
+                product = JsonConvert.DeserializeObject<Product>(jsonString);
+            }
+
+                return View(product);
+        }
+
+        [HttpGet]
+        public IActionResult DeleteProStore(int id)
+        {
+            HttpClient http = new HttpClient();
+            http.BaseAddress = new Uri(Global.API);
+            var response = http.DeleteAsync("product/Delete/" + id);
+            response.Wait();
+
+            return Redirect("/AdminDashboard/StoreDetiles");
+        }
 
         public IActionResult MyStore()
         {
