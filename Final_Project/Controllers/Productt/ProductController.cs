@@ -31,8 +31,6 @@ namespace Final_Project.Controllers
         }
 
         [HttpGet("")]
-
-       
         public  ResultViewModel Get()
         {
 

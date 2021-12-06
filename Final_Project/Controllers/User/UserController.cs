@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ViewModels;
+using ViewModels.User;
 
 namespace Final_Project.Controllers.User
 {
@@ -59,6 +60,14 @@ namespace Final_Project.Controllers.User
             return Ok(result);
         }
 
+        [HttpGet("")]
+        public ResultViewModel Get()
+        {
+
+            result.Message = "All Orders";
+            result.Data = OrderRepo.Get().Select(p => p.OrderViewModel());
+            return result;
+        }
 
         [HttpPost("addorder")]
         public ResultViewModel AddOrder(Order order)
