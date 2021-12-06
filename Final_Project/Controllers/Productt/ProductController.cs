@@ -32,27 +32,66 @@ namespace Final_Project.Controllers
             StoreRepo = UnitOfWork.GetStoreRepo();
         }
 
-        [HttpGet("")]
-
-       
-        public  ResultViewModel Get()
+        [HttpGet("userProducts")]
+        public  ResultViewModel GetforUser()
         {
 
             result.Message = "All Products";
             result.Data = ProductRepo.Get().Select(p => p.ToViewModel());
             return result;
         }
+        [HttpGet("AdminProducts")]
+
+
+        public ResultViewModel GetforAdmin()
+        {
+            result.Message = "All Products";
+            result.Data = ProductRepo.Get();
+            return result;
+        }
+
 
         [HttpGet("{id}")]
         public ResultViewModel GetProductByID(int id)
         {
+            Product product = ProductRepo.GetByID(id);
+            if (product == null)
+            {
+                result.ISuccessed = false;
+                return result;
+
+            }
+
             result.Message = " Product By ID";
+                result.Data = ProductRepo.GetByID(id).ToViewModel();
+
            
-            result.Data = ProductRepo.GetByID(id).ToViewModel();
+            
+            return result;
+
+        }
+
+        [HttpGet("AdminProduct/{id}")]
+        public ResultViewModel GetProductByIDForAdmin(int id)
+        {
+            Product product = ProductRepo.GetByID(id);
+            if (product == null)
+            {
+                result.ISuccessed = false;
+                return result;
+
+            }
+
+            result.Message = " Product By ID";
+            result.Data = ProductRepo.GetByID(id);
+
+
 
             return result;
 
         }
+
+
 
         [HttpPost("addProduct")]
         public ResultViewModel addProduct(InsertProductViewModel pro)
@@ -105,13 +144,13 @@ namespace Final_Project.Controllers
             UnitOfWork.Save();
             return result;
         }
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete/{id}")]
         public ResultViewModel deleteProduct(int id)
         {
             result.Message = "Deleted Product";
 
             result.Data = ProductRepo.GetByID(id);
-            ProductRepo.Remove(new Product { ID = id });
+            ProductRepo.Remove(ProductRepo.GetByID(id));
             UnitOfWork.Save();
             return result;
         }
