@@ -1,4 +1,5 @@
-﻿using Data;
+﻿using AutoMapper;
+using Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -23,15 +24,17 @@ namespace Reposotries
        UserManager<User> UserManager;
        RoleManager<Role> roleManager;
         Project_Context Context;
+        private readonly IMapper _mapper;
         public IConfiguration Configuration { get; }
         public UserRepository(UserManager<User> userManager,
             IConfiguration configuration, RoleManager<Role> _roleManager,
-            Project_Context context)
+            Project_Context context, IMapper mapper)
         {
             UserManager = userManager;
             Configuration = configuration;
             roleManager = _roleManager;
             Context=context;
+            _mapper = mapper;
         }
 
 
@@ -174,34 +177,15 @@ namespace Reposotries
         public async Task<List<ViewUser>> GetUsersAsync()
         {
             var user =  UserManager.Users;
-            List <ViewUser> users = new List<ViewUser>();
-
-            foreach (User r in user)
-            {
-                ViewUser usr = new ViewUser();
-                usr.id = r.Id;
-                usr.Full_Name = r.Full_Name;
-                usr.Email = r.Email;
-                usr.Adrress = r.Adrress;
-                usr.SSN = r.SSN;
-                usr.Phone = r.Phone;
-                usr.Date_Of_Birth = r.Date_Of_Birth;
-                users.Add(usr);
-            }
+            List<ViewUser> users = _mapper.Map<List<ViewUser>>(user);
+          
             return users;
         }
 
         public async Task<ViewUser> GetUserBYIDAsync(int id)
         {
             var res= await UserManager.FindByIdAsync(id.ToString());
-            ViewUser usr = new ViewUser();
-            usr.id = res.Id;
-            usr.Full_Name = res.Full_Name;
-            usr.Email = res.Email;
-            usr.Adrress = res.Adrress;
-            usr.SSN = res.SSN;
-            usr.Phone = res.Phone;
-            usr.Date_Of_Birth = res.Date_Of_Birth;
+            ViewUser usr = _mapper.Map<ViewUser>(res);
             return usr;
             
         }
