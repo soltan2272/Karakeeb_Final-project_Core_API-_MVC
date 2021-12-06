@@ -20,7 +20,6 @@ namespace Final_Project
     {
         public static ProductViewModel ToViewModel(this Product product)
         {
-
             return new ProductViewModel()
             {
                 ID = product.ID,
