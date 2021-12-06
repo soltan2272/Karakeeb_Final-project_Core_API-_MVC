@@ -89,15 +89,10 @@ namespace Final_Project.Controllers
 
         }
 
-<<<<<<< HEAD
 
 
-        [HttpPost("addoffer")]
-        public ResultViewModel AddOffer(Offer offer)
-=======
         [HttpPost("addProduct")]
         public ResultViewModel addProduct(InsertProductViewModel pro)
->>>>>>> 0b92d999796dfebe11e3b237bcc8fc830039c5f9
         {
             result.Message = "Add Product";
 
@@ -147,13 +142,13 @@ namespace Final_Project.Controllers
             UnitOfWork.Save();
             return result;
         }
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete/{id}")]
         public ResultViewModel deleteProduct(int id)
         {
             result.Message = "Deleted Product";
 
             result.Data = ProductRepo.GetByID(id);
-            ProductRepo.Remove(new Product { ID = id });
+            ProductRepo.Remove(ProductRepo.GetByID(id));
             UnitOfWork.Save();
             return result;
         }

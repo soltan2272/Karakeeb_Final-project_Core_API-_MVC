@@ -71,11 +71,11 @@ namespace AdminDashboard.Controllers
             var response = http.DeleteAsync("product/Delete/" + id);
             response.Wait();
 
-            return View("orders");
+            return Redirect("/AdminDashboard/Products");
         }
 
-            [HttpGet]
-        public IActionResult Detiles(int id)
+        [HttpGet]
+       public IActionResult Detiles(int id)
         {
             Product product = null;
             HttpClient http = new HttpClient();
@@ -104,33 +104,30 @@ namespace AdminDashboard.Controllers
         {
             return View();
         }
-       
-        public IActionResult Suppliers()
-        {
-            return View();
-        }
-        public IActionResult Reports()
-        {
-            return View();
-        }
-        public IActionResult Integrations()
+        public IActionResult AddProduct()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Suppliers()
         {
             return View();
         }
+        public IActionResult Stores()
+        {
+            return View();
+        }
+        public IActionResult ContactUs()
+        {
+            return View();
+        }
+
+       
         public IActionResult NotFound()
         {
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        
     }
 }

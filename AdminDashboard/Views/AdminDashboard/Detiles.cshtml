@@ -5,165 +5,108 @@
 }
 @using Models;
 @model Product;
-<style>
-   
 
-    .card {
-        border: none
-    }
-
-    .product {
-        background-color: #eee
-    }
-
-    .brand {
-        font-size: 13px
-    }
-
-    .act-price {
-        color: red;
-        font-weight: 700
-    }
-
-    .dis-price {
-        text-decoration: line-through
-    }
-    .checked {
-        color: orange;
-    }
-    .about {
-        font-size: 14px
-    }
-
-    .color {
-        margin-bottom: 10px
-    }
-
-    label.radio {
-        cursor: pointer
-    }
-
-        label.radio input {
-            position: absolute;
-            top: 0;
-            left: 0;
-            visibility: hidden;
-            pointer-events: none
+    <style>
+        .checked {
+            color: orange;
         }
-
-        label.radio span {
-            padding: 2px 9px;
-            border: 2px solid #ff0000;
-            display: inline-block;
-            color: #ff0000;
-            border-radius: 3px;
-            text-transform: uppercase
-        }
-
-        label.radio input:checked + span {
-            border-color: #ff0000;
-            background-color: #ff0000;
-            color: #fff
-        }
-
-    .btn-danger {
-        background-color: #ff0000 !important;
-        border-color: #ff0000 !important
-    }
-
-        .btn-danger:hover {
-            background-color: #da0606 !important;
-            border-color: #da0606 !important
-        }
-
-        .btn-danger:focus {
-            box-shadow: none
-        }
-
-    .cart i {
-        margin-right: 10px
-    }
-</style>
-
-<div class="container mt-5 mb-5 shadow">
-    <div class="row d-flex justify-content-center">
-        <div class="col-md-10">
-            <div class="card">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="images p-3">
-                            <div class="text-center p-4"> <img id="main-image" src=@Model.Image width="100%" /> </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="product p-4">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center"> <i class="fa fa-long-arrow-left"></i> <span class="ml-1"><a href="javascript:history.back()">Back</a></span> </div>
-                            </div>
-                            <div class="mt-4 mb-3">
-                                <span class="text-uppercase text-muted brand">Product-Name</span>
-                                <h5 class="text-uppercase">@Model.Name</h5>
-                                <div class="price d-flex flex-row align-items-center">
-                                    <span class="act-price">@Model.Price LE</span>
-                                    <div class="ml-2"> <small class="dis-price"></small> <span></span> </div>
+    </style>
+<div class="all-content-wrapper">
+    
+    <!-- Single pro tab start-->
+    <div class="single-product-tab-area mg-t-0 mg-b-30">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="single-product-pr">
+                        <div class="row">
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                <div id="myTabContent1" class="tab-content">
+                                    <div class="product-tab-list tab-pane fade active in" id="single-tab1">
+                                        <img src=@Model.Image alt="" />
+                                    </div>
                                 </div>
                             </div>
-                            <p class="about">@Model.Description</p>
-                            <div class="sizes mt-3">
-                                <h6 class="text-uppercase">Rate</h6>
-                                @switch (Model.Rate)
-                                {
-                                    case 1:
-                                        <span id="s1" class="s1 fa fa-star checked"></span>
-                                        <span id="s2" class="s2 fa fa-star "></span>
-                                        <span id="s3" class="s3 fa fa-star "></span>
-                                        <span id="s4" class="s4 fa fa-star"></span>
-                                        <span id="s5" class="s5 fa fa-star"></span>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center mb-3"> <i class="fa fa-long-arrow-left"></i> <span class="ml-1"><a href="javascript:history.back()">Back</a></span> </div>
+                            </div>
+                            <br>
+                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">
+                                <div class="single-product-details res-pro-tb">
+                                    <h1>@Model.Name</h1>
+                                    @switch (Model.Rate)
+                                    {
+                                        case 1:
+                                            <span id="s1" class="s1 fa fa-star checked"></span>
+                                            <span id="s2" class="s2 fa fa-star "></span>
+                                            <span id="s3" class="s3 fa fa-star "></span>
+                                            <span id="s4" class="s4 fa fa-star"></span>
+                                            <span id="s5" class="s5 fa fa-star"></span>
 
-                                        break;
+                                            break;
 
-                                    case 2:
-                                        <span id="s1" class="s1 fa fa-star checked"></span>
-                                        <span id="s2" class="s2 fa fa-star checked"></span>
-                                        <span id="s3" class="s3 fa fa-star "></span>
-                                        <span id="s4" class="s4 fa fa-star"></span>
-                                        <span id="s5" class="s5 fa fa-star"></span>
+                                        case 2:
+                                            <span id="s1" class="s1 fa fa-star checked"></span>
+                                            <span id="s2" class="s2 fa fa-star checked"></span>
+                                            <span id="s3" class="s3 fa fa-star "></span>
+                                            <span id="s4" class="s4 fa fa-star"></span>
+                                            <span id="s5" class="s5 fa fa-star"></span>
 
-                                        break;
+                                            break;
 
-                                    case 3:
-                                        <span id="s1" class="s1 fa fa-star checked"></span>
-                                        <span id="s2" class="s2 fa fa-star checked"></span>
-                                        <span id="s3" class="s3 fa fa-star checked"></span>
-                                        <span id="s4" class="s4 fa fa-star"></span>
-                                        <span id="s5" class="s5 fa fa-star"></span>
+                                        case 3:
+                                            <span id="s1" class="s1 fa fa-star checked"></span>
+                                            <span id="s2" class="s2 fa fa-star checked"></span>
+                                            <span id="s3" class="s3 fa fa-star checked"></span>
+                                            <span id="s4" class="s4 fa fa-star"></span>
+                                            <span id="s5" class="s5 fa fa-star"></span>
 
-                                        break;
-                                    case 4:
-                                        <span id="s1" class="s1 fa fa-star checked"></span>
-                                        <span id="s2" class="s2 fa fa-star checked"></span>
-                                        <span id="s3" class="s3 fa fa-star checked"></span>
-                                        <span id="s4" class="s4 fa fa-star checked"></span>
-                                        <span id="s5" class="s5 fa fa-star"></span>
+                                            break;
+                                        case 4:
+                                            <span id="s1" class="s1 fa fa-star checked"></span>
+                                            <span id="s2" class="s2 fa fa-star checked"></span>
+                                            <span id="s3" class="s3 fa fa-star checked"></span>
+                                            <span id="s4" class="s4 fa fa-star checked"></span>
+                                            <span id="s5" class="s5 fa fa-star"></span>
 
-                                        break;
+                                            break;
 
-                                    case 5:
-                                        <span id="s1" class="s1 fa fa-star checked"></span>
-                                        <span id="s2" class="s2 fa fa-star checked"></span>
-                                        <span id="s3" class="s3 fa fa-star checked"></span>
-                                        <span id="s4" class="s4 fa fa-star checked"></span>
-                                        <span id="s5" class="s5 fa fa-star checked"></span>
+                                        case 5:
+                                            <span id="s1" class="s1 fa fa-star checked"></span>
+                                            <span id="s2" class="s2 fa fa-star checked"></span>
+                                            <span id="s3" class="s3 fa fa-star checked"></span>
+                                            <span id="s4" class="s4 fa fa-star checked"></span>
+                                            <span id="s5" class="s5 fa fa-star checked"></span>
 
-                                        break;
+                                            break;
 
 
-                                }
+                                    }
+                                    <div class="single-pro-price">
+                                        <h5 style="color:white">price</h5>
+
+                                        <span class="single-regular">@Model.Price LE</span><span class="single-old"><del></del></span>
+                                    </div>
+                                    <div class="single-pro-price">
+                                        <h5 style="color:white">Quantity</h5>
+
+                                        <span class="single-regular">@Model.Quantity</span><span class="single-old"><del></del></span>
+                                    </div>
+                                    <div class="clear"></div>
+
+
+                                </div>
+                                <br>
+                                <div class="single-pro-cn">
+                                    <h3>Description</h3>
+                                    <p>
+                                        @Model.Description
+                                    </p>
+                                </div>
+
+                                @Html.ActionLink("Delete", "Delete", new { id = Model.ID }, new { @class = "btn btn-danger text-uppercase mr-2 px-4" })
 
                             </div>
-                            <div class="cart mt-4 align-items-center">
-                                @Html.ActionLink("Update", "Update", new { id = Model.ID }, new { @class = "btn btn-success me-4" })
-                                @Html.ActionLink("Delete", "Delete", new { id = Model.ID }, new { @class = "btn btn-danger text-uppercase mr-2 px-4" })
                             </div>
                         </div>
                     </div>
@@ -171,5 +114,11 @@
             </div>
         </div>
     </div>
-</div>
+   
+
+
+
+
+
+
 
