@@ -38,10 +38,10 @@
                                 <tr>
                                     <td>@store.Name</td>
                                     <td>@store.Address</td>
-                                    <td>@store.Phone </td>
+                                    <td>@store.Phone</td>
                                     
                                     <td>
-                                        @*@Html.ActionLink("Display", "StoreProduct", new { StoreProduct = @product.ID }, new { @class = "btn btn-primary" })*@
+                                        @Html.ActionLink("Display", "StoreProduct", new { StoreProduct = store.StoresProducts }, new { @class = "btn btn-primary" })
 
                                     </td>
                                  
