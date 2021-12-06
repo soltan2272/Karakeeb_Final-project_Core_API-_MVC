@@ -31,7 +31,7 @@ namespace AdminDashboard.Controllers
             return View();
 
             }
-            [HttpPost]
+            //[HttpPost]
          /*   public IActionResult Login()
             {
                // return View();
@@ -127,6 +127,10 @@ namespace AdminDashboard.Controllers
             return View(StoreProduct);
         }
         public IActionResult Users()
+        {
+            return View();
+        }
+        public IActionResult Admins()
         {
             return View();
         }
