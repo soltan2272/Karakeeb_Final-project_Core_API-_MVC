@@ -108,12 +108,24 @@ namespace AdminDashboard.Controllers
         {
             return View();
         }
+        public IActionResult Profile()
+        {
+            return View();
+        }
+        public IActionResult ChangePasswoed()
+        {
+            return View();
+        }
 
         public IActionResult Suppliers()
         {
             return View();
         }
         public IActionResult Stores()
+        {
+            return View();
+        }
+        public IActionResult MyStore()
         {
             return View();
         }
