@@ -155,6 +155,16 @@ namespace Final_Project.Controllers
             return result;
         }
 
+        [HttpGet("stores")]
+
+
+        public ResultViewModel GetStores()
+        {
+            result.Message = "All stores";
+            result.Data = StoreRepo.Get();
+            return result;
+        }
+
         [HttpPost("addStore")]
         public ResultViewModel addStore(StoreViewModel sto)
         {
@@ -199,7 +209,7 @@ namespace Final_Project.Controllers
         public ResultViewModel deleteStore(int id)
         {
             result.Data = StoreRepo.GetByID(id);
-            StoreRepo.Remove(new Store {ID = id});
+            StoreRepo.Remove(StoreRepo.GetByID(id));
             UnitOfWork.Save();
             result.Message = "Store Deleted";
             return result;

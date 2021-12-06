@@ -129,12 +129,56 @@ namespace AdminDashboard.Controllers
         {
             return View();
         }
+        public IActionResult Profile()
+        {
+            return View();
+        }
+        public IActionResult ChangePasswoed()
+        {
+            return View();
+        }
 
         public IActionResult Suppliers()
         {
             return View();
         }
+
+
         public IActionResult Stores()
+        {
+            IEnumerable<Store> Stores = null;
+            HttpClient http = new HttpClient();
+            http.BaseAddress = new Uri(Global.API);
+            var storecontroller = http.GetAsync("product/stores");
+            storecontroller.Wait();
+            var resltstore = storecontroller.Result;
+            if (resltstore.IsSuccessStatusCode)
+            {
+                var tabel = resltstore.Content.ReadAsAsync<ResultViewModel>();
+                tabel.Wait();
+                var serialiaze = tabel.Result.Data;
+                string jsonString = JsonConvert.SerializeObject(serialiaze);
+
+                Stores = JsonConvert.DeserializeObject<IList<Store>>(jsonString);
+            }
+
+            return View(Stores);
+
+        }
+
+        [HttpGet]
+        public IActionResult DeletStore(int id)
+        {
+            HttpClient http = new HttpClient();
+            http.BaseAddress = new Uri(Global.API);
+            var response = http.DeleteAsync("product/deleteStore/" + id);
+            response.Wait();
+
+            return Redirect("/AdminDashboard/Stores");
+        }
+
+
+        public IActionResult MyStore()
         {
             return View();
         }
