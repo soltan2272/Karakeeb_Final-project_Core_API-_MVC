@@ -118,6 +118,7 @@ namespace Reposotries
             if (user is null || !(await UserManager.CheckPasswordAsync(user, model.Password)))
             {
                 authModel.Message = "Email or password is inncorrect";
+                authModel.IsAuthenticated =false;
                 return authModel;
             }
 
@@ -176,9 +177,33 @@ namespace Reposotries
         }
         public async Task<List<ViewUser>> GetUsersAsync()
         {
-            var user =  UserManager.Users;
-            List<ViewUser> users = _mapper.Map<List<ViewUser>>(user);
+
+
+            var alluser = UserManager.GetUsersInRoleAsync("User").Result;
+           
+            List<ViewUser> users = _mapper.Map<List<ViewUser>>(alluser);
           
+            return users;
+        }
+
+        public async Task<List<ViewUser>> GetSellersAsync()
+        {
+
+
+            var allsellers = UserManager.GetUsersInRoleAsync("Seller").Result;
+
+            List<ViewUser> users = _mapper.Map<List<ViewUser>>(allsellers);
+
+            return users;
+        }
+        public async Task<List<ViewUser>> GetAdminsAsync()
+        {
+
+
+            var alladmins = UserManager.GetUsersInRoleAsync("Admin").Result;
+
+            List<ViewUser> users = _mapper.Map<List<ViewUser>>(alladmins);
+
             return users;
         }
 

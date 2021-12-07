@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ViewModels;
+using ViewModels.Userr;
 
 namespace Final_Project.Controllers
 {
@@ -14,6 +15,7 @@ namespace Final_Project.Controllers
     public class SellerController : ControllerBase
     {
         IUserRepository UserRepository;
+        ResultViewModel result = new ResultViewModel();
         public SellerController(IUserRepository userRepository, IUnitOfWork unitOfWork)
         {
             UserRepository = userRepository;
@@ -66,6 +68,38 @@ namespace Final_Project.Controllers
                 return BadRequest(result);
 
             return Ok(model);
+        }
+
+        [HttpGet("getsellers")]
+        public async Task<dynamic> GetAllUsers()
+        {
+
+            var res = await UserRepository.GetSellersAsync();
+            result.Data = res;
+            result.Message = "Succedd";
+            result.ISuccessed = true;
+            return result;
+        }
+
+        [HttpGet("getseller/{id}")]
+        public async Task<ResultViewModel> GetUserByID(int id)
+        {
+            ViewUser res = await UserRepository.GetUserBYIDAsync(id);
+            // User view = usr.ToModel();
+            result.Data = res;
+            result.Message = "Succedd";
+            result.ISuccessed = true;
+            return result;
+        }
+
+        [HttpDelete("deleteseller/{id}")]
+        public async Task<dynamic> DeleteUser(int id)
+        {
+            var res = await UserRepository.DeleteUser(id);
+            result.ISuccessed = true;
+            result.Data = res;
+            result.Message = "Deleted Successfully";
+            return result;
         }
     }
 }

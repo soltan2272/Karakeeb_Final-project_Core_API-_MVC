@@ -14,6 +14,9 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using JsonSerializer = System.Text.Json.JsonSerializer;
+using Models.Models;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AdminDashboard.Controllers
 {
@@ -31,27 +34,109 @@ namespace AdminDashboard.Controllers
             return View();
 
             }
-            [HttpPost]
-         /*   public IActionResult Login()
+       
+        [HttpPost]
+           public IActionResult Logincheck(LoginModel logininfo)
+           {
+            // return View()
+            var jsondata = JsonConvert.SerializeObject(logininfo);
+            var data = new StringContent(jsondata, Encoding.UTF8, "application/json");
+            HttpClient http = new HttpClient();
+               http.BaseAddress = new Uri(Global.API);
+               var AdminLogin = http.PostAsync("Admin/login",data);
+                AdminLogin.Wait();
+               var resltadmin = AdminLogin.Result;
+                string result = null;
+               if (resltadmin.IsSuccessStatusCode)
+               {
+                   var tabel = resltadmin.Content.ReadAsAsync<AuthModel>();
+                   tabel.Wait();
+                   var ser = tabel.Result.Token;
+                // string jsonString = JsonConvert.SerializeObject(ser);
+
+                // result = JsonConvert.DeserializeObject<string>(jsonString);
+                result = ser;
+                return Redirect("/AdminDashboard/Index");
+            }
+               else
             {
-               // return View();
+                return Redirect("/AdminDashboard/Login");
+            }
+            
+        }
+
+      
+        public IActionResult Users()
+        {
+            if (User.IsInRole("Seller"))
+            {
+                IEnumerable<User> users = null;
                 HttpClient http = new HttpClient();
                 http.BaseAddress = new Uri(Global.API);
-                var productcontroller = http.GetAsync("product/AdminProducts");
-                productcontroller.Wait();
-                var resltproduct = productcontroller.Result;
-                if (resltproduct.IsSuccessStatusCode)
+                var userscontroller = http.GetAsync("User/getusers");
+                userscontroller.Wait();
+                var resltuser = userscontroller.Result;
+                if (resltuser.IsSuccessStatusCode)
                 {
-                    var tabel = resltproduct.Content.ReadAsAsync<ResultViewModel>();
+                    var tabel = resltuser.Content.ReadAsAsync<ResultViewModel>();
                     tabel.Wait();
                     var ser = tabel.Result.Data;
                     string jsonString = JsonConvert.SerializeObject(ser);
 
-                    products = JsonConvert.DeserializeObject<IList<Product>>(jsonString);
+                    users = JsonConvert.DeserializeObject<IList<User>>(jsonString);
                 }
 
-                return View(products);
-        }*/
+                return View(users);
+            }
+            else
+            {
+                return Redirect("/AdminDashboard/Index");
+            }
+
+        }
+
+        public IActionResult Suppliers()
+        {
+
+            IEnumerable<User> Sellers = null;
+            HttpClient http = new HttpClient();
+            http.BaseAddress = new Uri(Global.API);
+            var sellerscontroller = http.GetAsync("Seller/getsellers");
+            sellerscontroller.Wait();
+            var resltuser = sellerscontroller.Result;
+            if (resltuser.IsSuccessStatusCode)
+            {
+                var tabel = resltuser.Content.ReadAsAsync<ResultViewModel>();
+                tabel.Wait();
+                var ser = tabel.Result.Data;
+                string jsonString = JsonConvert.SerializeObject(ser);
+
+                Sellers = JsonConvert.DeserializeObject<IList<User>>(jsonString);
+            }
+
+            return View(Sellers);
+
+
+        }
+
+        public IActionResult DeleteUser(int id)
+        {
+            HttpClient http = new HttpClient();
+            http.BaseAddress = new Uri(Global.API);
+            var response = http.DeleteAsync("User/deleteuser/" + id);
+            response.Wait();
+            return Redirect("/AdminDashboard/Users");
+        }
+        public IActionResult DeleteSeller(int id)
+        {
+            HttpClient http = new HttpClient();
+            http.BaseAddress = new Uri(Global.API);
+            var response = http.DeleteAsync("Seller/deleteseller/" + id);
+            response.Wait();
+            return Redirect("/AdminDashboard/Suppliers");
+        }
+
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
@@ -121,10 +206,10 @@ namespace AdminDashboard.Controllers
                 return View(product);
         }
 
-        public IActionResult Users()
+       /* public IActionResult Users()
         {
             return View();
-        }
+        }*/
         public IActionResult AddProduct()
         {
             return View();
@@ -138,10 +223,10 @@ namespace AdminDashboard.Controllers
             return View();
         }
 
-        public IActionResult Suppliers()
+      /*  public IActionResult Suppliers()
         {
             return View();
-        }
+        }*/
 
 
         public IActionResult Stores()
