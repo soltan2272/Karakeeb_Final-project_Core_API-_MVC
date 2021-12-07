@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using Models;
 using Reposotries;
 using System;
@@ -8,8 +9,10 @@ using System.Threading.Tasks;
 
 namespace Final_Project.Controllers
 {
+    [EnableCors("AllowOrigin")]
     [ApiController]
     [Route("api/[controller]")]
+
     public class SearchController : ControllerBase
     {
         IGenericRepostory<Product> ProductRepo;

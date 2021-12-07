@@ -1,5 +1,12 @@
 ﻿@using Models;
-@model IList<Product>;
+
+
+
+@model IPagedList<Product>;
+@using PagedList.Mvc;
+@using PagedList;
+@*@Html.PagedListPager(Model, page => Url.Action("index", new { page }));*@
+
 @{
     ViewData["Title"] = "Products";
 
@@ -13,10 +20,10 @@
                     <div class="product-status-wrap">
                         <h4>Products List</h4>
                         @*<div class="add-product">
-                            @Html.ActionLink("Add Product", "AddProduct")
+                                @Html.ActionLink("Add Product", "AddProduct")
 
-                            <a href="product-edit.html"></a>
-                        </div>*@
+                                <a href="product-edit.html"></a>
+                            </div>*@
                         <table>
                             <tr>
                                 <th>Image</th>
@@ -93,9 +100,9 @@
 
                                     </td>
                                     @*<td>
-                                        @Html.ActionLink("Update", "Update", @product, new { @class = "btn btn-success" })
+                                            @Html.ActionLink("Update", "Update", @product, new { @class = "btn btn-success" })
 
-                                    </td>*@
+                                        </td>*@
                                     <td>
                                         @Html.ActionLink("Delete", "Delete", new { ID = @product.ID }, new { @class = "btn btn-danger" })
 
@@ -106,7 +113,10 @@
 
 
                         </table>
+
+
                         <div class="custom-pagination">
+
                             <ul class="pagination">
                                 <li class="page-item"><a class="page-link" href="#">Previous</a></li>
                                 <li class="page-item"><a class="page-link" href="#">1</a></li>

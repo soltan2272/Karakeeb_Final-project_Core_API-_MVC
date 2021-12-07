@@ -3,6 +3,8 @@ using Final_Project;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Models;
+using PagedList;
+using PagedList.Mvc;
 using ViewModels;
 using Newtonsoft.Json;
 using System;
@@ -61,13 +63,13 @@ namespace AdminDashboard.Controllers
         { 
             return View();
         }
-        public IActionResult Products()
+        public IActionResult Products(int? page=1)
         {
 
             IEnumerable<Product> products = null;
             HttpClient http = new HttpClient();
             http.BaseAddress = new Uri(Global.API);
-            var productcontroller = http.GetAsync("product/AdminProducts");
+            var productcontroller = http.GetAsync("product/AdminProducts/"+page);
             productcontroller.Wait();
             var resltproduct = productcontroller.Result;
             if (resltproduct.IsSuccessStatusCode)
@@ -78,9 +80,10 @@ namespace AdminDashboard.Controllers
                 string jsonString = JsonConvert.SerializeObject(ser);
 
                 products = JsonConvert.DeserializeObject<IList<Product>>(jsonString);
+            
             }
           
-            return View(products);
+            return View(products.ToPagedList(page ?? 1, 7));
 
           
         }
