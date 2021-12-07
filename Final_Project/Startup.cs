@@ -72,6 +72,19 @@ namespace Final_Project
 
             services.AddSwaggerGen();
             services.AddAutoMapper(typeof(Startup));
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+            });
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                    .AllowAnyMethod().AllowAnyHeader();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -85,7 +98,6 @@ namespace Final_Project
             app.UseRouting();
             app.UseStaticFiles();
 
-
             app.UseCors(builer =>
             {
                 builer.WithOrigins("https://localhost:44331");
@@ -93,6 +105,7 @@ namespace Final_Project
                 builer.AllowAnyHeader();
 
             });
+            app.UseCors(options => options.AllowAnyOrigin());
 
             app.UseAuthentication();
             app.UseAuthorization();
