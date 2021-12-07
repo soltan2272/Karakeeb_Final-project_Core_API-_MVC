@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reposotries", "Reposotries\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViewModels", "ViewModels\ViewModels.csproj", "{BDC4CF76-6566-4930-8547-55A3A2DDFFBA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminDashboard", "AdminDashboard\AdminDashboard.csproj", "{6EB509CA-CDA4-4E1B-82A1-5C2449C8D7B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminDashboard", "AdminDashboard\AdminDashboard.csproj", "{6EB509CA-CDA4-4E1B-82A1-5C2449C8D7B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

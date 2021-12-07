@@ -1,7 +1,7 @@
 ﻿@using Models;
 @model IList<User>;
 @{
-    ViewData["Title"] = "Users";
+    ViewData["Title"] = "Sellers";
 
 }
 
@@ -33,20 +33,18 @@
 
                             @foreach (User usr in Model)
                             {
-                        <tr>
-                           
+                                <tr>
+                                    <td>@usr.Full_Name</td>
+                                    <td>@usr.Email </td>
+                                    <td>@usr.Adrress </td>
+                                    <td>@usr.Phone </td>
+                                    <td>@usr.SSN </td>
+                                    <td>@usr.Date_Of_Birth </td>
+                                    <td>
+                                        @Html.ActionLink("Delete", "Delete", new { ID = usr.Id }, new { @class = "btn btn-danger" })
 
-                            <td>@usr.Full_Name</td>
-                            <td>@usr.Email </td>
-                            <td>@usr.Adrress </td>
-                            <td>@usr.Phone </td>
-                            <td>@usr.SSN </td>
-                            <td>@usr.Date_Of_Birth </td>
-                            <td>
-                                @Html.ActionLink("Delete", "DeleteUser", new { ID = usr.Id }, new { @class = "btn btn-danger" })
-
-                            </td>
-                        </tr>
+                                    </td>
+                                </tr>
                             }
 
 

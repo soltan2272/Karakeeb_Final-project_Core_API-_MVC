@@ -1,5 +1,9 @@
 ﻿using Microsoft.AspNetCore.Cors;
+
+﻿using Data;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Reposotries;
@@ -22,17 +26,19 @@ namespace Final_Project.Controllers
         IGenericRepostory<Order> OrderRepo;
         IGenericRepostory<Feedback> FeedbackRepo;
 
-        
+        Project_Context Context;
 
         IUnitOfWork UnitOfWork;
         ResultViewModel result = new ResultViewModel();
-
-        public UserController(IUserRepository userRepository, IUnitOfWork unitOfWork)
+        
+        public UserController(IUserRepository userRepository,
+            IUnitOfWork unitOfWork, Project_Context context)
         {
             UnitOfWork = unitOfWork;
             UserRepository = userRepository;
             OrderRepo = UnitOfWork.GetOrderRepo();
             FeedbackRepo = UnitOfWork.GetFeedbackRepo();
+            Context = context;
             
         }
 
@@ -67,9 +73,8 @@ namespace Final_Project.Controllers
         [HttpGet("getusers")]
         public async Task<dynamic> GetAllUsers()
         {
-            
-           var res = await UserRepository.GetUsersAsync();
-          
+
+            var res = await UserRepository.GetUsersAsync();
             result.Data = res;
             result.Message = "Succedd";
             result.ISuccessed = true;

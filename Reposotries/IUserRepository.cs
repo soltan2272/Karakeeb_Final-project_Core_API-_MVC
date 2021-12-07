@@ -19,6 +19,10 @@ namespace Reposotries
         Task<string> AddRole(AddRoleModel Model);
         Task<List<ViewUser>> GetUsersAsync();
 
+        Task<List<ViewUser>> GetSellersAsync();
+
+        Task<List<ViewUser>> GetAdminsAsync();
+
         Task<ViewUser> GetUserBYIDAsync(int id);
 
         Task<List<User>> DeleteUser(int id);
