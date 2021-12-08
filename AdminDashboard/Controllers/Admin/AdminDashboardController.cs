@@ -41,10 +41,17 @@ namespace AdminDashboard.Controllers
 
 
 
+
         }
 
-            //[HttpPost]
-         /*   public IActionResult Login()
+
+
+        //[HttpPost]
+        // public IActionResult Login()
+
+
+
+        }
 
 
         [HttpPost]
@@ -285,6 +292,7 @@ namespace AdminDashboard.Controllers
                 return Redirect("/AdminDashboard/Login");
             }
         }
+
         [HttpGet]
         public IActionResult Delete(int id)
         {
@@ -304,8 +312,6 @@ namespace AdminDashboard.Controllers
                 return Redirect("/AdminDashboard/Login");
             }
         }
-
-
 
         [HttpGet]
         public IActionResult Detiles(int id)
@@ -348,6 +354,7 @@ namespace AdminDashboard.Controllers
             }
         }
 
+
        /* public IActionResult Users()
         {
             return View();
@@ -359,6 +366,7 @@ namespace AdminDashboard.Controllers
         }
 
         }*/
+
 
         public IActionResult AddProduct()
         {
@@ -402,11 +410,6 @@ namespace AdminDashboard.Controllers
             return Redirect("/AdminDashboard/Login");
         }
 
-
-        /*  public IActionResult Suppliers()
-          {
-              return View();
-          }*/
 
 
         public IActionResult Stores()
