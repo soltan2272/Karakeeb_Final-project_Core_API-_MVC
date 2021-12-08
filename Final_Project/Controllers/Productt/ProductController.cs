@@ -12,12 +12,14 @@ using ViewModels;
 
 namespace Final_Project.Controllers
 {
+   // [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/[controller]")]
+  
     public class ProductController : ControllerBase
     {
         IGenericRepostory<Product> ProductRepo;
-
+        IGenericRepostory<Category> CategoryRepo;
         IGenericRepostory<Store> StoreRepo;
         IUnitOfWork UnitOfWork;
 
@@ -28,48 +30,112 @@ namespace Final_Project.Controllers
             UnitOfWork = unitOfWork;
             ProductRepo = UnitOfWork.GetProductRepo();
             StoreRepo = UnitOfWork.GetStoreRepo();
+            CategoryRepo = unitOfWork.GetCategoryRepo();
         }
 
-        [HttpGet("")]
-        public  ResultViewModel Get()
+        [HttpGet("userProducts")]
+        public  ResultViewModel GetforUser()
         {
 
             result.Message = "All Products";
             result.Data = ProductRepo.Get().Select(p => p.ToViewModel());
             return result;
         }
+        [HttpGet("AdminProducts")]
+
+
+        public ResultViewModel GetforAdmin()
+        {
+            result.Message = "All Products";
+            result.Data = ProductRepo.Get();
+            return result;
+        }
+
 
         [HttpGet("{id}")]
         public ResultViewModel GetProductByID(int id)
         {
+            Product product = ProductRepo.GetByID(id);
+            if (product == null)
+            {
+                result.ISuccessed = false;
+                return result;
+
+            }
+
             result.Message = " Product By ID";
+                result.Data = ProductRepo.GetByID(id).ToViewModel();
+
            
-            result.Data = ProductRepo.GetByID(id).ToViewModel();
+            
+            return result;
+
+        }
+
+        [HttpGet("AdminProduct/{id}")]
+        public ResultViewModel GetProductByIDForAdmin(int id)
+        {
+            Product product = ProductRepo.GetByID(id);
+            if (product == null)
+            {
+                result.ISuccessed = false;
+                return result;
+
+            }
+
+            result.Message = " Product By ID";
+            result.Data = ProductRepo.GetByID(id);
+
+
 
             return result;
 
         }
 
-        [HttpPost("addProduct")]
-        public ResultViewModel addProduct(InsertProductViewModel pro)
+        [HttpGet("GetProductBySupplierID/{id}")]
+        public ResultViewModel GetProductBySupplierID(int id)
         {
+            Product products = ProductRepo.Get().Where(s => s.CurrentSupplierID == id).FirstOrDefault();
+            if (products == null)
+            {
+                result.ISuccessed = false;
+                return result;
+            }
+            result.Message = " Product By Supplier ID";
+            result.Data = products;
+            return result;
+        }
+
+
+
+
+        [HttpPost("addProduct")]
+        public ResultViewModel addProduct(Product product)
+        {
+            StoreProduct sp = new StoreProduct();
             result.Message = "Add Product";
 
-            var product = new Product()
+            var Cat = CategoryRepo.Get().Where(c => c.ID == product.CurrentCategoryID).FirstOrDefault();
+            if (Cat != null)
             {
-                ID = pro.ID,
-                Name = pro.Name,
-                Image = pro.Image,
-                Rate = pro.Rate,
-                Description = pro.Description,
-                Price = pro.Price,
-                CurrentCategoryID = pro.CurrentCategoryID,
-                CurrentSupplierID = pro.CurrentSupplierID,
-            };
+
+                Cat.Products.Add(product);
+            }
+
+
+
+            var store = StoreRepo.Get().
+                Where(s => s.StoresProducts.Where(sp => sp.Product_ID == product.ID).FirstOrDefault() != null).FirstOrDefault();
+            if (store == null)
+            {
+                sp.Product_ID = product.ID;
+                product.StoresProducts.Add(sp);
+            }
+
 
             ProductRepo.Add(product);
             UnitOfWork.Save();
-            result.Data = pro;
+            result.Data = product;
 
             return result;
 
@@ -85,6 +151,7 @@ namespace Final_Project.Controllers
             var product = ProductRepo.GetByID(id);
             product.ID = pro.ID;
             product.Name = pro.Name;
+            product.Quantity = pro.Quantity;
             product.Image = pro.Image;
             product.Rate = pro.Rate;
             product.Description = pro.Description;
@@ -101,14 +168,38 @@ namespace Final_Project.Controllers
             UnitOfWork.Save();
             return result;
         }
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete/{id}")]
         public ResultViewModel deleteProduct(int id)
         {
             result.Message = "Deleted Product";
 
             result.Data = ProductRepo.GetByID(id);
-            ProductRepo.Remove(new Product { ID = id });
+            ProductRepo.Remove(ProductRepo.GetByID(id));
             UnitOfWork.Save();
+            return result;
+        }
+
+        [HttpGet("stores")]
+
+
+        public ResultViewModel GetStores()
+        {
+            result.Message = "All stores";
+            result.Data = StoreRepo.Get();
+            return result;
+        }
+
+        [HttpGet("storesById/{id}")]
+        public ResultViewModel storesById(int id)
+        {
+            Store store = StoreRepo.GetByID(id);
+            if (store == null)
+            {
+                result.ISuccessed = false;
+                return result;
+            }
+            result.Message = " Store By ID";
+            result.Data = StoreRepo.GetByID(id);
             return result;
         }
 
@@ -116,13 +207,11 @@ namespace Final_Project.Controllers
         public ResultViewModel addStore(StoreViewModel sto)
         {
             result.Message = "Add Store";
-            var store = new Store()
-            {
-
-                Name = sto.Name,
-                Address = sto.Address,
-                Phone = sto.Phone
-            };
+            var store = new Store();
+            store.Name = sto.Name;
+            store.Address = sto.Address;
+            store.Phone = sto.Phone;
+            
 
             StoreRepo.Add(store);
             UnitOfWork.Save();
@@ -156,7 +245,7 @@ namespace Final_Project.Controllers
         public ResultViewModel deleteStore(int id)
         {
             result.Data = StoreRepo.GetByID(id);
-            StoreRepo.Remove(new Store {ID = id});
+            StoreRepo.Remove(StoreRepo.GetByID(id));
             UnitOfWork.Save();
             result.Message = "Store Deleted";
             return result;

@@ -19,8 +19,8 @@ namespace Reposotries
         IGenericRepostory<Payment> GetPaymentRepo();
         IGenericRepostory<Product> GetProductRepo();
         IGenericRepostory<Store> GetStoreRepo();
-      //  IGenericRepostory<Supplier> GetSupplierRepo();
-       /*IGenericRepostory<User> GetUserRepo();*/
+        //  IGenericRepostory<Supplier> GetSupplierRepo();
+       
         Task Save();
 
     }

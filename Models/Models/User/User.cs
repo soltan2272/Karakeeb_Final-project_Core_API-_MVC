@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Models
 {
    public class User:IdentityUser<int>
@@ -28,5 +29,6 @@ namespace Models
 
         public ICollection<Product> Products { get; set; }
 
+      
     }
 }

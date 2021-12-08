@@ -1,5 +1,7 @@
 ﻿using Data;
+using Microsoft.AspNetCore.Identity;
 using Models;
+using Models.Models.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +13,9 @@ namespace Reposotries
     public class UnitOfWork : IUnitOfWork
     {
         Project_Context Context;
+        
 
+     //   IGenericRepostory<User> UserRepo;
         IGenericRepostory<Category> CategoryRepo;
       //  IGenericRepostory<Contact> ContactRepo;
         IGenericRepostory<Courier> CourierRepo;
@@ -38,6 +42,7 @@ namespace Reposotries
             PaymentRepo = paymentRepo;
             ProductRepo = productRepo;
             StoreRepo = storeRepo;
+            //UserRepo = userRepo;
         }
 
         public IGenericRepostory<Category> GetCategoryRepo()
@@ -45,11 +50,7 @@ namespace Reposotries
             return CategoryRepo;
 
         }
-      /*  public IGenericRepostory<Contact> GetContactRepo()
-        {
-            return ContactRepo;
-
-        }*/
+     
         public IGenericRepostory<Courier> GetCourierRepo()
         {
             return CourierRepo;
