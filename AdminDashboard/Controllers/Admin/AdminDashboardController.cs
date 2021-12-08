@@ -40,7 +40,7 @@ namespace AdminDashboard.Controllers
             }
 
             //[HttpPost]
-         /*   public IActionResult Login()
+         //   public IActionResult Login()
 
        
         [HttpPost]
@@ -222,19 +222,20 @@ namespace AdminDashboard.Controllers
         }
         public IActionResult Products()
         {
-
-            IEnumerable<Product> products = null;
-            HttpClient http = new HttpClient();
-            http.BaseAddress = new Uri(Global.API);
-            var productcontroller = http.GetAsync("product/AdminProducts/"+page);
-            productcontroller.Wait();
-            var resltproduct = productcontroller.Result;
-            if (resltproduct.IsSuccessStatusCode)
+            if (HttpContext.Request.Cookies["UserToken"] != "")
             {
-                var tabel = resltproduct.Content.ReadAsAsync<ResultViewModel>();
-                tabel.Wait();
-                var ser = tabel.Result.Data;
-                string jsonString = JsonConvert.SerializeObject(ser);
+                IEnumerable<Product> products = null;
+                HttpClient http = new HttpClient();
+                http.BaseAddress = new Uri(Global.API);
+                var productcontroller = http.GetAsync("product/AdminProducts/" + 1);
+                productcontroller.Wait();
+                var resltproduct = productcontroller.Result;
+                if (resltproduct.IsSuccessStatusCode)
+                {
+                    var tabel = resltproduct.Content.ReadAsAsync<ResultViewModel>();
+                    tabel.Wait();
+                    var ser = tabel.Result.Data;
+                    string jsonString = JsonConvert.SerializeObject(ser);
 
                     products = JsonConvert.DeserializeObject<IList<Product>>(jsonString);
                 }
@@ -247,6 +248,7 @@ namespace AdminDashboard.Controllers
                 return Redirect("/AdminDashboard/Login");
             }
         }
+
         [HttpGet]
         public IActionResult Delete(int id)
         {
@@ -298,18 +300,7 @@ namespace AdminDashboard.Controllers
             }
         }
 
-       /* public IActionResult Users()
-        {
-            return View();
-
-        }
-        public IActionResult Admins()
-        {
-            return View();
-        }
-
-        }*/
-
+   
         public IActionResult AddProduct()
         {
             if (HttpContext.Request.Cookies["UserToken"] != "")
@@ -350,13 +341,6 @@ namespace AdminDashboard.Controllers
             HttpContext.Response.Cookies.Append("UserToken","");
             return Redirect("/AdminDashboard/Login");
         }
-
-
-        /*  public IActionResult Suppliers()
-          {
-              return View();
-          }*/
-
 
         public IActionResult Stores()
         {
