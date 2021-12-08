@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Models;
+using PagedList;
+using PagedList.Mvc;
 using ViewModels;
 using Newtonsoft.Json;
 using System;
@@ -35,7 +37,11 @@ namespace AdminDashboard.Controllers
         {
             return View();
 
-          }
+            }
+
+            //[HttpPost]
+         /*   public IActionResult Login()
+
        
         [HttpPost]
            public IActionResult Logincheck(LoginModel logininfo)
@@ -216,20 +222,19 @@ namespace AdminDashboard.Controllers
         }
         public IActionResult Products()
         {
-            if (HttpContext.Request.Cookies["UserToken"] != "")
+
+            IEnumerable<Product> products = null;
+            HttpClient http = new HttpClient();
+            http.BaseAddress = new Uri(Global.API);
+            var productcontroller = http.GetAsync("product/AdminProducts/"+page);
+            productcontroller.Wait();
+            var resltproduct = productcontroller.Result;
+            if (resltproduct.IsSuccessStatusCode)
             {
-                IEnumerable<Product> products = null;
-                HttpClient http = new HttpClient();
-                http.BaseAddress = new Uri(Global.API);
-                var productcontroller = http.GetAsync("product/AdminProducts");
-                productcontroller.Wait();
-                var resltproduct = productcontroller.Result;
-                if (resltproduct.IsSuccessStatusCode)
-                {
-                    var tabel = resltproduct.Content.ReadAsAsync<ResultViewModel>();
-                    tabel.Wait();
-                    var ser = tabel.Result.Data;
-                    string jsonString = JsonConvert.SerializeObject(ser);
+                var tabel = resltproduct.Content.ReadAsAsync<ResultViewModel>();
+                tabel.Wait();
+                var ser = tabel.Result.Data;
+                string jsonString = JsonConvert.SerializeObject(ser);
 
                     products = JsonConvert.DeserializeObject<IList<Product>>(jsonString);
                 }
@@ -296,7 +301,15 @@ namespace AdminDashboard.Controllers
        /* public IActionResult Users()
         {
             return View();
+
+        }
+        public IActionResult Admins()
+        {
+            return View();
+        }
+
         }*/
+
         public IActionResult AddProduct()
         {
             if (HttpContext.Request.Cookies["UserToken"] != "")

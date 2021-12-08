@@ -9,27 +9,30 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using ViewModels;
+using Models.Models;
 
 namespace Final_Project.Controllers
 {
-   // [Authorize(Roles = "Admin")]
+    [EnableCors("AllowOrigin")]
     [ApiController]
     [Route("api/[controller]")]
   
     public class ProductController : ControllerBase
     {
         IGenericRepostory<Product> ProductRepo;
-
+        IUserRepository UserRepository;
         IGenericRepostory<Store> StoreRepo;
         IUnitOfWork UnitOfWork;
 
         ResultViewModel result = new ResultViewModel();
 
-        public ProductController(IUnitOfWork unitOfWork)
+        public ProductController(IUserRepository userRepository,IUnitOfWork unitOfWork)
         {
             UnitOfWork = unitOfWork;
             ProductRepo = UnitOfWork.GetProductRepo();
             StoreRepo = UnitOfWork.GetStoreRepo();
+            UserRepository = userRepository;
+
         }
 
         [HttpGet("userProducts")]
@@ -40,13 +43,12 @@ namespace Final_Project.Controllers
             result.Data = ProductRepo.Get().Select(p => p.ToViewModel());
             return result;
         }
-        [HttpGet("AdminProducts")]
-
-
-        public ResultViewModel GetforAdmin()
+        [HttpGet("AdminProducts/{p}")]
+        public ResultViewModel GetforAdmin(int p)
         {
             result.Message = "All Products";
-            result.Data = ProductRepo.Get();
+            result.Data = ProductRepo.Get().OrderByDescending(p => p.ID).Skip(p * 7).Take(7);
+
             return result;
         }
 
@@ -109,6 +111,13 @@ namespace Final_Project.Controllers
                 CurrentCategoryID = pro.CurrentCategoryID,
                 CurrentSupplierID = pro.CurrentSupplierID,
             };
+            //product.supplier.
+            //var store = StoreRepo.Get().FirstOrDefault(s => s.SupllierStores
+            //                .FirstOrDefault(ss => s.ID == product.CurrentSupplierID) != null);
+            //if (store != null)
+            //{
+            //    store.StoresProducts.FirstOrDefault(
+            //}
 
             ProductRepo.Add(product);
             UnitOfWork.Save();
@@ -134,7 +143,6 @@ namespace Final_Project.Controllers
             product.Price = pro.Price;
             product.CurrentCategoryID = pro.CurrentCategoryID;
             product.CurrentSupplierID = pro.CurrentSupplierID;
-
 
             if (product == null)
             {

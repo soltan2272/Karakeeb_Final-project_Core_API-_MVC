@@ -1,6 +1,9 @@
+﻿using Microsoft.AspNetCore.Cors;
+
 ﻿using Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Reposotries;
@@ -15,6 +18,7 @@ namespace Final_Project.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowOrigin")]
     public class UserController : ControllerBase
     {
      
