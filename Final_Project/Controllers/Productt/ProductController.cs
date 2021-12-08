@@ -20,6 +20,7 @@ namespace Final_Project.Controllers
     public class ProductController : ControllerBase
     {
         IGenericRepostory<Product> ProductRepo;
+        IGenericRepostory<Category> CategoryRepo;
         IUserRepository UserRepository;
         IGenericRepostory<Store> StoreRepo;
         IUnitOfWork UnitOfWork;
@@ -31,6 +32,7 @@ namespace Final_Project.Controllers
             UnitOfWork = unitOfWork;
             ProductRepo = UnitOfWork.GetProductRepo();
             StoreRepo = UnitOfWork.GetStoreRepo();
+            CategoryRepo = unitOfWork.GetCategoryRepo();
             UserRepository = userRepository;
 
         }
@@ -93,15 +95,45 @@ namespace Final_Project.Controllers
 
         }
 
+        [HttpGet("GetProductBySupplierID/{id}")]
+        public ResultViewModel GetProductBySupplierID(int id)
+        {
+            Product products = ProductRepo.Get().Where(s => s.CurrentSupplierID == id).FirstOrDefault();
+            if (products == null)
+            {
+                result.ISuccessed = false;
+                return result;
+            }
+            result.Message = " Product By Supplier ID";
+            result.Data = products;
+            return result;
+        }
+
+
 
 
         [HttpPost("addProduct")]
-        public ResultViewModel addProduct(InsertProductViewModel pro)
+        public ResultViewModel addProduct(Product product)
         {
+            StoreProduct sp = new StoreProduct();
             result.Message = "Add Product";
 
-            var product = new Product()
+            var Cat = CategoryRepo.Get().Where(c => c.ID == product.CurrentCategoryID).FirstOrDefault();
+            if (Cat != null)
             {
+                Cat.Products.Add(product);
+            }
+
+
+
+            var store = StoreRepo.Get().
+                Where(s => s.StoresProducts.Where(sp => sp.Product_ID == product.ID).FirstOrDefault() != null).FirstOrDefault();
+            if (store == null)
+            {
+                sp.Product_ID = product.ID;
+                product.StoresProducts.Add(sp);
+            }
+
                 ID = pro.ID,
                 Name = pro.Name,
                 //Image = pro.Image,
@@ -121,7 +153,7 @@ namespace Final_Project.Controllers
 
             ProductRepo.Add(product);
             UnitOfWork.Save();
-            result.Data = pro;
+            result.Data = product;
 
             return result;
 
@@ -137,6 +169,9 @@ namespace Final_Project.Controllers
             var product = ProductRepo.GetByID(id);
             product.ID = pro.ID;
             product.Name = pro.Name;
+            product.Quantity = pro.Quantity;
+            product.Image = pro.Image;
+
            // product.Image = pro.Image;
             product.Rate = pro.Rate;
             product.Description = pro.Description;
@@ -173,17 +208,30 @@ namespace Final_Project.Controllers
             return result;
         }
 
+        [HttpGet("storesById/{id}")]
+        public ResultViewModel storesById(int id)
+        {
+            Store store = StoreRepo.GetByID(id);
+            if (store == null)
+            {
+                result.ISuccessed = false;
+                return result;
+            }
+            result.Message = " Store By ID";
+            result.Data = StoreRepo.GetByID(id);
+            return result;
+        }
+
+        [HttpPost("addStore")]
        /* [HttpPost("addStore")]
         public ResultViewModel addStore(StoreViewModel sto)
         {
             result.Message = "Add Store";
-            var store = new Store()
-            {
-
-                Name = sto.Name,
-                Address = sto.Address,
-                Phone = sto.Phone
-            };
+            var store = new Store();
+            store.Name = sto.Name;
+            store.Address = sto.Address;
+            store.Phone = sto.Phone;
+            
 
             StoreRepo.Add(store);
             UnitOfWork.Save();
