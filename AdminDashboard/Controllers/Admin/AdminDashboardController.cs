@@ -1,6 +1,7 @@
 ﻿using AdminDashboard.Models;
 using Final_Project;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Models;
 using ViewModels;
@@ -20,10 +21,11 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace AdminDashboard.Controllers
 {
+     
     public class AdminDashboardController : Controller
     {
         private readonly ILogger<AdminDashboardController> _logger;
-
+       
         public AdminDashboardController(ILogger<AdminDashboardController> logger)
         {
             _logger = logger;
@@ -33,7 +35,7 @@ namespace AdminDashboard.Controllers
         {
             return View();
 
-            }
+          }
        
         [HttpPost]
            public IActionResult Logincheck(LoginModel logininfo)
@@ -56,7 +58,11 @@ namespace AdminDashboard.Controllers
 
                 // result = JsonConvert.DeserializeObject<string>(jsonString);
                 result = ser;
+                HttpContext.Response.Cookies.Append("UserToken", result);
                 return Redirect("/AdminDashboard/Index");
+                
+
+
             }
                else
             {
@@ -68,7 +74,7 @@ namespace AdminDashboard.Controllers
       
         public IActionResult Users()
         {
-            if (User.IsInRole("Seller"))
+            if (HttpContext.Request.Cookies["UserToken"]!= "")
             {
                 IEnumerable<User> users = null;
                 HttpClient http = new HttpClient();
@@ -90,120 +96,202 @@ namespace AdminDashboard.Controllers
             }
             else
             {
-                return Redirect("/AdminDashboard/Index");
+                return Redirect("/AdminDashboard/Login");
             }
 
         }
 
         public IActionResult Suppliers()
         {
-
-            IEnumerable<User> Sellers = null;
-            HttpClient http = new HttpClient();
-            http.BaseAddress = new Uri(Global.API);
-            var sellerscontroller = http.GetAsync("Seller/getsellers");
-            sellerscontroller.Wait();
-            var resltuser = sellerscontroller.Result;
-            if (resltuser.IsSuccessStatusCode)
+            if (HttpContext.Request.Cookies["UserToken"] != "")
             {
-                var tabel = resltuser.Content.ReadAsAsync<ResultViewModel>();
-                tabel.Wait();
-                var ser = tabel.Result.Data;
-                string jsonString = JsonConvert.SerializeObject(ser);
+                IEnumerable<User> Sellers = null;
+                HttpClient http = new HttpClient();
+                http.BaseAddress = new Uri(Global.API);
+                var sellerscontroller = http.GetAsync("Seller/getsellers");
+                sellerscontroller.Wait();
+                var resltuser = sellerscontroller.Result;
+                if (resltuser.IsSuccessStatusCode)
+                {
+                    var tabel = resltuser.Content.ReadAsAsync<ResultViewModel>();
+                    tabel.Wait();
+                    var ser = tabel.Result.Data;
+                    string jsonString = JsonConvert.SerializeObject(ser);
 
-                Sellers = JsonConvert.DeserializeObject<IList<User>>(jsonString);
+                    Sellers = JsonConvert.DeserializeObject<IList<User>>(jsonString);
+                }
+
+                return View(Sellers);
+            }
+            else
+            {
+                return Redirect("/AdminDashboard/Login");
             }
 
-            return View(Sellers);
-
-
         }
+        public IActionResult Admins()
+        {
+            if (HttpContext.Request.Cookies["UserToken"] != "" 
+                && User.IsInRole("Admin"))
+            {
+                IEnumerable<User> Admins = null;
+                HttpClient http = new HttpClient();
+                http.BaseAddress = new Uri(Global.API);
+                var adminscontroller = http.GetAsync("Admin/getadmins");
+                adminscontroller.Wait();
+                var resltuser = adminscontroller.Result;
+                if (resltuser.IsSuccessStatusCode)
+                {
+                    var tabel = resltuser.Content.ReadAsAsync<ResultViewModel>();
+                    tabel.Wait();
+                    var ser = tabel.Result.Data;
+                    string jsonString = JsonConvert.SerializeObject(ser);
+
+                    Admins = JsonConvert.DeserializeObject<IList<User>>(jsonString);
+                }
+
+                return View(Admins);
+            }
+            else
+            {
+                return Redirect("/AdminDashboard/Login");
+            }
+            
+        }
+
 
         public IActionResult DeleteUser(int id)
         {
-            HttpClient http = new HttpClient();
-            http.BaseAddress = new Uri(Global.API);
-            var response = http.DeleteAsync("User/deleteuser/" + id);
-            response.Wait();
-            return Redirect("/AdminDashboard/Users");
+            if (HttpContext.Request.Cookies["UserToken"] != "")
+            {
+                HttpClient http = new HttpClient();
+                http.BaseAddress = new Uri(Global.API);
+                var response = http.DeleteAsync("User/deleteuser/" + id);
+                response.Wait();
+                return Redirect("/AdminDashboard/Users");
+            }
+            else
+            {
+                return Redirect("/AdminDashboard/Login");
+            }
         }
         public IActionResult DeleteSeller(int id)
         {
-            HttpClient http = new HttpClient();
-            http.BaseAddress = new Uri(Global.API);
-            var response = http.DeleteAsync("Seller/deleteseller/" + id);
-            response.Wait();
-            return Redirect("/AdminDashboard/Suppliers");
+            if (HttpContext.Request.Cookies["UserToken"] != "")
+            {
+                HttpClient http = new HttpClient();
+                http.BaseAddress = new Uri(Global.API);
+                var response = http.DeleteAsync("Seller/deleteseller/" + id);
+                response.Wait();
+                return Redirect("/AdminDashboard/Suppliers");
+            }
+            else
+            {
+                return Redirect("/AdminDashboard/Login");
+            }
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            if (HttpContext.Request.Cookies["UserToken"] != "")
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("/AdminDashboard/Login");
+            }
         }
        
         public IActionResult Orders()
-        { 
-            return View();
+        {
+            if (HttpContext.Request.Cookies["UserToken"] != "")
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("/AdminDashboard/Login");
+            }
         }
         public IActionResult Products()
         {
-
-            IEnumerable<Product> products = null;
-            HttpClient http = new HttpClient();
-            http.BaseAddress = new Uri(Global.API);
-            var productcontroller = http.GetAsync("product/AdminProducts");
-            productcontroller.Wait();
-            var resltproduct = productcontroller.Result;
-            if (resltproduct.IsSuccessStatusCode)
+            if (HttpContext.Request.Cookies["UserToken"] != "")
             {
-                var tabel = resltproduct.Content.ReadAsAsync<ResultViewModel>();
-                tabel.Wait();
-                var ser = tabel.Result.Data;
-                string jsonString = JsonConvert.SerializeObject(ser);
+                IEnumerable<Product> products = null;
+                HttpClient http = new HttpClient();
+                http.BaseAddress = new Uri(Global.API);
+                var productcontroller = http.GetAsync("product/AdminProducts");
+                productcontroller.Wait();
+                var resltproduct = productcontroller.Result;
+                if (resltproduct.IsSuccessStatusCode)
+                {
+                    var tabel = resltproduct.Content.ReadAsAsync<ResultViewModel>();
+                    tabel.Wait();
+                    var ser = tabel.Result.Data;
+                    string jsonString = JsonConvert.SerializeObject(ser);
 
-                products = JsonConvert.DeserializeObject<IList<Product>>(jsonString);
+                    products = JsonConvert.DeserializeObject<IList<Product>>(jsonString);
+                }
+
+                return View(products);
             }
-          
-            return View(products);
 
-          
+            else
+            {
+                return Redirect("/AdminDashboard/Login");
+            }
         }
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            HttpClient http = new HttpClient();
-            http.BaseAddress = new Uri(Global.API);
-            var response = http.DeleteAsync("product/Delete/" + id);
-            response.Wait();
+            if (HttpContext.Request.Cookies["UserToken"] != "")
+            {
+                HttpClient http = new HttpClient();
+                http.BaseAddress = new Uri(Global.API);
+                var response = http.DeleteAsync("product/Delete/" + id);
+                response.Wait();
 
-            return Redirect("/AdminDashboard/Products");
+                return Redirect("/AdminDashboard/Products");
+            }
+            else
+            {
+                return Redirect("/AdminDashboard/Login");
+            }
         }
 
         [HttpGet]
        public IActionResult Detiles(int id)
         {
-            Product product = null;
-            HttpClient http = new HttpClient();
-            http.BaseAddress = new Uri(Global.API);
-            var productcontroller = http.GetAsync("product/AdminProduct/" + id);
-            productcontroller.Wait();
-            var resltproduct = productcontroller.Result;
-            if (resltproduct.IsSuccessStatusCode)
+            if (HttpContext.Request.Cookies["UserToken"] != "")
             {
+                Product product = null;
+                HttpClient http = new HttpClient();
+                http.BaseAddress = new Uri(Global.API);
+                var productcontroller = http.GetAsync("product/AdminProduct/" + id);
+                productcontroller.Wait();
+                var resltproduct = productcontroller.Result;
+                if (resltproduct.IsSuccessStatusCode)
+                {
 
-                var tabel = resltproduct.Content.ReadAsAsync<ResultViewModel>();
-                tabel.Wait();
-                if(tabel.Result.ISuccessed==false)
-                    return View("NotFound");
+                    var tabel = resltproduct.Content.ReadAsAsync<ResultViewModel>();
+                    tabel.Wait();
+                    if (tabel.Result.ISuccessed == false)
+                        return View("NotFound");
 
-                var data = tabel.Result.Data;
-                string jsonString = JsonConvert.SerializeObject(data);
-                
-                product = JsonConvert.DeserializeObject<Product>(jsonString);
-            }
+                    var data = tabel.Result.Data;
+                    string jsonString = JsonConvert.SerializeObject(data);
+
+                    product = JsonConvert.DeserializeObject<Product>(jsonString);
+                }
 
                 return View(product);
+            }
+            else
+            {
+                return Redirect("/AdminDashboard/Login");
+            }
         }
 
        /* public IActionResult Users()
@@ -212,111 +300,195 @@ namespace AdminDashboard.Controllers
         }*/
         public IActionResult AddProduct()
         {
-            return View();
+            if (HttpContext.Request.Cookies["UserToken"] != "")
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("/AdminDashboard/Login");
+            }
         }
         public IActionResult Profile()
         {
-            return View();
+            if (HttpContext.Request.Cookies["UserToken"] != "")
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("/AdminDashboard/Login");
+            }
         }
         public IActionResult ChangePasswoed()
         {
-            return View();
+            if (HttpContext.Request.Cookies["UserToken"] != "")
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("/AdminDashboard/Login");
+            }
+        }
+        public IActionResult logout()
+        {
+           
+
+            HttpContext.Response.Cookies.Append("UserToken","");
+            return Redirect("/AdminDashboard/Login");
         }
 
-      /*  public IActionResult Suppliers()
-        {
-            return View();
-        }*/
+
+        /*  public IActionResult Suppliers()
+          {
+              return View();
+          }*/
 
 
         public IActionResult Stores()
         {
-            IEnumerable<Store> Stores = null;
-            HttpClient http = new HttpClient();
-            http.BaseAddress = new Uri(Global.API);
-            var storecontroller = http.GetAsync("product/stores");
-            storecontroller.Wait();
-            var resltstore = storecontroller.Result;
-            if (resltstore.IsSuccessStatusCode)
+            if (HttpContext.Request.Cookies["UserToken"] != "")
             {
-                var tabel = resltstore.Content.ReadAsAsync<ResultViewModel>();
-                tabel.Wait();
-                var serialiaze = tabel.Result.Data;
-                string jsonString = JsonConvert.SerializeObject(serialiaze);
+                IEnumerable<Store> Stores = null;
+                HttpClient http = new HttpClient();
+                http.BaseAddress = new Uri(Global.API);
+                var storecontroller = http.GetAsync("product/stores");
+                storecontroller.Wait();
+                var resltstore = storecontroller.Result;
+                if (resltstore.IsSuccessStatusCode)
+                {
+                    var tabel = resltstore.Content.ReadAsAsync<ResultViewModel>();
+                    tabel.Wait();
+                    var serialiaze = tabel.Result.Data;
+                    string jsonString = JsonConvert.SerializeObject(serialiaze);
 
-                Stores = JsonConvert.DeserializeObject<IList<Store>>(jsonString);
+                    Stores = JsonConvert.DeserializeObject<IList<Store>>(jsonString);
+                }
+
+                return View(Stores);
             }
-
-            return View(Stores);
-
+            else
+            {
+                return Redirect("/AdminDashboard/Login");
+            }
         }
 
         [HttpGet]
         public IActionResult DeletStore(int id)
         {
-            HttpClient http = new HttpClient();
-            http.BaseAddress = new Uri(Global.API);
-            var response = http.DeleteAsync("product/deleteStore/" + id);
-            response.Wait();
+            if (HttpContext.Request.Cookies["UserToken"] != "")
+            {
+                HttpClient http = new HttpClient();
+                http.BaseAddress = new Uri(Global.API);
+                var response = http.DeleteAsync("product/deleteStore/" + id);
+                response.Wait();
 
-            return Redirect("/AdminDashboard/Stores");
+                return Redirect("/AdminDashboard/Stores");
+            }
+            else
+            {
+                return Redirect("/AdminDashboard/Login");
+            }
         }
 
         
         [HttpGet]
        public IActionResult StoreDetiles(int id)
         {
-            Product product = null;
-            HttpClient http = new HttpClient();
-            http.BaseAddress = new Uri(Global.API);
-            var productcontroller = http.GetAsync("product/AdminProduct/" + id);
-            productcontroller.Wait();
-            var resltproduct = productcontroller.Result;
-            if (resltproduct.IsSuccessStatusCode)
+            if (HttpContext.Request.Cookies["UserToken"] != "")
             {
+                Product product = null;
+                HttpClient http = new HttpClient();
+                http.BaseAddress = new Uri(Global.API);
+                var productcontroller = http.GetAsync("product/AdminProduct/" + id);
+                productcontroller.Wait();
+                var resltproduct = productcontroller.Result;
+                if (resltproduct.IsSuccessStatusCode)
+                {
 
-                var tabel = resltproduct.Content.ReadAsAsync<ResultViewModel>();
-                tabel.Wait();
-                if(tabel.Result.ISuccessed==false)
-                    return View("NotFound");
+                    var tabel = resltproduct.Content.ReadAsAsync<ResultViewModel>();
+                    tabel.Wait();
+                    if (tabel.Result.ISuccessed == false)
+                        return View("NotFound");
 
-                var data = tabel.Result.Data;
-                string jsonString = JsonConvert.SerializeObject(data);
-                
-                product = JsonConvert.DeserializeObject<Product>(jsonString);
-            }
+                    var data = tabel.Result.Data;
+                    string jsonString = JsonConvert.SerializeObject(data);
+
+                    product = JsonConvert.DeserializeObject<Product>(jsonString);
+                }
 
                 return View(product);
+            }
+            else
+            {
+                return Redirect("/AdminDashboard/Login");
+            }
         }
 
         [HttpGet]
         public IActionResult DeleteProStore(int id)
         {
-            HttpClient http = new HttpClient();
-            http.BaseAddress = new Uri(Global.API);
-            var response = http.DeleteAsync("product/Delete/" + id);
-            response.Wait();
+            if (HttpContext.Request.Cookies["UserToken"] != "")
+            {
+                HttpClient http = new HttpClient();
+                http.BaseAddress = new Uri(Global.API);
+                var response = http.DeleteAsync("product/Delete/" + id);
+                response.Wait();
 
-            return Redirect("/AdminDashboard/StoreDetiles");
+                return Redirect("/AdminDashboard/StoreDetiles");
+            }
+            else
+            {
+                return Redirect("/AdminDashboard/Login");
+            }
         }
 
         public IActionResult MyStore()
         {
-            return View();
+            if (HttpContext.Request.Cookies["UserToken"] != "")
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("/AdminDashboard/Login");
+            }
         }
         public IActionResult ContactUs()
         {
-            return View();
+            if (HttpContext.Request.Cookies["UserToken"] != "")
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("/AdminDashboard/Login");
+            }
         }
         public IActionResult DisplayContact(int id)
         {
-            return View();
+            if (HttpContext.Request.Cookies["UserToken"] != "")
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("/AdminDashboard/Login");
+            }
         }
 
 
         public IActionResult NotFound()
         {
-            return View();
+            if (HttpContext.Request.Cookies["UserToken"] != "")
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("/AdminDashboard/Login");
+            }
         }
 
         

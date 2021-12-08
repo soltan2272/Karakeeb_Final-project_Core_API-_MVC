@@ -10,6 +10,7 @@ namespace Models.Models.Admin
     {
       
         public string Email { set; get; }
+        public string Name { set; get; }
         public string Subject { set; get; }
         public string Message { set; get; }
 

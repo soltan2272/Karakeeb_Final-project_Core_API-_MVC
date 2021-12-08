@@ -128,26 +128,14 @@ namespace Data.Migrations
                     b.Property<int>("Admin_ID")
                         .HasColumnType("int");
 
+                    b.Property<int>("ID")
+                        .HasColumnType("int");
+
                     b.HasKey("Product_ID", "Admin_ID");
 
                     b.HasIndex("Admin_ID");
 
                     b.ToTable("AdminProducts");
-                });
-
-            modelBuilder.Entity("Models.AdminStore", b =>
-                {
-                    b.Property<int>("Store_ID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Admin_ID")
-                        .HasColumnType("int");
-
-                    b.HasKey("Store_ID", "Admin_ID");
-
-                    b.HasIndex("Admin_ID");
-
-                    b.ToTable("AdminStores");
                 });
 
             modelBuilder.Entity("Models.Category", b =>
@@ -211,6 +199,9 @@ namespace Data.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Rate")
+                        .HasColumnType("int");
+
                     b.Property<string>("Subject")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -227,12 +218,35 @@ namespace Data.Migrations
                     b.ToTable("Feedback");
                 });
 
+            modelBuilder.Entity("Models.Models.Images", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CurrentProductID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Image_URL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CurrentProductID");
+
+                    b.ToTable("Images");
+                });
+
             modelBuilder.Entity("Models.Models.ProductOrder", b =>
                 {
                     b.Property<int>("Order_ID")
                         .HasColumnType("int");
 
                     b.Property<int>("Product_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ID")
                         .HasColumnType("int");
 
                     b.HasKey("Order_ID", "Product_ID");
@@ -390,11 +404,6 @@ namespace Data.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -428,6 +437,9 @@ namespace Data.Migrations
                     b.Property<int>("Product_ID")
                         .HasColumnType("int");
 
+                    b.Property<int>("ID")
+                        .HasColumnType("int");
+
                     b.HasKey("Feedback_ID", "Product_ID");
 
                     b.HasIndex("Product_ID");
@@ -443,68 +455,14 @@ namespace Data.Migrations
                     b.Property<int>("Product_ID")
                         .HasColumnType("int");
 
+                    b.Property<int>("ID")
+                        .HasColumnType("int");
+
                     b.HasKey("Offer_ID", "Product_ID");
 
                     b.HasIndex("Product_ID");
 
                     b.ToTable("productOffers");
-                });
-
-            modelBuilder.Entity("Models.Store", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Store");
-                });
-
-            modelBuilder.Entity("Models.StoreProduct", b =>
-                {
-                    b.Property<int>("Store_ID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Product_ID")
-                        .HasColumnType("int");
-
-                    b.HasKey("Store_ID", "Product_ID");
-
-                    b.HasIndex("Product_ID");
-
-                    b.ToTable("storeProducts");
-                });
-
-            modelBuilder.Entity("Models.SupplierStore", b =>
-                {
-                    b.Property<int>("Store_ID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Supllier_ID")
-                        .HasColumnType("int");
-
-                    b.HasKey("Store_ID", "Supllier_ID");
-
-                    b.HasIndex("Supllier_ID");
-
-                    b.ToTable("SupplierStores");
                 });
 
             modelBuilder.Entity("Models.User", b =>
@@ -667,25 +625,6 @@ namespace Data.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Models.AdminStore", b =>
-                {
-                    b.HasOne("Models.User", "Admin")
-                        .WithMany("AdminStores")
-                        .HasForeignKey("Admin_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.Store", "Store")
-                        .WithMany("AdminStores")
-                        .HasForeignKey("Store_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Admin");
-
-                    b.Navigation("Store");
-                });
-
             modelBuilder.Entity("Models.Feedback", b =>
                 {
                     b.HasOne("Models.User", "User")
@@ -695,6 +634,17 @@ namespace Data.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Models.Models.Images", b =>
+                {
+                    b.HasOne("Models.Product", "product")
+                        .WithMany("Product_Images")
+                        .HasForeignKey("CurrentProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("product");
                 });
 
             modelBuilder.Entity("Models.Models.ProductOrder", b =>
@@ -800,44 +750,6 @@ namespace Data.Migrations
                     b.Navigation("product");
                 });
 
-            modelBuilder.Entity("Models.StoreProduct", b =>
-                {
-                    b.HasOne("Models.Product", "product")
-                        .WithMany("StoresProducts")
-                        .HasForeignKey("Product_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.Store", "store")
-                        .WithMany("StoresProducts")
-                        .HasForeignKey("Store_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("product");
-
-                    b.Navigation("store");
-                });
-
-            modelBuilder.Entity("Models.SupplierStore", b =>
-                {
-                    b.HasOne("Models.Store", "store")
-                        .WithMany("SupllierStores")
-                        .HasForeignKey("Store_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.User", "supplier")
-                        .WithMany("SupllierStores")
-                        .HasForeignKey("Supllier_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("store");
-
-                    b.Navigation("supplier");
-                });
-
             modelBuilder.Entity("Models.Category", b =>
                 {
                     b.Navigation("Products");
@@ -872,37 +784,24 @@ namespace Data.Migrations
                 {
                     b.Navigation("AdminProducts");
 
+                    b.Navigation("Product_Images");
+
                     b.Navigation("productFeedbacks");
 
                     b.Navigation("ProductOffers");
 
                     b.Navigation("productOrders");
-
-                    b.Navigation("StoresProducts");
-                });
-
-            modelBuilder.Entity("Models.Store", b =>
-                {
-                    b.Navigation("AdminStores");
-
-                    b.Navigation("StoresProducts");
-
-                    b.Navigation("SupllierStores");
                 });
 
             modelBuilder.Entity("Models.User", b =>
                 {
                     b.Navigation("AdminProducts");
 
-                    b.Navigation("AdminStores");
-
                     b.Navigation("Feedbacks");
 
                     b.Navigation("Orders");
 
                     b.Navigation("Products");
-
-                    b.Navigation("SupllierStores");
                 });
 #pragma warning restore 612, 618
         }

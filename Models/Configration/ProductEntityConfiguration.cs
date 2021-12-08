@@ -21,8 +21,8 @@ namespace Models
                 .HasMaxLength(150);
             builder.Property(i => i.Price).IsRequired()
                .HasMaxLength(20);
-            builder.Property(i => i.Image).IsRequired()
-              .HasMaxLength(500);
+          /*  builder.Property(i => i.Image).IsRequired()
+              .HasMaxLength(500);*/
             builder.Property(i => i.Rate).IsRequired()
                .HasMaxLength(5);
            

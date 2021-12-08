@@ -8,10 +8,10 @@ namespace Models
 {
    public  class StoreProduct
     {
-        public int Product_ID { set; get; }
+     /* public int Product_ID { set; get; }
         public Product product { set; get; }
 
         public int Store_ID { set; get; }
-        public Store store { set; get; }
+        public Store store { set; get; }*/
     }
 }

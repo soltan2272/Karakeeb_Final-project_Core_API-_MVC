@@ -16,7 +16,7 @@ namespace ViewModels
     }
     public static class ProductViewModelExtensions
     {
-        public static StoreViewModel ToStoreViewModel(this Store store)
+      /*  public static StoreViewModel ToStoreViewModel(this Store store)
         {
             return new StoreViewModel()
             {
@@ -26,6 +26,6 @@ namespace ViewModels
                 Phone = store.Phone
 
             };
-        }
+        }*/
     }
 }

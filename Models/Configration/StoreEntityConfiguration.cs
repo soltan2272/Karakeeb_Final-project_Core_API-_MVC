@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-   public class StoreEntityConfiguration:IEntityTypeConfiguration<Store>
+  /* public class StoreEntityConfiguration:IEntityTypeConfiguration<Store>
     {
-        public void Configure(EntityTypeBuilder<Store> builder)
+       public void Configure(EntityTypeBuilder<Store> builder)
         {
             builder.ToTable("Store");
             builder.HasKey(i => i.ID);
@@ -22,5 +22,5 @@ namespace Models
             builder.Property(i => i.Phone).IsRequired()
                .HasMaxLength(15);
         }
-    }
+    }*/
 }

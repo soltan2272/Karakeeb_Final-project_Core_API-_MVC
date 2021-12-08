@@ -23,9 +23,9 @@ namespace Models
       
 
         public IList<AdminProduct> AdminProducts { get; set; }
-        public IList<AdminStore> AdminStores { get; set; }
+       // public IList<AdminStore> AdminStores { get; set; }
 
-        public IList<SupplierStore> SupllierStores { get; set; }
+       // public IList<SupplierStore> SupllierStores { get; set; }
 
         public ICollection<Product> Products { get; set; }
 

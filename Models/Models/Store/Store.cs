@@ -8,7 +8,7 @@ namespace Models
 {
    public class Store: BaseModel
     {
-        public string Name { get; set; }
+      /*  public string Name { get; set; }
         public string Address { get; set; }
         public string Phone { get; set; }
 
@@ -16,6 +16,6 @@ namespace Models
 
         public IList<StoreProduct> StoresProducts { get; set; }
         public IList<AdminStore> AdminStores { get; set; }
-
+      */
     }
 }

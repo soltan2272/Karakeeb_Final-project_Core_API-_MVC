@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Models.Models
 {
-   public class ProductOrder
+   public class ProductOrder:BaseModel
     {
         public int Product_ID { set; get; }
         public Product product { set; get; }

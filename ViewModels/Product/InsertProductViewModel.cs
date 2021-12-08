@@ -28,7 +28,7 @@ namespace ViewModels
                 ID = product.ID,
                 Name = product.Name,
                 Price = product.Price,
-                Image = product.Image,
+               // Image = product.Image,
                 Rate = product.Rate,
                 Description = product.Description,
                 CurrentSupplierID = product.CurrentSupplierID,

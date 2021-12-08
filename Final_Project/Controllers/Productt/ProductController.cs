@@ -102,7 +102,7 @@ namespace Final_Project.Controllers
             {
                 ID = pro.ID,
                 Name = pro.Name,
-                Image = pro.Image,
+                //Image = pro.Image,
                 Rate = pro.Rate,
                 Description = pro.Description,
                 Price = pro.Price,
@@ -128,7 +128,7 @@ namespace Final_Project.Controllers
             var product = ProductRepo.GetByID(id);
             product.ID = pro.ID;
             product.Name = pro.Name;
-            product.Image = pro.Image;
+           // product.Image = pro.Image;
             product.Rate = pro.Rate;
             product.Description = pro.Description;
             product.Price = pro.Price;
@@ -155,7 +155,7 @@ namespace Final_Project.Controllers
             return result;
         }
 
-        [HttpGet("stores")]
+     /*   [HttpGet("stores")]
 
 
         public ResultViewModel GetStores()
@@ -165,7 +165,7 @@ namespace Final_Project.Controllers
             return result;
         }
 
-        [HttpPost("addStore")]
+       /* [HttpPost("addStore")]
         public ResultViewModel addStore(StoreViewModel sto)
         {
             result.Message = "Add Store";
@@ -183,8 +183,8 @@ namespace Final_Project.Controllers
 
             return result;
 
-        }
-        [HttpPut("editStore")]
+        }*/
+     /*   [HttpPut("editStore")]
         public ResultViewModel editStore(int id, StoreViewModel sto)
         {
             var store = StoreRepo.GetByID(id);
@@ -202,10 +202,10 @@ namespace Final_Project.Controllers
             StoreRepo.Update(store);
             UnitOfWork.Save();
             return result;
-        }
+        }*/
 
         
-        [HttpDelete("deleteStore/{id}")]
+      /*  [HttpDelete("deleteStore/{id}")]
         public ResultViewModel deleteStore(int id)
         {
             result.Data = StoreRepo.GetByID(id);
@@ -213,7 +213,7 @@ namespace Final_Project.Controllers
             UnitOfWork.Save();
             result.Message = "Store Deleted";
             return result;
-        }
+        }*/
 
 
 

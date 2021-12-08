@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-   public class AdminProduct
+   public class AdminProduct : BaseModel
     {
         public int Admin_ID { get; set; }
         public User Admin { get; set; }
