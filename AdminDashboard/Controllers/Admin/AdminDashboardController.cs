@@ -131,8 +131,7 @@ namespace AdminDashboard.Controllers
         }
         public IActionResult Admins()
         {
-            if (HttpContext.Request.Cookies["UserToken"] != "" 
-                && User.IsInRole("Admin"))
+            if (HttpContext.Request.Cookies["UserToken"] != "" )
             {
                 IEnumerable<User> Admins = null;
                 HttpClient http = new HttpClient();
