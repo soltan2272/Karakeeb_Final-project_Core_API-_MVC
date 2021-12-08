@@ -9,10 +9,11 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using ViewModels;
+using Models.Models;
 
 namespace Final_Project.Controllers
 {
-   // [Authorize(Roles = "Admin")]
+    [EnableCors("AllowOrigin")]
     [ApiController]
     [Route("api/[controller]")]
   
@@ -20,17 +21,20 @@ namespace Final_Project.Controllers
     {
         IGenericRepostory<Product> ProductRepo;
         IGenericRepostory<Category> CategoryRepo;
+        IUserRepository UserRepository;
         IGenericRepostory<Store> StoreRepo;
         IUnitOfWork UnitOfWork;
 
         ResultViewModel result = new ResultViewModel();
 
-        public ProductController(IUnitOfWork unitOfWork)
+        public ProductController(IUserRepository userRepository,IUnitOfWork unitOfWork)
         {
             UnitOfWork = unitOfWork;
             ProductRepo = UnitOfWork.GetProductRepo();
             StoreRepo = UnitOfWork.GetStoreRepo();
             CategoryRepo = unitOfWork.GetCategoryRepo();
+            UserRepository = userRepository;
+
         }
 
         [HttpGet("userProducts")]
@@ -41,13 +45,12 @@ namespace Final_Project.Controllers
             result.Data = ProductRepo.Get().Select(p => p.ToViewModel());
             return result;
         }
-        [HttpGet("AdminProducts")]
-
-
-        public ResultViewModel GetforAdmin()
+        [HttpGet("AdminProducts/{p}")]
+        public ResultViewModel GetforAdmin(int p)
         {
             result.Message = "All Products";
-            result.Data = ProductRepo.Get();
+            result.Data = ProductRepo.Get().OrderByDescending(p => p.ID).Skip(p * 7).Take(7);
+
             return result;
         }
 
@@ -118,7 +121,6 @@ namespace Final_Project.Controllers
             var Cat = CategoryRepo.Get().Where(c => c.ID == product.CurrentCategoryID).FirstOrDefault();
             if (Cat != null)
             {
-
                 Cat.Products.Add(product);
             }
 
@@ -132,6 +134,22 @@ namespace Final_Project.Controllers
                 product.StoresProducts.Add(sp);
             }
 
+                ID = pro.ID,
+                Name = pro.Name,
+                //Image = pro.Image,
+                Rate = pro.Rate,
+                Description = pro.Description,
+                Price = pro.Price,
+                CurrentCategoryID = pro.CurrentCategoryID,
+                CurrentSupplierID = pro.CurrentSupplierID,
+            };
+            //product.supplier.
+            //var store = StoreRepo.Get().FirstOrDefault(s => s.SupllierStores
+            //                .FirstOrDefault(ss => s.ID == product.CurrentSupplierID) != null);
+            //if (store != null)
+            //{
+            //    store.StoresProducts.FirstOrDefault(
+            //}
 
             ProductRepo.Add(product);
             UnitOfWork.Save();
@@ -153,12 +171,13 @@ namespace Final_Project.Controllers
             product.Name = pro.Name;
             product.Quantity = pro.Quantity;
             product.Image = pro.Image;
+
+           // product.Image = pro.Image;
             product.Rate = pro.Rate;
             product.Description = pro.Description;
             product.Price = pro.Price;
             product.CurrentCategoryID = pro.CurrentCategoryID;
             product.CurrentSupplierID = pro.CurrentSupplierID;
-
 
             if (product == null)
             {
@@ -179,7 +198,7 @@ namespace Final_Project.Controllers
             return result;
         }
 
-        [HttpGet("stores")]
+     /*   [HttpGet("stores")]
 
 
         public ResultViewModel GetStores()
@@ -204,6 +223,7 @@ namespace Final_Project.Controllers
         }
 
         [HttpPost("addStore")]
+       /* [HttpPost("addStore")]
         public ResultViewModel addStore(StoreViewModel sto)
         {
             result.Message = "Add Store";
@@ -219,8 +239,8 @@ namespace Final_Project.Controllers
 
             return result;
 
-        }
-        [HttpPut("editStore")]
+        }*/
+     /*   [HttpPut("editStore")]
         public ResultViewModel editStore(int id, StoreViewModel sto)
         {
             var store = StoreRepo.GetByID(id);
@@ -238,10 +258,10 @@ namespace Final_Project.Controllers
             StoreRepo.Update(store);
             UnitOfWork.Save();
             return result;
-        }
+        }*/
 
         
-        [HttpDelete("deleteStore/{id}")]
+      /*  [HttpDelete("deleteStore/{id}")]
         public ResultViewModel deleteStore(int id)
         {
             result.Data = StoreRepo.GetByID(id);
@@ -249,7 +269,7 @@ namespace Final_Project.Controllers
             UnitOfWork.Save();
             result.Message = "Store Deleted";
             return result;
-        }
+        }*/
 
 
 

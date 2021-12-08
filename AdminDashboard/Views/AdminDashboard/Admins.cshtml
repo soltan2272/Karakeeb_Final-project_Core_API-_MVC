@@ -1,15 +1,10 @@
-﻿ @*@using Models;
-@model IList<Store>;
-
+﻿@using Models;
+@model IList<User>;
 @{
-    ViewData["Title"] = "Stores";
-}*@
- <!--
-<style>
-    .checked {
-        color: orange;
-    }
-</style>
+    ViewData["Title"] = "Admins";
+
+}
+
 
 <div class="all-content-wrapper">
 
@@ -18,7 +13,7 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="product-status-wrap">
-                        <h4>Store List</h4>
+                        <h4>Products List</h4>
                         @*<div class="add-product">
                                 @Html.ActionLink("Add Product", "AddProduct")
 
@@ -26,32 +21,34 @@
                             </div>*@
                         <table>
                             <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Address</th>
-                                <th scope="col">Phone</th>
-                                <th scope="col">Display</th>
-                                <th scope="col">Delete</th>
+                                <th>Full_Name</th>
+                                <th>Email</th>
+                                <th>Adress</th>
+                                <th>Phone</th>
+                                <th>SSN</th>
+                                <th>Date of birth</th>
+                                <th>Delete</th>
+
                             </tr>
 
-                       @*     @foreach (Store store in Model)
+                            @foreach (User usr in Model)
                             {
                                 <tr>
-                                    <td>@store.Name</td>
-                                    <td>@store.Address</td>
-                                    <td>@store.Phone</td>
-                                    
-                                    <td>
-                                        @Html.ActionLink("Display", "StoreProduct", new { StoreProduct = store.StoresProducts }, new { @class = "btn btn-primary" })
 
-                                    </td>
-                                 
+
+                                    <td>@usr.Full_Name</td>
+                                    <td>@usr.Email </td>
+                                    <td>@usr.Adrress </td>
+                                    <td>@usr.Phone </td>
+                                    <td>@usr.SSN </td>
+                                    <td>@usr.Date_Of_Birth </td>
                                     <td>
-                                        @Html.ActionLink("Delete", "DeletStore", new { ID = @store.ID }, new { @class = "btn btn-danger" })
+                                        @Html.ActionLink("Delete", "deleteadmin", new { ID = usr.Id }, new { @class = "btn btn-danger" })
 
                                     </td>
                                 </tr>
                             }
-*@
+
 
 
                         </table>
@@ -71,4 +68,9 @@
     </div>
 
 </div>
-     -->
+
+<style>
+    .checked {
+        color: orange;
+    }
+</style>

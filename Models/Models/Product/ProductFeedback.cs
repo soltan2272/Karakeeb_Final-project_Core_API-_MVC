@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class ProductFeedback
+    public class ProductFeedback : BaseModel
     {
         public int Product_ID { get; set; }
         public Product Product { get; set; }

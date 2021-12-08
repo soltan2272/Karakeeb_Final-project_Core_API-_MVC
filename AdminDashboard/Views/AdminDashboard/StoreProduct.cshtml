@@ -1,16 +1,12 @@
-﻿@using Models;
+﻿
+@using Models;
+@model IList<Product>;
 
-
-
-@model IPagedList<Product>;
-@using PagedList.Mvc;
-@using PagedList;
-@*@Html.PagedListPager(Model, page => Url.Action("index", new { page }));*@
 
 @{
-    ViewData["Title"] = "Products";
-
+    ViewData["Title"] = "StoreProduct";
 }
+
 <div class="all-content-wrapper">
 
     <div class="product-status mg-b-30">
@@ -96,7 +92,7 @@
                                     </td>
 
                                     <td>
-                                        @Html.ActionLink("Display", "Detiles", new { ID = @product.ID }, new { @class = "btn btn-primary" })
+                                        @Html.ActionLink("Display", "StoreDetiles", new { ID = @product.ID }, new { @class = "btn btn-primary" })
 
                                     </td>
                                     @*<td>
@@ -104,7 +100,7 @@
 
                                         </td>*@
                                     <td>
-                                        @Html.ActionLink("Delete", "Delete", new { ID = @product.ID }, new { @class = "btn btn-danger" })
+                                        @Html.ActionLink("Delete", "DeleteProStore", new { ID = @product.ID }, new { @class = "btn btn-danger" })
 
                                     </td>
                                 </tr>
@@ -113,10 +109,7 @@
 
 
                         </table>
-
-
                         <div class="custom-pagination">
-
                             <ul class="pagination">
                                 <li class="page-item"><a class="page-link" href="#">Previous</a></li>
                                 <li class="page-item"><a class="page-link" href="#">1</a></li>

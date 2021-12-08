@@ -6,13 +6,13 @@
 @using Models;
 @model Product;
 
-    <style>
-        .checked {
-            color: orange;
-        }
-    </style>
+<style>
+    .checked {
+        color: orange;
+    }
+</style>
 <div class="all-content-wrapper">
-    
+
     <!-- Single pro tab start-->
     <div class="single-product-tab-area mg-t-0 mg-b-30">
         <div class="container-fluid">
@@ -104,9 +104,8 @@
                                     </p>
                                 </div>
 
-                                @Html.ActionLink("Delete", "Delete", new { id = Model.ID }, new { @class = "btn btn-danger text-uppercase mr-2 px-4" })
+                                @Html.ActionLink("Delete", "DeleteProStore", new { id = Model.ID }, new { @class = "btn btn-danger text-uppercase mr-2 px-4" })
 
-                            </div>
                             </div>
                         </div>
                     </div>
@@ -114,7 +113,8 @@
             </div>
         </div>
     </div>
-   
+</div>
+
 
 
 

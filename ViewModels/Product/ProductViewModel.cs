@@ -25,7 +25,7 @@ namespace Final_Project
                 ID = product.ID,
                 Name = product.Name,
                 Price = product.Price,
-                Image = product.Image,
+               // Image = product.Image,
                 Rate = product.Rate,
                 Description = product.Description
 

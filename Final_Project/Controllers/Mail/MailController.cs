@@ -1,4 +1,5 @@
 ﻿using Final_Project.EmailServices;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,6 +11,7 @@ using ViewModels.Mail;
 
 namespace Final_Project.Controllers.Mail
 {
+    [EnableCors("AllowOrigin")]
     [Route("api/[controller]")]
     [ApiController]
     public class MailController : ControllerBase

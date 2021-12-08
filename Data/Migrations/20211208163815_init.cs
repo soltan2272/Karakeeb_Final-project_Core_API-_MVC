@@ -116,21 +116,6 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Store",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Store", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -245,7 +230,8 @@ namespace Data.Migrations
                     Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Subject = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    CurrentUserID = table.Column<int>(type: "int", nullable: false)
+                    CurrentUserID = table.Column<int>(type: "int", nullable: false),
+                    Rate = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -267,7 +253,6 @@ namespace Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     Price = table.Column<float>(type: "real", maxLength: 20, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     Rate = table.Column<int>(type: "int", maxLength: 5, nullable: false),
                     CurrentSupplierID = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
@@ -327,59 +312,12 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AdminStores",
-                columns: table => new
-                {
-                    Admin_ID = table.Column<int>(type: "int", nullable: false),
-                    Store_ID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AdminStores", x => new { x.Store_ID, x.Admin_ID });
-                    table.ForeignKey(
-                        name: "FK_AdminStores_AspNetUsers_Admin_ID",
-                        column: x => x.Admin_ID,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AdminStores_Store_Store_ID",
-                        column: x => x.Store_ID,
-                        principalTable: "Store",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SupplierStores",
-                columns: table => new
-                {
-                    Supllier_ID = table.Column<int>(type: "int", nullable: false),
-                    Store_ID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SupplierStores", x => new { x.Store_ID, x.Supllier_ID });
-                    table.ForeignKey(
-                        name: "FK_SupplierStores_AspNetUsers_Supllier_ID",
-                        column: x => x.Supllier_ID,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SupplierStores_Store_Store_ID",
-                        column: x => x.Store_ID,
-                        principalTable: "Store",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AdminProducts",
                 columns: table => new
                 {
                     Admin_ID = table.Column<int>(type: "int", nullable: false),
-                    Product_ID = table.Column<int>(type: "int", nullable: false)
+                    Product_ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -399,11 +337,32 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Images",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Image_URL = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CurrentProductID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Images", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Images_Product_CurrentProductID",
+                        column: x => x.CurrentProductID,
+                        principalTable: "Product",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductFeedbacks",
                 columns: table => new
                 {
                     Product_ID = table.Column<int>(type: "int", nullable: false),
-                    Feedback_ID = table.Column<int>(type: "int", nullable: false)
+                    Feedback_ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -427,7 +386,8 @@ namespace Data.Migrations
                 columns: table => new
                 {
                     Product_ID = table.Column<int>(type: "int", nullable: false),
-                    Offer_ID = table.Column<int>(type: "int", nullable: false)
+                    Offer_ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -447,35 +407,12 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "storeProducts",
-                columns: table => new
-                {
-                    Product_ID = table.Column<int>(type: "int", nullable: false),
-                    Store_ID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_storeProducts", x => new { x.Store_ID, x.Product_ID });
-                    table.ForeignKey(
-                        name: "FK_storeProducts_Product_Product_ID",
-                        column: x => x.Product_ID,
-                        principalTable: "Product",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_storeProducts_Store_Store_ID",
-                        column: x => x.Store_ID,
-                        principalTable: "Store",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ProductOrder",
                 columns: table => new
                 {
                     Product_ID = table.Column<int>(type: "int", nullable: false),
-                    Order_ID = table.Column<int>(type: "int", nullable: false)
+                    Order_ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -497,11 +434,6 @@ namespace Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AdminProducts_Admin_ID",
                 table: "AdminProducts",
-                column: "Admin_ID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AdminStores_Admin_ID",
-                table: "AdminStores",
                 column: "Admin_ID");
 
             migrationBuilder.CreateIndex(
@@ -549,6 +481,11 @@ namespace Data.Migrations
                 column: "CurrentUserID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Images_CurrentProductID",
+                table: "Images",
+                column: "CurrentProductID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Order_CurrentCourierID",
                 table: "Order",
                 column: "CurrentCourierID");
@@ -587,25 +524,12 @@ namespace Data.Migrations
                 name: "IX_ProductOrder_Product_ID",
                 table: "ProductOrder",
                 column: "Product_ID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_storeProducts_Product_ID",
-                table: "storeProducts",
-                column: "Product_ID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SupplierStores_Supllier_ID",
-                table: "SupplierStores",
-                column: "Supllier_ID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "AdminProducts");
-
-            migrationBuilder.DropTable(
-                name: "AdminStores");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -623,6 +547,9 @@ namespace Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Images");
+
+            migrationBuilder.DropTable(
                 name: "ProductFeedbacks");
 
             migrationBuilder.DropTable(
@@ -630,12 +557,6 @@ namespace Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductOrder");
-
-            migrationBuilder.DropTable(
-                name: "storeProducts");
-
-            migrationBuilder.DropTable(
-                name: "SupplierStores");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -651,9 +572,6 @@ namespace Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Product");
-
-            migrationBuilder.DropTable(
-                name: "Store");
 
             migrationBuilder.DropTable(
                 name: "Courier");

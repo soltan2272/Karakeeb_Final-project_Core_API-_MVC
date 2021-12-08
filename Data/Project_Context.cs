@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Models;
-
-
+using Models.Configration;
 using Models.Models;
 
 using Models.Models.User;
@@ -25,7 +24,7 @@ namespace Data
 
         
      //   public DbSet<Supplier> Suplliers { get; set; }
-        public DbSet<Store> Stores { get; set; }
+      //  public DbSet<Store> Stores { get; set; }
         public DbSet<Offer> Offers { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -34,22 +33,24 @@ namespace Data
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<ProductFeedback> ProductFeedbacks { get; set; }
-        public DbSet<StoreProduct> storeProducts { get; set; }
+     //   public DbSet<StoreProduct> storeProducts { get; set; }
         public DbSet<ProductOffer> productOffers { get; set; }
-        public DbSet<SupplierStore> SupplierStores { get; set; }
+      //  public DbSet<SupplierStore> SupplierStores { get; set; }
        // public DbSet<Admin> Admins { get; set; }
        // public DbSet<Contact> Contacts { get; set; }
        
         public DbSet<AdminProduct> AdminProducts { get; set; }
 
-        public DbSet<AdminStore> AdminStores { get; set; }
+      //  public DbSet<AdminStore> AdminStores { get; set; }
+
+        public DbSet<Images> Images { get; set; }
 
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
-            modelBuilder.ApplyConfiguration(new StoreEntityConfiguration());
+            //modelBuilder.ApplyConfiguration(new StoreEntityConfiguration());
           //  modelBuilder.ApplyConfiguration(new SupplierEntityConfiguration());
             modelBuilder.ApplyConfiguration(new OfferEntityConfiguration());
             modelBuilder.ApplyConfiguration(new ProductEntityConfiguration());
@@ -58,31 +59,32 @@ namespace Data
             modelBuilder.ApplyConfiguration(new CourierEntityConfiguration());
             modelBuilder.ApplyConfiguration(new PaymentEnityConfiguration());
             modelBuilder.ApplyConfiguration(new FeedbackEntityConfiguration());
-          //  modelBuilder.ApplyConfiguration(new AdminEntityConfiguration());
-           // modelBuilder.ApplyConfiguration(new ContactEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new ImageEntityConfiguration());
+            //  modelBuilder.ApplyConfiguration(new AdminEntityConfiguration());
+            // modelBuilder.ApplyConfiguration(new ContactEntityConfiguration());
 
-            modelBuilder.Entity<SupplierStore>().HasKey(ss => new { ss.Store_ID, ss.Supllier_ID });
-            modelBuilder.Entity<SupplierStore>()
-            .HasOne<User>(s => s.supplier)
-            .WithMany(sp => sp.SupllierStores)
-            .HasForeignKey(sp => sp.Supllier_ID);
+            /*  modelBuilder.Entity<SupplierStore>().HasKey(ss => new { ss.Store_ID, ss.Supllier_ID });
+              modelBuilder.Entity<SupplierStore>()
+              .HasOne<User>(s => s.supplier)
+              .WithMany(sp => sp.SupllierStores)
+              .HasForeignKey(sp => sp.Supllier_ID);
 
-            modelBuilder.Entity<SupplierStore>()
-            .HasOne<Store>(s => s.store)
-            .WithMany(sp => sp.SupllierStores)
-            .HasForeignKey(sp => sp.Store_ID);
+              modelBuilder.Entity<SupplierStore>()
+              .HasOne<Store>(s => s.store)
+              .WithMany(sp => sp.SupllierStores)
+              .HasForeignKey(sp => sp.Store_ID);
 
 
-            modelBuilder.Entity<StoreProduct>().HasKey(sp => new { sp.Store_ID, sp.Product_ID});
-            modelBuilder.Entity<StoreProduct>()
-            .HasOne<Product>(p => p.product)
-            .WithMany(sp => sp.StoresProducts)
-            .HasForeignKey(sp => sp.Product_ID);
+              modelBuilder.Entity<StoreProduct>().HasKey(sp => new { sp.Store_ID, sp.Product_ID});
+              modelBuilder.Entity<StoreProduct>()
+              .HasOne<Product>(p => p.product)
+              .WithMany(sp => sp.StoresProducts)
+              .HasForeignKey(sp => sp.Product_ID);
 
-            modelBuilder.Entity<StoreProduct>()
-            .HasOne<Store>(s => s.store)
-            .WithMany(sp => sp.StoresProducts)
-            .HasForeignKey(sp => sp.Store_ID);
+              modelBuilder.Entity<StoreProduct>()
+              .HasOne<Store>(s => s.store)
+              .WithMany(sp => sp.StoresProducts)
+              .HasForeignKey(sp => sp.Store_ID);*/
 
             modelBuilder.Entity<ProductOffer>().HasKey(po => new { po.Offer_ID, po.Product_ID });
             modelBuilder.Entity<ProductOffer>()
@@ -138,7 +140,7 @@ namespace Data
             .HasForeignKey(p => p.Product_ID)
             .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<AdminStore>().HasKey(As => new { As.Store_ID, As.Admin_ID });
+       /*     modelBuilder.Entity<AdminStore>().HasKey(As => new { As.Store_ID, As.Admin_ID });
             modelBuilder.Entity<AdminStore>()
             .HasOne<User>(a => a.Admin)
             .WithMany(As => As.AdminStores)
@@ -147,7 +149,7 @@ namespace Data
             modelBuilder.Entity<AdminStore>()
             .HasOne<Store>(s => s.Store)
             .WithMany(As => As.AdminStores)
-            .HasForeignKey(a => a.Store_ID);
+            .HasForeignKey(a => a.Store_ID);*/
            
 
 
@@ -182,11 +184,16 @@ namespace Data
             .WithMany(f => f.Feedbacks)
             .HasForeignKey(u => u.CurrentUserID);
 
-         /*   modelBuilder.Entity<User>()
-            .HasOne<Contact>(c=>c.Contacts)
-            .WithMany(a => a.Admins)
-            .HasForeignKey(a => a.CurrentContactID)
-            .OnDelete(DeleteBehavior.Restrict);*/
+          modelBuilder.Entity<Images>()
+         .HasOne<Product>(u => u.product)
+         .WithMany(f => f.Product_Images)
+         .HasForeignKey(u => u.CurrentProductID);
+
+            /*   modelBuilder.Entity<User>()
+               .HasOne<Contact>(c=>c.Contacts)
+               .WithMany(a => a.Admins)
+               .HasForeignKey(a => a.CurrentContactID)
+               .OnDelete(DeleteBehavior.Restrict);*/
 
             base.OnModelCreating(modelBuilder);
         }

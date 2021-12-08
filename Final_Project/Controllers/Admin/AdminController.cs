@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Reposotries;
 using System;
@@ -6,14 +7,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ViewModels;
+using ViewModels.Userr;
 
 namespace Final_Project.Controllers.Admin
 {
+    [EnableCors("AllowOrigin")]
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase
     {
         IUserRepository UserRepository;
+        ResultViewModel result = new ResultViewModel();
         public AdminController(IUserRepository userRepository, IUnitOfWork unitOfWork)
         {
             UserRepository = userRepository;
@@ -50,7 +54,7 @@ namespace Final_Project.Controllers.Admin
 
             var result = await UserRepository.Login(loginModel);
             if (!result.IsAuthenticated)
-                return BadRequest(result.Message);
+                return BadRequest(result);
             return Ok(result);
         }
 
@@ -66,6 +70,38 @@ namespace Final_Project.Controllers.Admin
                 return BadRequest(result);
 
             return Ok(model);
+        }
+
+        [HttpGet("getadmins")]
+        public async Task<dynamic> GetAllUsers()
+        {
+
+            var res = await UserRepository.GetAdminsAsync();
+            result.Data = res;
+            result.Message = "Succedd";
+            result.ISuccessed = true;
+            return result;
+        }
+
+        [HttpGet("getadmin/{id}")]
+        public async Task<ResultViewModel> GetUserByID(int id)
+        {
+            ViewUser res = await UserRepository.GetUserBYIDAsync(id);
+            // User view = usr.ToModel();
+            result.Data = res;
+            result.Message = "Succedd";
+            result.ISuccessed = true;
+            return result;
+        }
+
+        [HttpDelete("deleteadmin/{id}")]
+        public async Task<dynamic> DeleteUser(int id)
+        {
+            var res = await UserRepository.DeleteUser(id);
+            result.ISuccessed = true;
+            result.Data = res;
+            result.Message = "Deleted Successfully";
+            return result;
         }
     }
 
