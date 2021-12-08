@@ -17,7 +17,6 @@ using System.Text;
 using System.Threading.Tasks;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using Models.Models;
-using System.Text;
 using Microsoft.AspNetCore.Authorization;
 
 namespace AdminDashboard.Controllers
@@ -618,34 +617,35 @@ namespace AdminDashboard.Controllers
             return View(Stores);
         }
         [HttpPost]
-        public async Task<IActionResult> addStore(Store s)
-        {
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.Timeout = TimeSpan.FromSeconds(60);
-            client.BaseAddress = new Uri("https://localhost:44354/");
-                var data = new
-                {
-                    ID = s.ID,
-                    Name = s.Name,
-                    Address = s.Address,
-                    Phone = s.Phone
-                };
+        //public async Task<IActionResult> addStore(Store s)
+        //{
+        //    var client = new HttpClient();
+        //    client.DefaultRequestHeaders.Accept.Clear();
+        //    client.Timeout = TimeSpan.FromSeconds(60);
+        //    client.BaseAddress = new Uri("https://localhost:44354/");
+        //        var data = new
+        //        {
+        //            ID = s.ID,
+        //            Name = s.Name,
+        //            Address = s.Address,
+        //            Phone = s.Phone
+        //        };
 
-                var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+        //        var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
 
-                using (HttpResponseMessage response = await client.PostAsync("api/Product/addStore", content))
-                {
-                    var responseContent = response.Content.ReadAsStringAsync().Result;
-                    response.EnsureSuccessStatusCode();
+        //        using (HttpResponseMessage response = await client.PostAsync("api/Product/addStore", content))
+        //        {
+        //            var responseContent = response.Content.ReadAsStringAsync().Result;
+        //            response.EnsureSuccessStatusCode();
 
-                    return Redirect("/AdminDashboard/Stores");
-                }
-        }
+        //            return Redirect("/AdminDashboard/Stores");
+        //        }
+        //}
 
         public IActionResult addstore()
         {
             return View();
+        }
 
         public IActionResult DeleteProStore(int id)
         {
@@ -664,18 +664,18 @@ namespace AdminDashboard.Controllers
             }
         }
 
-        public IActionResult MyStore()
-        {
-            if (HttpContext.Request.Cookies["UserToken"] != "")
-            {
-                return View();
-            }
-            else
-            {
-                return Redirect("/AdminDashboard/Login");
-            }
+        //public IActionResult MyStore()
+        //{
+        //    if (HttpContext.Request.Cookies["UserToken"] != "")
+        //    {
+        //        return View();
+        //    }
+        //    else
+        //    {
+        //        return Redirect("/AdminDashboard/Login");
+        //    }
 
-        }
+        //}
 
         public IActionResult ContactUs()
         {
