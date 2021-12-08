@@ -12,8 +12,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ViewModels;
+using ViewModels.User;
 using ViewModels.Userr;
-
+using ViewModels.Userr;
+//>>>>>>> 2d68eb011ea5204e67e68e210ffd5af35dcbee1c
 namespace Final_Project.Controllers
 {
     [Route("api/[controller]")]
@@ -69,6 +71,14 @@ namespace Final_Project.Controllers
             return Ok(result);
         }
 
+        [HttpGet("")]
+        public ResultViewModel Get()
+        {
+
+            result.Message = "All Orders";
+            result.Data = OrderRepo.Get().Select(p => p.OrderViewModel());
+            return result;
+        }
 
         [HttpGet("getusers")]
         public async Task<dynamic> GetAllUsers()

@@ -17,6 +17,7 @@ namespace ViewModels
         public int Rate { get; set; }
         public int CurrentSupplierID { get; set; }
         public int CurrentCategoryID { get; set; }
+        public int Quantity { get; set; }
 
     }
     public static class InsertProductViewModelExtensions
@@ -28,11 +29,12 @@ namespace ViewModels
                 ID = product.ID,
                 Name = product.Name,
                 Price = product.Price,
+                Quantity = product.Quantity,
                // Image = product.Image,
                 Rate = product.Rate,
                 Description = product.Description,
                 CurrentSupplierID = product.CurrentSupplierID,
-                CurrentCategoryID = product.CurrentCategoryID,
+                CurrentCategoryID = product.CurrentCategoryID
             };
         }
 

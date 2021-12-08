@@ -26,21 +26,21 @@ namespace ViewModels
 
         [Required, StringLength(150)]
         public string Date_Of_Birth { set; get; }
-      
+
     }
     public static class SignUpModelExtensions
     {
-        public static User ToModel(this SignUpModel signUpModel)
+        public static Models.User ToModel(this SignUpModel signUpModel)
         {
-            return new User
+            return new Models.User
             {
-              Full_Name=signUpModel.Full_Name,
-              UserName=signUpModel.Full_Name,
-              Phone=signUpModel.Phone,
-              Adrress=signUpModel.Adrress,
-              SSN=signUpModel.SSN,
-              Date_Of_Birth=signUpModel.Date_Of_Birth,
-              Email = signUpModel.Email
+                Full_Name = signUpModel.Full_Name,
+                UserName = signUpModel.Full_Name,
+                Phone = signUpModel.Phone,
+                Adrress = signUpModel.Adrress,
+                SSN = signUpModel.SSN,
+                Date_Of_Birth = signUpModel.Date_Of_Birth,
+                Email = signUpModel.Email
             };
         }
     }
