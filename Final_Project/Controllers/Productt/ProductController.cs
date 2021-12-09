@@ -112,31 +112,20 @@ namespace Final_Project.Controllers
         [HttpPost("addProduct")]
         public ResultViewModel addProduct(Product product)
         {
-            StoreProduct sp = new StoreProduct();
+            //StoreProduct sp = new StoreProduct();
+            var res = product;
             result.Message = "Add Product";
-
-            var Cat = CategoryRepo.Get().Where(c => c.ID == product.CurrentCategoryID).FirstOrDefault();
-            if (Cat != null)
-            {
-
-                Cat.Products.Add(product);
-            }
-
-            //var store = StoreRepo.Get().
-            //    Where(s => s.StoresProducts.Where(sp => sp.Product_ID == product.ID).FirstOrDefault() != null).FirstOrDefault();
-            //if (store == null)
+            //var Cat = CategoryRepo.Get().Where(c => c.ID == product.CurrentCategoryID).FirstOrDefault();
+            //if (Cat != null)
             //{
-            //    sp.Product_ID = product.ID;
-            //    product.StoresProducts.Add(sp);
+            //    Cat.Products.Add(product);
             //}
-
 
             ProductRepo.Add(product);
             UnitOfWork.Save();
             result.Data = product;
 
             return result;
-
         }
 
         [HttpPut("editProduct")]

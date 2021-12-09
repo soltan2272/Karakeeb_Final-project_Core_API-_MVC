@@ -29,9 +29,10 @@ namespace Reposotries
             return  Table.Find(id);
         }
 
-        public void Add(T entity)
+        public int Add(T entity)
         {
              Table.Add(entity);
+            return entity.ID;
         }
 
         public void Update(T entity)
