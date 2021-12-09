@@ -24,37 +24,60 @@ namespace Final_Project.Controllers
             UnitOfWork = unitOfWork;
             ProductRepo = UnitOfWork.GetProductRepo();
         }
-        [HttpGet("{Name}")]
+
+        [HttpGet("Name/{Name}")]
         public ResultViewModel Name(string Name)
         {
-
-            result.Message = "All Products have Name: " + Name;
-            result.Data = ProductRepo.Get().Where(p => p.Name.Contains(Name)).Select(p => p.ToViewModel());
+            var res = ProductRepo.Get().Where(p => p.Name.Contains(Name)).Select(p => p.ToViewModel());
+            if (res != null)
+            {
+                result.Message = "All Products have Name: " + Name;
+                result.Data = res;
+            }
+            else
+            {
+                result.ISuccessed = false;
+                result.Message = " not found ";
+            }
             return result;
         }
 
-        [HttpGet("{price}")]
+        [HttpGet("PriceLessThan/{price}")]
         public ResultViewModel PriceLessThan(int price)
         {
-
-
-            result.Message = "Products Less Than "+price;
-            result.Data = ProductRepo.Get().Where(p => p.Price<=price).Select(p => p.ToViewModel());
+            var res = ProductRepo.Get().Where(p => p.Price<=price).Select(p => p.ToViewModel());
+            if (res != null)
+            {
+                result.Message = "Products Less Than " + price;
+                result.Data = res;
+            }
+            else
+            {
+                result.ISuccessed = false;
+                result.Message = "not found";
+            }
             return result;
-
         }
 
-        [HttpGet("{price}")]
+        [HttpGet("PriceMoreThan/{price}")]
         public ResultViewModel PriceMoreThan(int price)
         {
+           var res = ProductRepo.Get().Where(p => p.Price >= price).Select(p => p.ToViewModel());
 
-            result.Message = "Products Less Than " + price;
-            result.Data = ProductRepo.Get().Where(p => p.Price >= price).Select(p => p.ToViewModel());
+            if (res != null)
+            {
+                result.Message = "Products Less Than " + price;
+                result.Data = res;
+            }
+            else
+            {
+                result.ISuccessed = false;
+                result.Message = "not found";
+            }
             return result;
-
         }
 
-        [HttpGet("{Rate}")]
+        [HttpGet("Rate/{Rate}")]
         public ResultViewModel Rate(int Rate)
         {
             if(Rate<=5&& Rate >= 0)
@@ -66,30 +89,44 @@ namespace Final_Project.Controllers
             else
             {
                 result.ISuccessed = false;
-                result.Data = "error Rate not valied ";
+                result.Message = "error not valied ";
 
             }
             return result;
-
         }
 
-        [HttpGet("{Category}")]
+        [HttpGet("Category/{Category}")]
         public ResultViewModel Category(int Category)
         {
-
-            result.Message = "Products By Category Name ";
-            result.Data = ProductRepo.Get().Where(p => p.CurrentCategoryID == Category).Select(p => p.ToViewModel());
+            var res = ProductRepo.Get().Where(p => p.CurrentCategoryID == Category).Select(p => p.ToViewModel());
+            if (res != null)
+            {
+                result.Message = "Products By Category Name ";
+                result.Data = res;
+            }
+            else
+            {
+                result.ISuccessed = false;
+                result.Message = "not found";
+            }
             return result;
-
         }
-        [HttpGet("{Seller}")]
+
+        [HttpGet("Seller/{Seller}")]
         public ResultViewModel Seller(int Seller)
         {
-
-            result.Message = "Products By Seller Name ";
-            result.Data = ProductRepo.Get().Where(p => p.CurrentSupplierID == Seller).Select(p => p.ToViewModel());
+            var res= ProductRepo.Get().Where(p => p.CurrentSupplierID == Seller).Select(p => p.ToViewModel());
+            if (res != null)
+            {
+                result.Message = "Products By Seller Name ";
+                result.Data = res;
+            }
+            else
+            {
+                result.ISuccessed = false;
+                result.Message = "not found";
+            }
             return result;
-
         }
     }
 }

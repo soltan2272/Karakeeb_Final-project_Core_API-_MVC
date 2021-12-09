@@ -118,7 +118,6 @@ namespace Final_Project.Controllers
             var Cat = CategoryRepo.Get().Where(c => c.ID == product.CurrentCategoryID).FirstOrDefault();
             if (Cat != null)
             {
-
                 Cat.Products.Add(product);
             }
 
@@ -209,7 +208,7 @@ namespace Final_Project.Controllers
         //    store.Name = sto.Name;
         //    store.Address = sto.Address;
         //    store.Phone = sto.Phone;
-            
+
 
         //    StoreRepo.Add(store);
         //    UnitOfWork.Save();
@@ -238,17 +237,26 @@ namespace Final_Project.Controllers
         //    return result;
         //}
 
-        
-        [HttpDelete("deleteStore/{id}")]
-        public ResultViewModel deleteStore(int id)
+
+        //[HttpDelete("deleteStore/{id}")]
+        //public ResultViewModel deleteStore(int id)
+        //{
+        //    result.Data = StoreRepo.GetByID(id);
+        //    StoreRepo.Remove(StoreRepo.GetByID(id));
+        //    UnitOfWork.Save();
+        //    result.Message = "Store Deleted";
+        //    return result;
+        //}
+
+
+        [HttpGet("category")]
+        public ResultViewModel Getcategory()
         {
-            result.Data = StoreRepo.GetByID(id);
-            StoreRepo.Remove(StoreRepo.GetByID(id));
-            UnitOfWork.Save();
-            result.Message = "Store Deleted";
+
+            result.Message = "All category";
+            result.Data = CategoryRepo.Get();
             return result;
         }
-
 
 
     }
