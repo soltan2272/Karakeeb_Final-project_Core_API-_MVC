@@ -12,7 +12,7 @@ using ViewModels;
 
 namespace Final_Project.Controllers
 {
-    // [Authorize(Roles = "Admin")]
+    [EnableCors("AllowOrigin")]
     [ApiController]
     [Route("api/[controller]")]
 
@@ -150,7 +150,9 @@ namespace Final_Project.Controllers
             product.ID = pro.ID;
             product.Name = pro.Name;
             product.Quantity = pro.Quantity;
-            // product.Image = pro.Image;
+         
+
+           // product.Image = pro.Image;
             product.Rate = pro.Rate;
             product.Description = pro.Description;
             product.Price = pro.Price;
@@ -201,55 +203,6 @@ namespace Final_Project.Controllers
             return result;
         }
 
-        //[HttpPost("addStore")]
-        //public ResultViewModel addStore(StoreViewModel sto)
-        //{
-        //    result.Message = "Add Store";
-        //    var store = new Store();
-        //    store.Name = sto.Name;
-        //    store.Address = sto.Address;
-        //    store.Phone = sto.Phone;
-
-
-        //    StoreRepo.Add(store);
-        //    UnitOfWork.Save();
-        //    result.Data = store;
-
-        //    return result;
-
-        //}
-        //[HttpPut("editStore")]
-        //public ResultViewModel editStore(int id, StoreViewModel sto)
-        //{
-        //    var store = StoreRepo.GetByID(id);
-        //    result.Data = ProductRepo.GetByID(id).ToViewModel();
-
-        //    store.Name = sto.Name;
-        //    store.Address = sto.Address;
-        //    store.Phone = sto.Phone;
-
-        //    if (store == null)
-        //    {
-        //        result.Message = "NotFound Store";
-        //    }
-        //    result.Data = store;
-        //    StoreRepo.Update(store);
-        //    UnitOfWork.Save();
-        //    return result;
-        //}
-
-
-        [HttpDelete("deleteStore/{id}")]
-        public ResultViewModel deleteStore(int id)
-        {
-            result.Data = StoreRepo.GetByID(id);
-            StoreRepo.Remove(StoreRepo.GetByID(id));
-            UnitOfWork.Save();
-            result.Message = "Store Deleted";
-            return result;
-        }
-
-
-
+       }
     }
-}
+     
