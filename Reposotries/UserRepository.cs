@@ -156,7 +156,7 @@ namespace Reposotries
             authModel.Username = user.UserName;
             authModel.ExpiresOn = Token.ValidTo;
             authModel.Roles = roles.ToList();
-
+            authModel.User_ID = user.Id;
             return authModel;
 
         }
@@ -223,7 +223,7 @@ namespace Reposotries
             return users;
 
         }
-
+     
     }
 
    

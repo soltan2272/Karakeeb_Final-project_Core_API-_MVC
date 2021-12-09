@@ -39,18 +39,21 @@ namespace AdminDashboard.Controllers
         {
             return View();
 
-
-
         }
 
-            //[HttpPost]
-         /*   public IActionResult Login()
+
+
+        //[HttpPost]
+        // public IActionResult Login()
+
+
 
 
         [HttpPost]
         public IActionResult Logincheck(LoginModel logininfo)
         {
             // return View()
+            bool isAdmin = false;
             var jsondata = JsonConvert.SerializeObject(logininfo);
             var data = new StringContent(jsondata, Encoding.UTF8, "application/json");
             HttpClient http = new HttpClient();
@@ -64,17 +67,26 @@ namespace AdminDashboard.Controllers
                 var tabel = resltadmin.Content.ReadAsAsync<AuthModel>();
                 tabel.Wait();
                 var ser = tabel.Result.Token;
-                // string jsonString = JsonConvert.SerializeObject(ser);
-
-
-
-                // result = JsonConvert.DeserializeObject<string>(jsonString);
+                var usrid = tabel.Result.User_ID;
+                var usrname = tabel.Result.Username;
+                var Roles = tabel.Result.Roles;
+                foreach(string role in Roles)
+                {
+                    if(role=="Admin")
+                    {
+                        isAdmin = true;
+                    }
+                }
+               if(isAdmin==false)
+                {
+                    return Redirect("/AdminDashboard/Login");
+                }
                 result = ser;
                 HttpContext.Response.Cookies.Append("UserToken", result);
+                HttpContext.Response.Cookies.Append("UserID", usrid.ToString());
+                HttpContext.Response.Cookies.Append("UserName", usrname);
+                ViewData["UserName"] = tabel.Result.Username;
                 return Redirect("/AdminDashboard/Index");
-
-
-
 
             }
             else
@@ -140,9 +152,6 @@ namespace AdminDashboard.Controllers
                     tabel.Wait();
                     var ser = tabel.Result.Data;
                     string jsonString = JsonConvert.SerializeObject(ser);
-
-
-
                     Sellers = JsonConvert.DeserializeObject<IList<User>>(jsonString);
                 }
 
@@ -269,7 +278,6 @@ namespace AdminDashboard.Controllers
                     string jsonString = JsonConvert.SerializeObject(ser);
 
 
-
                     products = JsonConvert.DeserializeObject<IList<Product>>(jsonString);
                 }
 
@@ -321,7 +329,7 @@ namespace AdminDashboard.Controllers
                 if (resltproduct.IsSuccessStatusCode)
                 {
 
-
+                    
 
                     var tabel = resltproduct.Content.ReadAsAsync<ResultViewModel>();
                     tabel.Wait();
@@ -348,18 +356,6 @@ namespace AdminDashboard.Controllers
             }
         }
 
-       /* public IActionResult Users()
-        {
-            return View();
-
-        }
-        public IActionResult Admins()
-        {
-            return View();
-        }
-
-        }*/
-
         public IActionResult AddProduct()
         {
             if (HttpContext.Request.Cookies["UserToken"] != "")
@@ -375,7 +371,25 @@ namespace AdminDashboard.Controllers
         {
             if (HttpContext.Request.Cookies["UserToken"] != "")
             {
-                return View();
+                User user = null;
+                HttpClient http = new HttpClient();
+                http.BaseAddress = new Uri(Global.API);
+                var userID = HttpContext.Request.Cookies["UserID"];
+                var Usercontroller = http.GetAsync("User/getuser/" + userID);
+                Usercontroller.Wait();
+                var resltuser = Usercontroller.Result;
+                if (resltuser.IsSuccessStatusCode)
+                {
+                    var tabel = resltuser.Content.ReadAsAsync<ResultViewModel>();
+                    tabel.Wait();
+                    if (tabel.Result.ISuccessed == false)
+                        return View("NotFound");
+                    var data = tabel.Result.Data;
+                    string jsonString = JsonConvert.SerializeObject(data);
+                    user = JsonConvert.DeserializeObject<User>(jsonString);
+                }
+                return View(user);
+
             }
             else
             {
@@ -401,13 +415,6 @@ namespace AdminDashboard.Controllers
             HttpContext.Response.Cookies.Append("UserToken", "");
             return Redirect("/AdminDashboard/Login");
         }
-
-
-        /*  public IActionResult Suppliers()
-          {
-              return View();
-          }*/
-
 
         public IActionResult Stores()
         {
@@ -564,10 +571,6 @@ namespace AdminDashboard.Controllers
                 return Redirect("/AdminDashboard/Login");
             }
         }
-
-
-
-
         public IActionResult NotFound()
         {
             if (HttpContext.Request.Cookies["UserToken"] != "")
@@ -579,8 +582,6 @@ namespace AdminDashboard.Controllers
                 return Redirect("/AdminDashboard/Login");
             }
         }
-
-
 
 
     }

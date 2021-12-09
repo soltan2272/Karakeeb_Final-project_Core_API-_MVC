@@ -14,8 +14,8 @@ using System.Threading.Tasks;
 using ViewModels;
 using ViewModels.User;
 using ViewModels.Userr;
-using ViewModels.Userr;
-//>>>>>>> 2d68eb011ea5204e67e68e210ffd5af35dcbee1c
+
+
 namespace Final_Project.Controllers
 {
     [Route("api/[controller]")]
