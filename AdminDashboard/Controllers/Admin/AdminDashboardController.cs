@@ -1,4 +1,4 @@
-﻿using AdminDashboard.Models;
+using AdminDashboard.Models;
 using Final_Project;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
@@ -41,6 +41,7 @@ namespace AdminDashboard.Controllers
 
 
 
+
         }
 
 
@@ -49,6 +50,8 @@ namespace AdminDashboard.Controllers
         // public IActionResult Login()
 
 
+
+        }
 
 
         [HttpPost]
@@ -360,8 +363,6 @@ namespace AdminDashboard.Controllers
             //}
         }
 
-
-
         [HttpGet]
         public IActionResult Delete(int id)
         {
@@ -379,8 +380,6 @@ namespace AdminDashboard.Controllers
                 return Redirect("/AdminDashboard/Login");
             }
         }
-
-
 
         [HttpGet]
         public IActionResult Detiles(int id)
@@ -416,6 +415,17 @@ namespace AdminDashboard.Controllers
         }
 
 
+       /* public IActionResult Users()
+        {
+            return View();
+
+        }
+        public IActionResult Admins()
+        {
+            return View();
+        }
+
+        }*/
 
         [HttpPost]
         public async Task<IActionResult> AddProduct(Product product)
