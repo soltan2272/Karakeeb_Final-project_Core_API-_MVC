@@ -129,7 +129,7 @@ namespace Final_Project.Controllers
             return result;
         }
 
-        [HttpPut("editProduct")]
+        [HttpPut("editProduct/{id}")]
         public ResultViewModel editProduct(int id, InsertProductViewModel pro)
         {
             //if (id == null)
@@ -158,7 +158,7 @@ namespace Final_Project.Controllers
             UnitOfWork.Save();
             return result;
         }
-        [HttpDelete("Delete/{id}")]
+        [Route("Delete/{id}")]
         public ResultViewModel deleteProduct(int id)
         {
             result.Message = "Deleted Product";
