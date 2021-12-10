@@ -116,6 +116,7 @@ namespace Final_Project.Controllers
             var res = product;
             result.Message = "Add Product";
 
+<<<<<<< HEAD
             var Cat = CategoryRepo.Get().Where(c => c.ID == product.CurrentCategoryID).FirstOrDefault();
             if (Cat != null)
             {
@@ -123,6 +124,13 @@ namespace Final_Project.Controllers
             }
 
           
+=======
+            Category Cat = CategoryRepo.Get().Where(c => c.ID == product.CurrentCategoryID).FirstOrDefault();
+            if (Cat != null)
+            {
+                product.category = Cat;
+            }
+>>>>>>> bed181da2741e6b9f06b96276edb99e0f340ba55
 
             ProductRepo.Add(product);
             UnitOfWork.Save();
