@@ -115,11 +115,12 @@ namespace Final_Project.Controllers
             //StoreProduct sp = new StoreProduct();
             var res = product;
             result.Message = "Add Product";
-            //var Cat = CategoryRepo.Get().Where(c => c.ID == product.CurrentCategoryID).FirstOrDefault();
-            //if (Cat != null)
-            //{
-            //    Cat.Products.Add(product);
-            //}
+
+            Category Cat = CategoryRepo.Get().Where(c => c.ID == product.CurrentCategoryID).FirstOrDefault();
+            if (Cat != null)
+            {
+                product.category = Cat;
+            }
 
             ProductRepo.Add(product);
             UnitOfWork.Save();
