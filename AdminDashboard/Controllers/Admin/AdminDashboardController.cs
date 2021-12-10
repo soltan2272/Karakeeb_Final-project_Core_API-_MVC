@@ -450,7 +450,7 @@ namespace AdminDashboard.Controllers
                 };
                 var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
 
-                using (HttpResponseMessage response = await client.PostAsync("api/Product/addStore", content))
+                using (HttpResponseMessage response = await client.PostAsync("api/Product/addProduct", content))
                 {
                     var responseContent = response.Content.ReadAsStringAsync().Result;
                     response.EnsureSuccessStatusCode();
@@ -468,6 +468,52 @@ namespace AdminDashboard.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        //public async Task<IActionResult> editProduct(int id, Product product)
+        //{
+        public async Task<IActionResult> editProduct(Product product)
+        {
+            if (HttpContext.Request.Cookies["UserToken"] != "")
+            {
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.Timeout = TimeSpan.FromSeconds(60);
+                client.BaseAddress = new Uri("https://localhost:44354/");
+                var data = new
+                {
+                    Name = product.Name,
+                    Price = product.Price,
+                    Quantity = product.Quantity,
+                    //Image = product.Image,
+                    Rate = product.Rate,
+                    Description = product.Description,
+                    CurrentSupplierID = product.CurrentSupplierID,
+                    CurrentCategoryID = product.CurrentCategoryID,
+                    ID = product.ID
+                };
+                var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+
+                using (HttpResponseMessage response = await client.PutAsync("api/Product/editproduct/"+product.ID, content))
+                {
+                    var responseContent = response.Content.ReadAsStringAsync().Result;
+                    response.EnsureSuccessStatusCode();
+                    return Redirect("/AdminDashboard/Products");
+
+                }
+            }
+            else
+            {
+                return Redirect("/AdminDashboard/Login");
+            }
+
+        }
+
+        public IActionResult editProduct()
+        {
+            return View();
+        }
+
             public IActionResult Profile()
         {
             if (HttpContext.Request.Cookies["UserToken"] != "")
