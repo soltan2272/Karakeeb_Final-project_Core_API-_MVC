@@ -1,10 +1,10 @@
-﻿@using Models;
-@model Store
+﻿@*@using Models;
+    @model Store
 
-@{
-    ViewData["Title"] = "Stores";
-}
-
+    @{
+        ViewData["Title"] = "Stores";
+    }*@
+<!--
 <style>
     .checked {
         color: orange;
@@ -17,44 +17,70 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="product-status-wrap">
+                    <div class="product-status-wrap">-->
+@* <h4>My Store</h4> <a href="/AdminDashboard/addStore">Contact Page</a>*@
+<!--<h4> Add My Store
+  @*  @Html.ActionLink("Create My Store", "addStore")*@
+    </h4>
+
+<table>
+    <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Address</th>
+        <th scope="col">Phone</th>
+        <th scope="col">Add Product</th>
+        <th scope="col">Delete</th>
+    </tr>
+
+
+
+<<<<<<< HEAD
+    <tr>
+        <td>  @* @Model.Name</td>
+        <td>@Model.Address</td>
+        <td>@Model.Phone *@</td>
+
+        <td>
+
+         @*   @Html.ActionLink("Add Product", "addProduct")-->*@
+@*, new { StoreProduct = @product.ID }, new { @class = "btn btn-primary" })*@
+
+<!--</td>
+
+        <td>
+          @*    @Html.ActionLink("Delete", "DeletStore", new { ID = @Model.ID }, new { @class = "btn btn-danger" }) *@
+
+        </td>
+    </tr>
 
 
 
 
-                       @* <h4>My Store</h4> <a href="/AdminDashboard/addStore">Contact Page</a>*@
-                        <h4> Add My Store  @Html.ActionLink("Create My Store", "addStore") </h4>
-                      
-                        <table>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Address</th>
-                                <th scope="col">Phone</th>
-                                <th scope="col">Add Product</th>
-                                <th scope="col">Delete</th>
-                            </tr>
-
-                           
-        
-                            <!--<tr>
-                                <td>@Model</td>
-                                <td>@Model</td>
-                                <td>@Model </td>
-
-                                <td>
-
-                                    @Html.ActionLink("Add Product", "addProduct")-->
-                                    @*, new { StoreProduct = @product.ID }, new { @class = "btn btn-primary" })*@
-
-                                <!--</td>
-
-                                <td>
-                                    @Html.ActionLink("Delete", "DeletStore", new { ID = @Model.ID }, new { @class = "btn btn-danger" })
-
-                                </td>
-                            </tr>-->
-                          
+</table>-->
+=======
+                        @* <h4>My Store</h4> <a href="/AdminDashboard/addStore">Contact Page</a>*@
+                        <h4> Add Product</h4>
+                        @Html.ActionLink("ADD Product", "addProduct")
+                        @*<table>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Address</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Add Product</th>
+            <th scope="col">Delete</th>
+        </tr>*@
 
 
 
-                        </table>
+                        <!--<tr>
+        <td>@Model</td>
+        <td>@Model</td>
+        <td>@Model </td>
+
+        <td>
+
+
+        </td>
+    </tr>-->
+                        @*</table>*@
+>>>>>>> f82dacc2bb8e14d124ef1f25f47e6e69c273e583

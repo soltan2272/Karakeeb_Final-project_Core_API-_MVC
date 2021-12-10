@@ -59,6 +59,23 @@ namespace Final_Project.Controllers
             return result;
         }
 
+        [HttpGet("Pricerange/{price}/{price2}")]
+        public ResultViewModel PriceLessThan(int price , int price2 )
+        {
+            var res = ProductRepo.Get().Where(p => p.Price >= price&&p.Price<=price2).Select(p => p.ToViewModel());
+            if (res != null)
+            {
+                result.Message = "Products Less Than " + price;
+                result.Data = res;
+            }
+            else
+            {
+                result.ISuccessed = false;
+                result.Message = "not found";
+            }
+            return result;
+        }
+
         [HttpGet("PriceMoreThan/{price}")]
         public ResultViewModel PriceMoreThan(int price)
         {
@@ -83,7 +100,7 @@ namespace Final_Project.Controllers
             if(Rate<=5&& Rate >= 0)
             {
                 result.Message = "Products Where Rate = " + Rate;
-                result.Data = ProductRepo.Get().Where(p => p.Rate == Rate).Select(p => p.ToViewModel());
+                result.Data = ProductRepo.Get().Where(p => p.Rate <= Rate).Select(p => p.ToViewModel());
 
             }
             else
@@ -99,6 +116,22 @@ namespace Final_Project.Controllers
         public ResultViewModel Category(int Category)
         {
             var res = ProductRepo.Get().Where(p => p.CurrentCategoryID == Category).Select(p => p.ToViewModel());
+            if (res != null)
+            {
+                result.Message = "Products By Category Name ";
+                result.Data = res;
+            }
+            else
+            {
+                result.ISuccessed = false;
+                result.Message = "not found";
+            }
+            return result;
+        }
+        [HttpGet("Category/{Category}/{search}")]
+        public ResultViewModel CategorySearch(int Category,string search)
+        {
+            var res = ProductRepo.Get().Where(p => p.CurrentCategoryID == Category).Select(p => p.ToViewModel()).Where(pro=>pro.Name.Contains(search));
             if (res != null)
             {
                 result.Message = "Products By Category Name ";

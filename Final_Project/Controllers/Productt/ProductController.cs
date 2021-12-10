@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Cors;
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Reposotries;
@@ -12,10 +12,10 @@ using ViewModels;
 
 namespace Final_Project.Controllers
 {
-   // [Authorize(Roles = "Admin")]
+    [EnableCors("AllowOrigin")]
     [ApiController]
     [Route("api/[controller]")]
-  
+
     public class ProductController : ControllerBase
     {
         IGenericRepostory<Product> ProductRepo;
@@ -34,7 +34,7 @@ namespace Final_Project.Controllers
         }
 
         [HttpGet("userProducts")]
-        public  ResultViewModel GetforUser()
+        public ResultViewModel GetforUser()
         {
 
             result.Message = "All Products";
@@ -64,10 +64,10 @@ namespace Final_Project.Controllers
             }
 
             result.Message = " Product By ID";
-                result.Data = ProductRepo.GetByID(id).ToViewModel();
+            result.Data = ProductRepo.GetByID(id).ToViewModel();
 
-           
-            
+
+
             return result;
 
         }
@@ -112,7 +112,8 @@ namespace Final_Project.Controllers
         [HttpPost("addProduct")]
         public ResultViewModel addProduct(Product product)
         {
-            StoreProduct sp = new StoreProduct();
+            //StoreProduct sp = new StoreProduct();
+            var res = product;
             result.Message = "Add Product";
 
             var Cat = CategoryRepo.Get().Where(c => c.ID == product.CurrentCategoryID).FirstOrDefault();
@@ -121,21 +122,13 @@ namespace Final_Project.Controllers
                 Cat.Products.Add(product);
             }
 
-            //var store = StoreRepo.Get().
-            //    Where(s => s.StoresProducts.Where(sp => sp.Product_ID == product.ID).FirstOrDefault() != null).FirstOrDefault();
-            //if (store == null)
-            //{
-            //    sp.Product_ID = product.ID;
-            //    product.StoresProducts.Add(sp);
-            //}
-
+          
 
             ProductRepo.Add(product);
             UnitOfWork.Save();
             result.Data = product;
 
             return result;
-
         }
 
         [HttpPut("editProduct")]
@@ -149,6 +142,8 @@ namespace Final_Project.Controllers
             product.ID = pro.ID;
             product.Name = pro.Name;
             product.Quantity = pro.Quantity;
+         
+
            // product.Image = pro.Image;
             product.Rate = pro.Rate;
             product.Description = pro.Description;
@@ -259,5 +254,6 @@ namespace Final_Project.Controllers
         }
 
 
+       }
     }
-}
+     
