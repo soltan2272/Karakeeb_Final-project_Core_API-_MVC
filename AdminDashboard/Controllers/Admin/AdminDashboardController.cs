@@ -43,17 +43,11 @@ namespace AdminDashboard.Controllers
 
 
 
-<<<<<<< HEAD
         //[HttpPost]
         // public IActionResult Login()
 
 
 
-        
-
-
-=======
->>>>>>> dfbb9de9b7d20b6bad9e0cd375e2728443376c3c
         [HttpPost]
         public IActionResult Logincheck(LoginModel logininfo)
         {

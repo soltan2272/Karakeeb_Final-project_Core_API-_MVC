@@ -1,4 +1,5 @@
 ﻿using Models;
+using Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,8 +20,9 @@ namespace Reposotries
         IGenericRepostory<Payment> GetPaymentRepo();
         IGenericRepostory<Product> GetProductRepo();
         IGenericRepostory<Store> GetStoreRepo();
+        IGenericRepostory<Images> GetImagesRepo();
         //  IGenericRepostory<Supplier> GetSupplierRepo();
-       
+
         Task Save();
 
     }

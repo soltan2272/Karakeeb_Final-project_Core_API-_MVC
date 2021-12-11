@@ -27,7 +27,7 @@
                             </div>*@
                         <table>
                             <tr>
-                                <th>Index</th>
+                                <th>Image</th>
                                 <th>Product Name</th>
                                 <th>Price</th>
                                 <th>Quantity</th>
@@ -39,76 +39,79 @@
 
                             @foreach (Product product in Model)
                             {
-                                <tr>
-                                    <td>1</td>
+                        <tr>
+                            <td>
+                                <img src="@product.Product_Images.FirstOrDefault()" />
+                            
+                            </td>
 
-                                    <td>@product.Name</td>
-                                    <td>@product.Price LE</td>
-                                    <td>@product.Quantity </td>
-                                    <td>
-                                        @switch (product.Rate)
-                                        {
-                                            case 1:
-                                                <span id="s1" class="s1 fa fa-star checked"></span>
-                                                <span id="s2" class="s2 fa fa-star "></span>
-                                                <span id="s3" class="s3 fa fa-star "></span>
-                                                <span id="s4" class="s4 fa fa-star"></span>
-                                                <span id="s5" class="s5 fa fa-star"></span>
+                            <td>@product.Name</td>
+                            <td>@product.Price LE</td>
+                            <td>@product.Quantity </td>
+                            <td>
+                                @switch (product.Rate)
+                                {
+                                    case 1:
+                                        <span id="s1" class="s1 fa fa-star checked"></span>
+                                        <span id="s2" class="s2 fa fa-star "></span>
+                                        <span id="s3" class="s3 fa fa-star "></span>
+                                        <span id="s4" class="s4 fa fa-star"></span>
+                                        <span id="s5" class="s5 fa fa-star"></span>
 
-                                                break;
+                                        break;
 
-                                            case 2:
-                                                <span id="s1" class="s1 fa fa-star checked"></span>
-                                                <span id="s2" class="s2 fa fa-star checked"></span>
-                                                <span id="s3" class="s3 fa fa-star "></span>
-                                                <span id="s4" class="s4 fa fa-star"></span>
-                                                <span id="s5" class="s5 fa fa-star"></span>
+                                    case 2:
+                                        <span id="s1" class="s1 fa fa-star checked"></span>
+                                        <span id="s2" class="s2 fa fa-star checked"></span>
+                                        <span id="s3" class="s3 fa fa-star "></span>
+                                        <span id="s4" class="s4 fa fa-star"></span>
+                                        <span id="s5" class="s5 fa fa-star"></span>
 
-                                                break;
+                                        break;
 
-                                            case 3:
-                                                <span id="s1" class="s1 fa fa-star checked"></span>
-                                                <span id="s2" class="s2 fa fa-star checked"></span>
-                                                <span id="s3" class="s3 fa fa-star checked"></span>
-                                                <span id="s4" class="s4 fa fa-star"></span>
-                                                <span id="s5" class="s5 fa fa-star"></span>
+                                    case 3:
+                                        <span id="s1" class="s1 fa fa-star checked"></span>
+                                        <span id="s2" class="s2 fa fa-star checked"></span>
+                                        <span id="s3" class="s3 fa fa-star checked"></span>
+                                        <span id="s4" class="s4 fa fa-star"></span>
+                                        <span id="s5" class="s5 fa fa-star"></span>
 
-                                                break;
-                                            case 4:
-                                                <span id="s1" class="s1 fa fa-star checked"></span>
-                                                <span id="s2" class="s2 fa fa-star checked"></span>
-                                                <span id="s3" class="s3 fa fa-star checked"></span>
-                                                <span id="s4" class="s4 fa fa-star checked"></span>
-                                                <span id="s5" class="s5 fa fa-star"></span>
+                                        break;
+                                    case 4:
+                                        <span id="s1" class="s1 fa fa-star checked"></span>
+                                        <span id="s2" class="s2 fa fa-star checked"></span>
+                                        <span id="s3" class="s3 fa fa-star checked"></span>
+                                        <span id="s4" class="s4 fa fa-star checked"></span>
+                                        <span id="s5" class="s5 fa fa-star"></span>
 
-                                                break;
+                                        break;
 
-                                            case 5:
-                                                <span id="s1" class="s1 fa fa-star checked"></span>
-                                                <span id="s2" class="s2 fa fa-star checked"></span>
-                                                <span id="s3" class="s3 fa fa-star checked"></span>
-                                                <span id="s4" class="s4 fa fa-star checked"></span>
-                                                <span id="s5" class="s5 fa fa-star checked"></span>
+                                    case 5:
+                                        <span id="s1" class="s1 fa fa-star checked"></span>
+                                        <span id="s2" class="s2 fa fa-star checked"></span>
+                                        <span id="s3" class="s3 fa fa-star checked"></span>
+                                        <span id="s4" class="s4 fa fa-star checked"></span>
+                                        <span id="s5" class="s5 fa fa-star checked"></span>
 
-                                                break;
+                                        break;
 
 
-                                        }
-                                    </td>
+                                }
+                            </td>
 
-                                    <td>
-                                        @Html.ActionLink("Display", "Detiles", new { ID = @product.ID }, new { @class = "btn btn-primary" })
+                            <td>
+                                @Html.ActionLink("Display", "Detiles", new { ID = @product.ID }, new { @class = "btn btn-primary" })
 
-                                    </td>
-                                    <td>
-                                        @Html.ActionLink("Update", "Update", @product, new { @class = "btn btn-success" })
+                            </td>
+                            <td>
+                                @Html.ActionLink("Update", "Update", @product, new { @class = "btn btn-success" })
 
-                                    </td>
-                                    <td>
-                                        @Html.ActionLink("Delete", "Delete", new { ID = @product.ID }, new { @class = "btn btn-danger" })
+                            </td>
+                            <td>
+                                @Html.ActionLink("Delete", "Delete", new { ID = @product.ID }, new { @class = "btn btn-danger" })
 
-                                    </td>
-                                </tr>
+                            </td>
+                        </tr>
                             }
 
 

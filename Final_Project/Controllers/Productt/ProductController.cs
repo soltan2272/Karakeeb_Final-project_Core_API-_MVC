@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using ViewModels;
+using Models.Models;
 
 namespace Final_Project.Controllers
 {
@@ -21,6 +22,7 @@ namespace Final_Project.Controllers
         IGenericRepostory<Product> ProductRepo;
         IGenericRepostory<Category> CategoryRepo;
         IGenericRepostory<Store> StoreRepo;
+        IGenericRepostory<Images> ImageRepo;
         IUnitOfWork UnitOfWork;
 
         ResultViewModel result = new ResultViewModel();
@@ -30,7 +32,8 @@ namespace Final_Project.Controllers
             UnitOfWork = unitOfWork;
             ProductRepo = UnitOfWork.GetProductRepo();
             StoreRepo = UnitOfWork.GetStoreRepo();
-            CategoryRepo = unitOfWork.GetCategoryRepo();
+            CategoryRepo = UnitOfWork.GetCategoryRepo();
+            ImageRepo = UnitOfWork.GetImagesRepo();
         }
 
         [HttpGet("userProducts")]
@@ -82,12 +85,8 @@ namespace Final_Project.Controllers
                 return result;
 
             }
-
             result.Message = " Product By ID";
             result.Data = ProductRepo.GetByID(id);
-
-
-
             return result;
 
         }
@@ -116,25 +115,34 @@ namespace Final_Project.Controllers
             var res = product;
             result.Message = "Add Product";
 
-<<<<<<< HEAD
-            var Cat = CategoryRepo.Get().Where(c => c.ID == product.CurrentCategoryID).FirstOrDefault();
-            if (Cat != null)
-            {
-                Cat.Products.Add(product);
-            }
 
-          
-=======
             Category Cat = CategoryRepo.Get().Where(c => c.ID == product.CurrentCategoryID).FirstOrDefault();
             if (Cat != null)
             {
                 product.category = Cat;
             }
->>>>>>> bed181da2741e6b9f06b96276edb99e0f340ba55
 
             ProductRepo.Add(product);
             UnitOfWork.Save();
             result.Data = product;
+
+            return result;
+        }
+        [HttpPost("addimages")]
+        public ResultViewModel addimages(Images image)
+        {
+            var res = image;
+            result.Message = "Add Images for Product";
+
+            Product prod = ProductRepo.Get().Where(p => p.ID == image.CurrentProductID).FirstOrDefault();
+            if (prod != null)
+            {
+                image.product = prod;
+            }
+
+            ImageRepo.Add(image);
+            UnitOfWork.Save();
+            result.Data = image;
 
             return result;
         }
@@ -189,19 +197,19 @@ namespace Final_Project.Controllers
             return result;
         }
 
-        [HttpGet("storesById/{id}")]
-        public ResultViewModel storesById(int id)
-        {
-            Store store = StoreRepo.GetByID(id);
-            if (store == null)
-            {
-                result.ISuccessed = false;
-                return result;
-            }
-            result.Message = " Store By ID";
-            result.Data = StoreRepo.GetByID(id);
-            return result;
-        }
+        //[HttpGet("storesById/{id}")]
+        //public ResultViewModel storesById(int id)
+        //{
+        //    Store store = StoreRepo.GetByID(id);
+        //    if (store == null)
+        //    {
+        //        result.ISuccessed = false;
+        //        return result;
+        //    }
+        //    result.Message = " Store By ID";
+        //    result.Data = StoreRepo.GetByID(id);
+        //    return result;
+        //}
 
         //[HttpPost("addStore")]
         //public ResultViewModel addStore(StoreViewModel sto)
