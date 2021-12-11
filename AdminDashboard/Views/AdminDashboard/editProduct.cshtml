@@ -1,17 +1,19 @@
-﻿@using Models;
+﻿
+@using Models;
 @model Product
+
 @{
-    ViewData["Title"] = "addProduct";
-
+    ViewData["Title"] = "editProduct";
 }
+<h2>Edit Product</h2>
 
-<h2>Add Product </h2>
+
 <div class="container-fluid" style="margin-left:250px">
-    <form asp-action="addProduct" role="form">
+    <form asp-action="editProduct" role="form">
         @*<div class="mb-3">
-            <label class="form-label">ID</label>
-            <input type="text" asp-for="ID" class="form-control" placeholder="Enter Store ID">
-        </div>*@
+                <label class="form-label">ID</label>
+                <input type="text" asp-for="ID" class="form-control" placeholder="Enter Store ID">
+            </div>*@
         <div class="mb-3">
             <label class="form-label">Name</label>
             <input type="text" asp-for="Name" class="form-control" placeholder="Enter Product Name">
@@ -25,14 +27,9 @@
             <input type="text" asp-for="Price" class="form-control" placeholder="Enter Product Price">
         </div>
         @*<div class="mb-3">
-            <label class="form-label">Image</label>
-<<<<<<< HEAD
-            <input type="text" asp-for="Product_Images" class="form-control" placeholder="Enter Product Image">
-        </div>
-=======
-            <input type="text" asp-for="Imag" class="form-control" placeholder="Enter Product Image">
-        </div>*@
->>>>>>> f82dacc2bb8e14d124ef1f25f47e6e69c273e583
+                <label class="form-label">Image</label>
+                <input type="text" asp-for="Imag" class="form-control" placeholder="Enter Product Image">
+            </div>*@
         <div class="mb-3">
             <label class="form-label">Rate</label>
             <input type="text" asp-for="Rate" class="form-control" placeholder="Enter Product Rate">
@@ -53,3 +50,4 @@
 
         <button type="submit" class="btn btn-light">Submit</button>
     </form>
+

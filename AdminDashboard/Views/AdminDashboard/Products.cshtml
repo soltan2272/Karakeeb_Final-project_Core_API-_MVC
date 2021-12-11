@@ -102,9 +102,15 @@
                             <td>
                                 @Html.ActionLink("Display", "Detiles", new { ID = @product.ID }, new { @class = "btn btn-primary" })
 
+<<<<<<< HEAD
                             </td>
                             <td>
                                 @Html.ActionLink("Update", "Update", @product, new { @class = "btn btn-success" })
+=======
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Update", "editProduct", new { ID = @product.ID , @product} , new { @class = "btn btn-success" })
+>>>>>>> 3e47709c2b5165a4066edf75b11897983cde968c
 
                             </td>
                             <td>
