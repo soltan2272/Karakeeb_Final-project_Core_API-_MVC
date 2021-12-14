@@ -20,8 +20,7 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 using Models.Models;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
-
-
+using Newtonsoft.Json.Linq;
 
 namespace AdminDashboard.Controllers
 {
@@ -319,8 +318,9 @@ namespace AdminDashboard.Controllers
                 IEnumerable<Product> products = null;
                 HttpClient http = new HttpClient();
                 http.BaseAddress = new Uri(Global.API);
-                //var productcontroller = http.GetAsync("product/AdminProducts/" + 1);
+            //var productcontroller = http.GetAsync("product/AdminProducts/" + 1);
                 var productcontroller = http.GetAsync("Product/userProducts");
+               // var productcontroller = http.GetAsync("Product/ GetProductBySupplierID / " + 1);
                 productcontroller.Wait();
                 var resltproduct = productcontroller.Result;
                 if (resltproduct.IsSuccessStatusCode)
@@ -394,8 +394,10 @@ namespace AdminDashboard.Controllers
 
   
         [HttpPost]
-        public async Task<IActionResult> AddProduct(Product product)
+        public async Task<IActionResult> AddProduct(InsertProductViewModel product)
         {
+            
+            
             if (HttpContext.Request.Cookies["UserToken"] != "")
             {
                 var client = new HttpClient();
@@ -408,7 +410,7 @@ namespace AdminDashboard.Controllers
                     Name = product.Name,
                     Price = product.Price,
                     Quantity = product.Quantity,
-                    //Image = product.Image,
+                    imgspathes = product.imgspathes,
                     Rate = product.Rate,
                     Description = product.Description,
                     CurrentSupplierID = product.CurrentSupplierID,
@@ -533,10 +535,10 @@ namespace AdminDashboard.Controllers
         {
             if (HttpContext.Request.Cookies["UserToken"] != "")
             {
-                IEnumerable<Store> Stores = null;
+                IEnumerable<Product> ps = null;
                 HttpClient http = new HttpClient();
                 http.BaseAddress = new Uri(Global.API);
-                var storecontroller = http.GetAsync("product/stores");
+                var storecontroller = http.GetAsync("Product/GetProductBySupplierID/1");
                 storecontroller.Wait();
                 var resltstore = storecontroller.Result;
                 if (resltstore.IsSuccessStatusCode)
@@ -548,17 +550,47 @@ namespace AdminDashboard.Controllers
 
 
 
-                    Stores = JsonConvert.DeserializeObject<IList<Store>>(jsonString);
+                     ps = JsonConvert.DeserializeObject<IList<Product>>(jsonString);
+                   
+                    return View(ps) ;
                 }
+                return View(ps);
 
 
 
-                return View(Stores);
             }
             else
             {
                 return Redirect("/AdminDashboard/Login");
             }
+            //if (HttpContext.Request.Cookies["UserToken"] != "")
+            //{
+            //    IEnumerable<Store> Stores = null;
+            //    HttpClient http = new HttpClient();
+            //    http.BaseAddress = new Uri(Global.API);
+            //    var storecontroller = http.GetAsync("product/stores");
+            //    storecontroller.Wait();
+            //    var resltstore = storecontroller.Result;
+            //    if (resltstore.IsSuccessStatusCode)
+            //    {
+            //        var tabel = resltstore.Content.ReadAsAsync<ResultViewModel>();
+            //        tabel.Wait();
+            //        var serialiaze = tabel.Result.Data;
+            //        string jsonString = JsonConvert.SerializeObject(serialiaze);
+
+
+
+            //        Stores = JsonConvert.DeserializeObject<IList<Store>>(jsonString);
+            //    }
+
+
+
+            //    return View(Stores);
+            //}
+            //else
+            //{
+            //    return Redirect("/AdminDashboard/Login");
+            //}
         }
 
 
@@ -639,17 +671,82 @@ namespace AdminDashboard.Controllers
             }
         }
 
-        public IActionResult MyStore()
+
+        public  IActionResult MyStore()
         {
-            if (HttpContext.Request.Cookies["UserToken"] != "")
-            {
-                return View();
-            }
-            else
-            {
-                return Redirect("/AdminDashboard/Login");
-            }
+            return View();
         }
+        //    return View();
+        //}
+       // IEnumerable<Product> products = null;
+        // List<Product> p = null;
+            
+            //var client = new HttpClient();
+            //client.DefaultRequestHeaders.Accept.Clear();
+            //client.Timeout = TimeSpan.FromSeconds(60);
+            //client.BaseAddress = new Uri("https://localhost:44354/");
+            //using (HttpResponseMessage response = await client.GetAsync("api/Product/GetProductBySupplierID/"+ 1))
+            //{
+            //    //var responseContent = response.Content.ReadAsStringAsync().Result;
+            //    //response.EnsureSuccessStatusCode();
+            //    var tabel = response.Content.ReadAsAsync<ResultViewModel>();
+            //    tabel.Wait();
+            //    var serialiaze = tabel.Result.Data;
+            //   string jsonString = JsonConvert.SerializeObject(serialiaze , Formatting.Indented);
+
+                
+            //    List<Product>  products = JsonConvert.DeserializeObject<List<Product>>(jsonString);
+                
+            //    return View(products);
+            //}
+               
+        
+
+
+
+
+
+
+        // return View(products);
+
+
+
+        // var p = jsonString.DeserializeObject<List<Product>>();
+        //return View(p);//responseContent);//        }
+
+        //}
+
+
+
+        //if (HttpContext.Request.Cookies["UserToken"] != "")
+        //{
+
+        //IEnumerable<Product> products = null;
+        ////Product products = null;
+        //HttpClient http = new HttpClient();
+        //http.BaseAddress = new Uri(Global.API);
+        //var productcontroller = http.GetAsync("Product/GetProductBySupplierID/"+1);
+        ////var productcontroller = http.GetAsync("Product/userProducts");
+        //productcontroller.Wait();
+        //var resltproduct = productcontroller.Result;
+        //if (resltproduct.IsSuccessStatusCode)
+        //{
+        //    var tabel = resltproduct.Content.ReadAsAsync<ResultViewModel>();
+        //    tabel.Wait();
+        //    var ser = tabel.Result.Data;
+        //    string jsonString = JsonConvert.SerializeObject(ser);
+
+        //    products = JsonConvert.DeserializeObject<IList<Product>>(jsonString);
+        //}
+        //return View(products);
+        //}
+        //else
+        //{
+        //    return Redirect("/AdminDashboard/Login");
+        //}
+
+        //}
+
         public IActionResult ContactUs()
         {
             if (HttpContext.Request.Cookies["UserToken"] != "")
