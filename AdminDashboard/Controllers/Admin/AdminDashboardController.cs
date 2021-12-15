@@ -20,7 +20,6 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 using Models.Models;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
-using Newtonsoft.Json.Linq;
 
 namespace AdminDashboard.Controllers
 {
@@ -110,6 +109,9 @@ namespace AdminDashboard.Controllers
                     tabel.Wait();
                     var ser = tabel.Result.Data;
                     string jsonString = JsonConvert.SerializeObject(ser);
+
+
+
                     users = JsonConvert.DeserializeObject<IList<User>>(jsonString);
                 }
                 return View(users.ToPagedList((p ?? 1), 7));
@@ -322,7 +324,6 @@ namespace AdminDashboard.Controllers
                 http.BaseAddress = new Uri(Global.API);
                 var productcontroller = http.GetAsync("product/AdminProducts/");
                 //var productcontroller = http.GetAsync("Product/AdminProducts");
-
                 productcontroller.Wait();
                 var resltproduct = productcontroller.Result;
                 if (resltproduct.IsSuccessStatusCode)
@@ -396,10 +397,8 @@ namespace AdminDashboard.Controllers
 
   
         [HttpPost]
-        public async Task<IActionResult> AddProduct(InsertProductViewModel product)
+        public async Task<IActionResult> AddProduct(Product product)
         {
-            
-            
             if (HttpContext.Request.Cookies["UserToken"] != "")
             {
                 var client = new HttpClient();
@@ -412,7 +411,7 @@ namespace AdminDashboard.Controllers
                     Name = product.Name,
                     Price = product.Price,
                     Quantity = product.Quantity,
-                    imgspathes = product.imgspathes,
+                    //Image = product.Image,
                     Rate = product.Rate,
                     Description = product.Description,
                     CurrentSupplierID = product.CurrentSupplierID,
@@ -519,19 +518,16 @@ namespace AdminDashboard.Controllers
                 var sellerscontroller = http.GetAsync("Seller/getsellers");
                 sellerscontroller.Wait();
                 var resltuser = sellerscontroller.Result;
-
+                if (resltuser.IsSuccessStatusCode)
                 {
                     var tabel = resltuser.Content.ReadAsAsync<ResultViewModel>();
                     tabel.Wait();
                     var ser = tabel.Result.Data;
                     string jsonString = JsonConvert.SerializeObject(ser);
                     Sellers = JsonConvert.DeserializeObject<IList<User>>(jsonString);
-
                 }
-                return View(ps);
 
                 return View(Sellers.ToPagedList((p ?? 1), 7));
-
             }
             else
             {
@@ -539,34 +535,6 @@ namespace AdminDashboard.Controllers
 
                
             }
-            //if (HttpContext.Request.Cookies["UserToken"] != "")
-            //{
-            //    IEnumerable<Store> Stores = null;
-            //    HttpClient http = new HttpClient();
-            //    http.BaseAddress = new Uri(Global.API);
-            //    var storecontroller = http.GetAsync("product/stores");
-            //    storecontroller.Wait();
-            //    var resltstore = storecontroller.Result;
-            //    if (resltstore.IsSuccessStatusCode)
-            //    {
-            //        var tabel = resltstore.Content.ReadAsAsync<ResultViewModel>();
-            //        tabel.Wait();
-            //        var serialiaze = tabel.Result.Data;
-            //        string jsonString = JsonConvert.SerializeObject(serialiaze);
-
-
-
-            //        Stores = JsonConvert.DeserializeObject<IList<Store>>(jsonString);
-            //    }
-
-
-
-            //    return View(Stores);
-            //}
-            //else
-            //{
-            //    return Redirect("/AdminDashboard/Login");
-            //}
         }
         [HttpGet]
         public IActionResult StoreProduct(int id,int? p=1)
@@ -657,22 +625,18 @@ namespace AdminDashboard.Controllers
             }
         }
 
-
-        public  IActionResult MyStore()
+        public IActionResult MyStore()
         {
-            return View();
+            if (HttpContext.Request.Cookies["UserToken"] != "")
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("/AdminDashboard/Login");
+            }
         }
         public IActionResult ContactUs(int? p=1)
-
-               
-        
-
-
-
-
-
-
-        public IActionResult ContactUs()
         {
             if (HttpContext.Request.Cookies["UserToken"] != "")
             {

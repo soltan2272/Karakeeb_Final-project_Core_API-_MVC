@@ -13,7 +13,7 @@ using ViewModels.Userr;
 
 namespace Final_Project.Controllers
 {
-    [EnableCors("AllowAllHeaders")]
+    [EnableCors("AllowOrigin")]
     [Route("api/[controller]")]
     [ApiController]
     public class SellerController : ControllerBase
@@ -27,12 +27,6 @@ namespace Final_Project.Controllers
             UserRepository = userRepository;
             Context = context;
 
-        Project_Context Context;
-        public SellerController(IUserRepository userRepository, 
-            IUnitOfWork unitOfWork, Project_Context context)
-        {
-            UserRepository = userRepository;
-            Context = context;
         }
 
 
@@ -44,7 +38,7 @@ namespace Final_Project.Controllers
 
             var result = await UserRepository.SignUp(signupModel);
             if (!result.IsAuthenticated)
-                return Ok(result);
+                return BadRequest(result.Message);
 
             var adminRole = new AddRoleModel
             {
@@ -56,11 +50,7 @@ namespace Final_Project.Controllers
             return Ok(result);
 
         }
-       /* [HttpGet("getall")]
-       public List<User> getallser()
-        {
-            var sellers= Context.p
-        }*/
+
         [HttpPost("login")]
         public async Task<IActionResult> login([FromBody] LoginModel loginModel)
         {

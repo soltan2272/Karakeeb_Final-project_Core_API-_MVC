@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Final_Project.Controllers
 {
-    [EnableCors("AllowAllHeaders")]
+    [EnableCors("AllowOrigin")]
     [ApiController]
     [Route("api/[controller]")]
 

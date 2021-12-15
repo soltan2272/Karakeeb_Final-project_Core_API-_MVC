@@ -1,8 +1,5 @@
-﻿@model ViewModels.InsertProductViewModel
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+﻿@using Models;
+@model Product
 @{
     ViewData["Title"] = "addProduct";
 
@@ -12,9 +9,9 @@
 <div class="container-fluid" style="margin-left:250px">
     <form asp-action="addProduct" role="form">
         @*<div class="mb-3">
-                <label class="form-label">ID</label>
-                <input type="text" asp-for="ID" class="form-control" placeholder="Enter Store ID">
-            </div>*@
+            <label class="form-label">ID</label>
+            <input type="text" asp-for="ID" class="form-control" placeholder="Enter Store ID">
+        </div>*@
         <div class="mb-3">
             <label class="form-label">Name</label>
             <input type="text" asp-for="Name" class="form-control" placeholder="Enter Product Name">
@@ -27,7 +24,15 @@
             <label class="form-label">Price</label>
             <input type="text" asp-for="Price" class="form-control" placeholder="Enter Product Price">
         </div>
-      
+        @*<div class="mb-3">
+            <label class="form-label">Image</label>
+<<<<<<< HEAD
+            <input type="text" asp-for="Product_Images" class="form-control" placeholder="Enter Product Image">
+        </div>
+=======
+            <input type="text" asp-for="Imag" class="form-control" placeholder="Enter Product Image">
+        </div>*@
+>>>>>>> f82dacc2bb8e14d124ef1f25f47e6e69c273e583
         <div class="mb-3">
             <label class="form-label">Rate</label>
             <input type="text" asp-for="Rate" class="form-control" placeholder="Enter Product Rate">
@@ -46,37 +51,5 @@
             <input type="text" asp-for="CurrentSupplierID" value="2" class="form-control" placeholder="Enter Product CurrentSupplierID">
         </div>
 
-
-        <div class="row">
-            <div class="col-12">
-                <div class="product-info">
-                    <div class="product-image">
-                        <p class="text">
-                            @*<h4>product image </h4>*@
-                            @*<img id="blah" src="#" />*@
-                        </p>
-                    </div>
-                    <div class="upload-image-sec">
-                        <!-- upload inputs -->
-                        <p class="text"><img src="~/img/camera.png" alt="">upload image</p>
-                        <div class="upload-catalouge">
-                            <input type="file" class="fileupload" name="imgspathes" id="first-file-upload-btn" hidden accept=".png, .jpg">
-                            <label for="first-file-upload-btn" class="upload-image"></label>
-
-                            <input type="file" class="fileupload" name="imgspathes" id="second-file-upload-btn" hidden accept=".png, .jpg">
-                            <label for="second-file-upload-btn" class="upload-image"></label>
-
-                            <input type="file" class="fileupload" name="imgspathes" id="third-file-upload-btn" hidden accept=".png, .jpg">
-                            <label for="third-file-upload-btn" class="upload-image"></label>
-
-                            <input type="file" class="fileupload" name="imgspathes" id="fourth-file-upload-btn" hidden accept=".png, .jpg">
-                            <label for="fourth-file-upload-btn" class="upload-image"></label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <button type="submit" class="btn btn-light">Submit</button>
     </form>
-

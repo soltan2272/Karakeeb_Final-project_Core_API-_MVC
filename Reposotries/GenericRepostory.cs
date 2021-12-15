@@ -32,7 +32,7 @@ namespace Reposotries
         public int Add(T entity)
         {
              Table.Add(entity);
-             return entity.ID;
+            return entity.ID;
         }
 
         public void Update(T entity)

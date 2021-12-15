@@ -8,8 +8,8 @@ namespace Models.Models
 {
     public class Images:BaseModel
     {
-        //public List<string> Image_URL { set; get; }
         public string Image_URL { set; get; }
+
         public int CurrentProductID { get; set; }
         public Product product { get; set; }
     }
