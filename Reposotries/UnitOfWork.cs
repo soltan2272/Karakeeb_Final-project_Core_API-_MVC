@@ -29,7 +29,6 @@ namespace Reposotries
         IGenericRepostory<Images> ImagesRepo;
         IGenericRepostory<ContactUs> ContactRepo;
 
-        IGenericRepostory<Images> ImgRepo;
         public UnitOfWork(Project_Context context,
                             IGenericRepostory<Category> categoryRepo,// IGenericRepostory<Contact> contactRepo,
                             IGenericRepostory<Courier> courierRepo, IGenericRepostory<Feedback> feedbackRepo,
@@ -38,7 +37,6 @@ namespace Reposotries
                             IGenericRepostory<Store> storeRepo, IGenericRepostory<Images> imagesRepo,
                             IGenericRepostory<ContactUs> contactRepo
 )
-                            IGenericRepostory<Images> imgRepo)
         {
             Context = context;
             CategoryRepo = categoryRepo;
@@ -53,9 +51,6 @@ namespace Reposotries
             ImagesRepo = imagesRepo;
             //UserRepo = userRepo;
             ContactRepo = contactRepo;
-           
-            //UserRepo = userRepo;
-            ImgRepo = imgRepo;
         }
 
         public IGenericRepostory<Category> GetCategoryRepo()
@@ -104,12 +99,6 @@ namespace Reposotries
         public IGenericRepostory<Store> GetStoreRepo()
         {
             return StoreRepo;
-
-        }
-
-        public IGenericRepostory<Images> GetImgRepo()
-        {
-            return ImgRepo;
 
         }
 

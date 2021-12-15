@@ -15,7 +15,7 @@ using Data;
 
 namespace Final_Project.Controllers
 {
-    [EnableCors("AllowAllHeaders")]
+    [EnableCors("AllowOrigin")]
     [ApiController]
     [Route("api/[controller]")]
 
@@ -25,7 +25,6 @@ namespace Final_Project.Controllers
         IGenericRepostory<Category> CategoryRepo;
         IGenericRepostory<Store> StoreRepo;
         IGenericRepostory<Images> ImageRepo;
-
         IUnitOfWork UnitOfWork;
         IUserRepository UserRepository;
 
@@ -42,7 +41,6 @@ namespace Final_Project.Controllers
             CategoryRepo = UnitOfWork.GetCategoryRepo();
             ImageRepo = UnitOfWork.GetImagesRepo();
             UserRepository = userRepository;
-            ImgRepo = UnitOfWork.GetImgRepo();
         }
 
         [HttpGet("userProducts")]
@@ -154,7 +152,6 @@ namespace Final_Project.Controllers
         public ResultViewModel GetProductBySupplierID(int id)
         {
             Product products = ProductRepo.Get().Where(s => s.CurrentSupplierID == id).FirstOrDefault();
-
             if (products == null)
             {
                 result.ISuccessed = false;
@@ -169,38 +166,26 @@ namespace Final_Project.Controllers
 
 
         [HttpPost("addProduct")]
-        public ResultViewModel addProduct(InsertProductViewModel product)
+        public ResultViewModel addProduct(Product product)
         {
             //StoreProduct sp = new StoreProduct();
             var res = product;
             result.Message = "Add Product";
 
-           
-            
-            //UnitOfWork.Save();
-
-            var x = ToProductExtensions.ToProductModel(product);
 
             Category Cat = CategoryRepo.Get().Where(c => c.ID == product.CurrentCategoryID).FirstOrDefault();
             if (Cat != null)
             {
-                x.category = Cat;
+                product.category = Cat;
             }
             User saller =Context.Users.Where(s=>s.Id==product.CurrentSupplierID).FirstOrDefault();
                 if (saller != null)
             {
                 product.supplier = saller;
             }
-            ProductRepo.Add(x);
-            Images im = new Images();
 
-            foreach (var i in product.imgspathes)
-            {
-                ImgRepo.Add(new Images { CurrentProductID = 10, Image_URL = i });
-            }
-            
+            ProductRepo.Add(product);
             UnitOfWork.Save();
-            
             result.Data = product;
 
             return result;
@@ -221,7 +206,6 @@ namespace Final_Project.Controllers
 
             return result;
         }
-
 
         [HttpPut("editProduct/{id}")]
         public ResultViewModel editProduct(int id, InsertProductViewModel pro)

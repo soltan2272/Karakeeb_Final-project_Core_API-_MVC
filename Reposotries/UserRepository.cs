@@ -106,9 +106,8 @@ namespace Reposotries
                 Roles = new List<string> { "User" },
                 Token = new JwtSecurityTokenHandler().WriteToken(Token),
                 Username = Temp.UserName,
-                User_ID = Temp.Id,
-                Message = "Registered Successfully Please Check Your Email"
-
+                User_ID = Temp.Id
+                
             };
         }
      public async Task<AuthModel> Login(LoginModel model)
@@ -224,52 +223,7 @@ namespace Reposotries
             return users;
 
         }
-       
-        public async Task<string> ChangePassword(EditProfile _user)
-        {
-
-            var user = await UserManager.FindByIdAsync(_user.ID.ToString());
-            if (user == null)
-            {
-                return "Not Allowed";
-            }
-
-            user.PasswordHash = UserManager.PasswordHasher.HashPassword(_user.ToUserModel(), _user.Password);
-            var result = await UserManager.UpdateAsync(user);
-
-            if (!result.Succeeded)
-            {
-                return ("Failed to Change password");
-            }
-
-
-
-            return ("Password Updated Sucessfully");
-        }
-
-        
-        public async Task<string> UserEditProfile(EditProfile model)
-        {
-
-            var user = await UserManager.FindByIdAsync(model.ID.ToString());
-
-            if (user == null)
-            {
-                return "NotFound";
-            }
-            else
-            {
-                user.Full_Name = model.Full_Name;
-                user.Email = model.Email;
-                user.Adrress = model.Adrress;
-                user.Phone = model.Phone;
-                user.SSN = model.SSN;
-                user.Date_Of_Birth = model.Date_Of_Birth;
-                var result = await UserManager.UpdateAsync(user);
-
-                return "Profile Updated Sucessfully";
-            }
-        }
+     
     }
 
    
