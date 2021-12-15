@@ -12,13 +12,13 @@ namespace Models
         public string Name { get; set; }
         public float Price { get; set; }
         public string Description { get; set; }
-      //  public string Image { get; set; }
+       // public string[] imgpaths { get; set; }
         public int Rate { get; set; } = 0;
         public int CurrentSupplierID { get; set; }
         public User supplier { get; set; }
 
         public int Quantity { get; set; }
-      //  public IList<StoreProduct> StoresProducts { get; set; }
+        //public IList<StoreProduct> StoresProducts { get; set; }
         public IList<ProductOffer> ProductOffers { get; set; }
         public IList<ProductFeedback> productFeedbacks { get; set; }
         public int CurrentCategoryID { get; set; }

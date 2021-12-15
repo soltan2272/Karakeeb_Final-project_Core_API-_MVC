@@ -1,6 +1,7 @@
 ﻿using Data;
 using Microsoft.AspNetCore.Identity;
 using Models;
+using Models.Models;
 using Models.Models.User;
 using System;
 using System.Collections.Generic;
@@ -25,12 +26,13 @@ namespace Reposotries
         IGenericRepostory<Payment> PaymentRepo;
         IGenericRepostory<Product> ProductRepo;
         IGenericRepostory<Store> StoreRepo;
+        IGenericRepostory<Images> ImgRepo;
         public UnitOfWork(Project_Context context,
                             IGenericRepostory<Category> categoryRepo,// IGenericRepostory<Contact> contactRepo,
                             IGenericRepostory<Courier> courierRepo, IGenericRepostory<Feedback> feedbackRepo,
                             IGenericRepostory<Offer> offerRepo, IGenericRepostory<Order> orderRepo,
                             IGenericRepostory<Payment> paymentRepo, IGenericRepostory<Product> productRepo,
-                            IGenericRepostory<Store> storeRepo)
+                            IGenericRepostory<Images> imgRepo)
         {
             Context = context;
             CategoryRepo = categoryRepo;
@@ -41,8 +43,9 @@ namespace Reposotries
             OrderRepo = orderRepo;
             PaymentRepo = paymentRepo;
             ProductRepo = productRepo;
-            StoreRepo = storeRepo;
+           
             //UserRepo = userRepo;
+            ImgRepo = imgRepo;
         }
 
         public IGenericRepostory<Category> GetCategoryRepo()
@@ -84,6 +87,12 @@ namespace Reposotries
         public IGenericRepostory<Store> GetStoreRepo()
         {
             return StoreRepo;
+
+        }
+
+        public IGenericRepostory<Images> GetImgRepo()
+        {
+            return ImgRepo;
 
         }
 

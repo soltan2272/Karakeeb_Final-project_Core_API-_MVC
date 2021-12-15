@@ -1,10 +1,10 @@
-﻿@*@using Models;
-    @model Store
+<
+﻿@using Models;
+@model List<Product>
 
-    @{
-        ViewData["Title"] = "Stores";
-    }*@
-<!--
+@{
+    ViewData["Title"] = "MyStore";
+
 <style>
     .checked {
         color: orange;
@@ -18,69 +18,169 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="product-status-wrap">-->
-@* <h4>My Store</h4> <a href="/AdminDashboard/addStore">Contact Page</a>*@
-<!--<h4> Add My Store
-  @*  @Html.ActionLink("Create My Store", "addStore")*@
-    </h4>
 
-<table>
+                        <h4> Add Product</h4>
+                        @Html.ActionLink("ADD Product", "addProduct")
+
+                        @*<table>
+                            <tr>
+                                <th>Index</th>
+                                <th>Product Name</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Rate</th>
+                                <th>Display</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+
+                            @foreach (Product product in Model)
+                            {
+                                <tr>
+                                    <td>1</td>
+
+                                    <td>@product.Name</td>
+                                    <td>@product.Price LE</td>
+                                    <td>@product.Quantity </td>
+                                    <td>
+                                        @switch (product.Rate)
+                                        {
+                                            case 1:
+                                                <span id="s1" class="s1 fa fa-star checked"></span>
+                                                <span id="s2" class="s2 fa fa-star "></span>
+                                                <span id="s3" class="s3 fa fa-star "></span>
+                                                <span id="s4" class="s4 fa fa-star"></span>
+                                                <span id="s5" class="s5 fa fa-star"></span>
+
+                                                break;
+
+                                            case 2:
+                                                <span id="s1" class="s1 fa fa-star checked"></span>
+                                                <span id="s2" class="s2 fa fa-star checked"></span>
+                                                <span id="s3" class="s3 fa fa-star "></span>
+                                                <span id="s4" class="s4 fa fa-star"></span>
+                                                <span id="s5" class="s5 fa fa-star"></span>
+
+                                                break;
+
+                                            case 3:
+                                                <span id="s1" class="s1 fa fa-star checked"></span>
+                                                <span id="s2" class="s2 fa fa-star checked"></span>
+                                                <span id="s3" class="s3 fa fa-star checked"></span>
+                                                <span id="s4" class="s4 fa fa-star"></span>
+                                                <span id="s5" class="s5 fa fa-star"></span>
+
+                                                break;
+                                            case 4:
+                                                <span id="s1" class="s1 fa fa-star checked"></span>
+                                                <span id="s2" class="s2 fa fa-star checked"></span>
+                                                <span id="s3" class="s3 fa fa-star checked"></span>
+                                                <span id="s4" class="s4 fa fa-star checked"></span>
+                                                <span id="s5" class="s5 fa fa-star"></span>
+
+                                                break;
+
+                                            case 5:
+                                                <span id="s1" class="s1 fa fa-star checked"></span>
+                                                <span id="s2" class="s2 fa fa-star checked"></span>
+                                                <span id="s3" class="s3 fa fa-star checked"></span>
+                                                <span id="s4" class="s4 fa fa-star checked"></span>
+                                                <span id="s5" class="s5 fa fa-star checked"></span>
+
+                                                break;
+
+
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @Html.ActionLink("Display", "Detiles", new { ID = @product.ID }, new { @class = "btn btn-primary" })
+
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Update", "editProduct", new { ID = @product.ID, @product }, new { @class = "btn btn-success" })
+
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Delete", "Delete", new { ID = @product.ID }, new { @class = "btn btn-danger" })
+
+                                    </td>
+                                </tr>
+                            }
+
+
+
+                        </table>*@
+
+
+                        <div class="custom-pagination">
+
+                            <ul class="pagination">
+                                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    .checked {
+        color: orange;
+    }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<table>
     <tr>
         <th scope="col">Name</th>
         <th scope="col">Address</th>
         <th scope="col">Phone</th>
         <th scope="col">Add Product</th>
         <th scope="col">Delete</th>
-    </tr>
+    </tr>*@
 
 
 
-<<<<<<< HEAD
-    <tr>
-        <td>  @* @Model.Name</td>
-        <td>@Model.Address</td>
-        <td>@Model.Phone *@</td>
+<!--<tr>
+    <td>@Model</td>
+    <td>@Model</td>
+    <td>@Model </td>
 
-        <td>
-
-         @*   @Html.ActionLink("Add Product", "addProduct")-->*@
-@*, new { StoreProduct = @product.ID }, new { @class = "btn btn-primary" })*@
-
-<!--</td>
-
-        <td>
-          @*    @Html.ActionLink("Delete", "DeletStore", new { ID = @Model.ID }, new { @class = "btn btn-danger" }) *@
-
-        </td>
-    </tr>
+    <td>
 
 
+    </td>
+</tr>-->
+@*</table>*@
 
-
-</table>-->
-=======
-                        @* <h4>My Store</h4> <a href="/AdminDashboard/addStore">Contact Page</a>*@
-                        <h4> Add Product</h4>
-                        @Html.ActionLink("ADD Product", "addProduct")
-                        @*<table>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Address</th>
-            <th scope="col">Phone</th>
-            <th scope="col">Add Product</th>
-            <th scope="col">Delete</th>
-        </tr>*@
-
-
-
-                        <!--<tr>
-        <td>@Model</td>
-        <td>@Model</td>
-        <td>@Model </td>
-
-        <td>
-
-
-        </td>
-    </tr>-->
-                        @*</table>*@
->>>>>>> f82dacc2bb8e14d124ef1f25f47e6e69c273e583

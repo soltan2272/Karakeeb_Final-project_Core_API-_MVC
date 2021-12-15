@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using ViewModels;
+using Models.Models;
 
 namespace Final_Project.Controllers
 {
@@ -21,6 +22,7 @@ namespace Final_Project.Controllers
         IGenericRepostory<Product> ProductRepo;
         IGenericRepostory<Category> CategoryRepo;
         IGenericRepostory<Store> StoreRepo;
+        IGenericRepostory<Images> ImgRepo;
         IUnitOfWork UnitOfWork;
 
         ResultViewModel result = new ResultViewModel();
@@ -30,7 +32,8 @@ namespace Final_Project.Controllers
             UnitOfWork = unitOfWork;
             ProductRepo = UnitOfWork.GetProductRepo();
             StoreRepo = UnitOfWork.GetStoreRepo();
-            CategoryRepo = unitOfWork.GetCategoryRepo();
+            CategoryRepo = UnitOfWork.GetCategoryRepo();
+            ImgRepo = UnitOfWork.GetImgRepo();
         }
 
         [HttpGet("userProducts")]
@@ -96,6 +99,7 @@ namespace Final_Project.Controllers
         public ResultViewModel GetProductBySupplierID(int id)
         {
             Product products = ProductRepo.Get().Where(s => s.CurrentSupplierID == id).FirstOrDefault();
+
             if (products == null)
             {
                 result.ISuccessed = false;
@@ -110,24 +114,38 @@ namespace Final_Project.Controllers
 
 
         [HttpPost("addProduct")]
-        public ResultViewModel addProduct(Product product)
+        public ResultViewModel addProduct(InsertProductViewModel product)
         {
             //StoreProduct sp = new StoreProduct();
             var res = product;
             result.Message = "Add Product";
 
+           
+            
+            //UnitOfWork.Save();
+
+            var x = ToProductExtensions.ToProductModel(product);
+
             Category Cat = CategoryRepo.Get().Where(c => c.ID == product.CurrentCategoryID).FirstOrDefault();
             if (Cat != null)
             {
-                product.category = Cat;
+                x.category = Cat;
             }
+            ProductRepo.Add(x);
+            Images im = new Images();
 
-            ProductRepo.Add(product);
+            foreach (var i in product.imgspathes)
+            {
+                ImgRepo.Add(new Images { CurrentProductID = 10, Image_URL = i });
+            }
+            
             UnitOfWork.Save();
+            
             result.Data = product;
 
             return result;
         }
+
 
         [HttpPut("editProduct/{id}")]
         public ResultViewModel editProduct(int id, InsertProductViewModel pro)
