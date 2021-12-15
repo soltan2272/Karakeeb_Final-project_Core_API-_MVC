@@ -12,7 +12,7 @@ using ViewModels;
 
 namespace Final_Project.Controllers
 {
-    [EnableCors("AllowOrigin")]
+    [EnableCors("AllowAllHeaders")]
     [ApiController]
     [Route("api/[controller]")]
 

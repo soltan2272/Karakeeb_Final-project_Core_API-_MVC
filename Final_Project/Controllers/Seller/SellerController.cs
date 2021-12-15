@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Data;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using Reposotries;
 using System;
 using System.Collections.Generic;
@@ -11,17 +13,19 @@ using ViewModels.Userr;
 
 namespace Final_Project.Controllers
 {
-    [EnableCors("AllowOrigin")]
+    [EnableCors("AllowAllHeaders")]
     [Route("api/[controller]")]
     [ApiController]
     public class SellerController : ControllerBase
     {
         IUserRepository UserRepository;
         ResultViewModel result = new ResultViewModel();
-        public SellerController(IUserRepository userRepository, IUnitOfWork unitOfWork)
+        Project_Context Context;
+        public SellerController(IUserRepository userRepository, 
+            IUnitOfWork unitOfWork, Project_Context context)
         {
             UserRepository = userRepository;
-
+            Context = context;
         }
 
 
@@ -33,7 +37,7 @@ namespace Final_Project.Controllers
 
             var result = await UserRepository.SignUp(signupModel);
             if (!result.IsAuthenticated)
-                return BadRequest(result.Message);
+                return Ok(result);
 
             var adminRole = new AddRoleModel
             {
@@ -45,7 +49,11 @@ namespace Final_Project.Controllers
             return Ok(result);
 
         }
-
+       /* [HttpGet("getall")]
+       public List<User> getallser()
+        {
+            var sellers= Context.p
+        }*/
         [HttpPost("login")]
         public async Task<IActionResult> login([FromBody] LoginModel loginModel)
         {

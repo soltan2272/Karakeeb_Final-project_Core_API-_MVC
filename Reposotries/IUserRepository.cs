@@ -26,5 +26,7 @@ namespace Reposotries
         Task<ViewUser> GetUserBYIDAsync(int id);
 
         Task<List<User>> DeleteUser(int id);
+        Task<string> UserEditProfile(EditProfile model);
+        Task<string> ChangePassword(EditProfile _user);
     }
 }

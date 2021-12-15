@@ -18,9 +18,10 @@ using ViewModels.Userr;
 
 namespace Final_Project.Controllers
 {
+    [EnableCors("AllowAllHeaders")]
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("AllowOrigin")]
+  
     public class UserController : ControllerBase
     {
      
@@ -49,14 +50,23 @@ namespace Final_Project.Controllers
         public async Task<IActionResult> SignUp([FromBody]SignUpModel signupModel)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return Ok(ModelState);
 
             var result = await UserRepository.SignUp(signupModel);
             if(!result.IsAuthenticated)
-                return BadRequest(result.Message);         
+                return Ok(result);         
 
             return Ok(result);
 
+        }
+        [HttpPost("edituser")]
+        public async Task<IActionResult> editUser([FromBody] EditProfile editprofile)
+        {
+            if (!ModelState.IsValid)
+                return Ok(ModelState);
+
+            var result = await UserRepository.UserEditProfile(editprofile);
+                return Ok(result);
         }
 
         [HttpPost("login")]
@@ -67,7 +77,7 @@ namespace Final_Project.Controllers
 
             var result = await UserRepository.Login(loginModel);
             if (!result.IsAuthenticated)
-                return BadRequest(result.Message);
+                return Ok(result);
             return Ok(result);
         }
 

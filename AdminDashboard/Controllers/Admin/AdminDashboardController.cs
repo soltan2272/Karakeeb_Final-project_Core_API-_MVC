@@ -106,9 +106,6 @@ namespace AdminDashboard.Controllers
                     tabel.Wait();
                     var ser = tabel.Result.Data;
                     string jsonString = JsonConvert.SerializeObject(ser);
-
-
-
                     users = JsonConvert.DeserializeObject<IList<User>>(jsonString);
                 }
                 return View(users);
