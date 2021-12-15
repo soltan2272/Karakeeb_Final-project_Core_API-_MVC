@@ -28,13 +28,35 @@ namespace Final_Project
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+
+            services.AddCors(options =>
+
+            {
+
+                options.AddPolicy("AllowAllHeaders",
+
+                builder =>
+
+                {
+
+                    builder.AllowAnyOrigin()
+
+                            .AllowAnyHeader()
+
+                            .AllowAnyMethod();
+
+                });
+
+            });
+
+            services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.IgnoreNullValues = true);
             services.Configure<MailSetting>(Configuration.GetSection("MailSettings"));
             services.AddTransient<IEmailService, MailingService>();
           services.AddDbContext<Project_Context>(options => {
@@ -72,7 +94,7 @@ namespace Final_Project
 
             services.AddSwaggerGen();
             services.AddAutoMapper(typeof(Startup));
-            services.AddCors(c =>
+          /*  services.AddCors(c =>
             {
                 c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
             });
@@ -84,7 +106,7 @@ namespace Final_Project
                     builder.AllowAnyOrigin()
                     .AllowAnyMethod().AllowAnyHeader();
                 });
-            });
+            });*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -98,14 +120,17 @@ namespace Final_Project
             app.UseRouting();
             app.UseStaticFiles();
 
-            app.UseCors(builer =>
+            /*app.UseCors(builer =>
             {
-                builer.WithOrigins("https://localhost:44331");
+                builer.WithOrigins("https://localhost:4200");
                 builer.AllowAnyMethod();
                 builer.AllowAnyHeader();
 
             });
-            app.UseCors(options => options.AllowAnyOrigin());
+            app.UseCors(options => options.AllowAnyOrigin());*/
+            app.UseCors("AllowAllHeaders");
+
+
 
             app.UseAuthentication();
             app.UseAuthorization();

@@ -24,6 +24,7 @@ namespace Reposotries
         IGenericRepostory<ContactUs> GetContactRepo();
         //  IGenericRepostory<Supplier> GetSupplierRepo();
 
+        IGenericRepostory<Images> GetImgRepo();
         Task Save();
 
     }

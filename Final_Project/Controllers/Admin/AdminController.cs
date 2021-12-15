@@ -11,7 +11,7 @@ using ViewModels.Userr;
 
 namespace Final_Project.Controllers.Admin
 {
-    [EnableCors("AllowOrigin")]
+    [EnableCors("AllowAllHeaders")]
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase

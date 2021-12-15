@@ -13,12 +13,12 @@ namespace ViewModels
         public string Name { get; set; }
         public float Price { get; set; }
         public string Description { get; set; }
-        public string Image { get; set; }
+       
         public int Rate { get; set; }
         public int CurrentSupplierID { get; set; }
         public int CurrentCategoryID { get; set; }
         public int Quantity { get; set; }
-
+        public string [] imgspathes { get; set; }
     }
     public static class InsertProductViewModelExtensions
     {
@@ -30,7 +30,7 @@ namespace ViewModels
                 Name = product.Name,
                 Price = product.Price,
                 Quantity = product.Quantity,
-               // Image = product.Image,
+               // imgspaths = product.imgpaths,
                 Rate = product.Rate,
                 Description = product.Description,
                 CurrentSupplierID = product.CurrentSupplierID,
