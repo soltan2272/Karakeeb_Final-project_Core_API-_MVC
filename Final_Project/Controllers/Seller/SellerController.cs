@@ -19,7 +19,14 @@ namespace Final_Project.Controllers
     public class SellerController : ControllerBase
     {
         IUserRepository UserRepository;
+        Project_Context Context;
+
         ResultViewModel result = new ResultViewModel();
+        public SellerController(Project_Context context,IUserRepository userRepository, IUnitOfWork unitOfWork)
+        {
+            UserRepository = userRepository;
+            Context = context;
+
         Project_Context Context;
         public SellerController(IUserRepository userRepository, 
             IUnitOfWork unitOfWork, Project_Context context)
@@ -83,7 +90,6 @@ namespace Final_Project.Controllers
         [HttpGet("getsellers")]
         public async Task<dynamic> GetAllUsers()
         {
-
             var res = await UserRepository.GetSellersAsync();
             result.Data = res;
             result.Message = "Succedd";

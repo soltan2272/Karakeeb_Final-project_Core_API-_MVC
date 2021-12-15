@@ -10,6 +10,8 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using ViewModels;
 using Models.Models;
+using PagedList.Core;
+using Data;
 
 namespace Final_Project.Controllers
 {
@@ -22,17 +24,24 @@ namespace Final_Project.Controllers
         IGenericRepostory<Product> ProductRepo;
         IGenericRepostory<Category> CategoryRepo;
         IGenericRepostory<Store> StoreRepo;
-        IGenericRepostory<Images> ImgRepo;
-        IUnitOfWork UnitOfWork;
+        IGenericRepostory<Images> ImageRepo;
 
+        IUnitOfWork UnitOfWork;
+        IUserRepository UserRepository;
+
+        Project_Context Context;
         ResultViewModel result = new ResultViewModel();
 
-        public ProductController(IUnitOfWork unitOfWork)
+        public ProductController(Project_Context context, IUserRepository userRepository,
+                                 IUnitOfWork unitOfWork)
         {
+            Context = context;
             UnitOfWork = unitOfWork;
             ProductRepo = UnitOfWork.GetProductRepo();
             StoreRepo = UnitOfWork.GetStoreRepo();
             CategoryRepo = UnitOfWork.GetCategoryRepo();
+            ImageRepo = UnitOfWork.GetImagesRepo();
+            UserRepository = userRepository;
             ImgRepo = UnitOfWork.GetImgRepo();
         }
 
@@ -41,24 +50,61 @@ namespace Final_Project.Controllers
         {
 
             result.Message = "All Products";
-            result.Data = ProductRepo.Get().Select(p => p.ToViewModel());
+            result.Data = Context.Products.Select(p =>new { 
+            p.ID,
+            p.Name,
+            p.Price,
+            p.ProductOffers,
+            p.category,
+            p.Description,
+            p.productFeedbacks,
+            p.Rate,
+            p.supplier,
+            p.Product_Images});
+
             return result;
         }
         [HttpGet("AdminProducts")]
-
-
-        public ResultViewModel GetforAdmin()
+        public ResultViewModel GetforAdmin(int? p=0)
         {
             result.Message = "All Products";
-            result.Data = ProductRepo.Get();
+            result.Data = Context.Products.Select(p => new
+            {
+                p.ID,
+                p.Name,
+                p.Price,
+                p.ProductOffers,
+                p.category,
+                p.Description,
+                p.productFeedbacks,
+                p.Rate,
+                p.supplier,
+                p.Product_Images,
+                p.Quantity,
+                p.productOrders,
+            });
+                //.ToPagedList((p ?? 1), 5);
             return result;
         }
 
 
-        [HttpGet("{id}")]
+        [HttpGet("UserProduct/{id}")]
         public ResultViewModel GetProductByID(int id)
         {
-            Product product = ProductRepo.GetByID(id);
+            var product = Context.Products.Where(pro => pro.ID == id).Select(p => new {
+                p.ID,
+                p.Name,
+                p.Price,
+                p.ProductOffers,
+                p.category,
+                p.Description,
+                p.productFeedbacks,
+                p.Rate,
+                p.supplier,
+                p.productOrders,
+                p.Product_Images
+
+            }).FirstOrDefault();
             if (product == null)
             {
                 result.ISuccessed = false;
@@ -67,7 +113,7 @@ namespace Final_Project.Controllers
             }
 
             result.Message = " Product By ID";
-            result.Data = ProductRepo.GetByID(id).ToViewModel();
+            result.Data = product;
 
 
 
@@ -78,19 +124,28 @@ namespace Final_Project.Controllers
         [HttpGet("AdminProduct/{id}")]
         public ResultViewModel GetProductByIDForAdmin(int id)
         {
-            Product product = ProductRepo.GetByID(id);
+            var product = Context.Products.Where(pro=>pro.ID==id).Select(p => new {
+                p.ID,
+                p.Name,
+                p.Price,
+                p.ProductOffers,
+                p.category,
+                p.Description,
+                p.productFeedbacks,
+                p.Rate,
+                p.supplier,
+                p.Product_Images,
+                p.Quantity,
+                p.productOrders,
+            }).FirstOrDefault();
             if (product == null)
             {
                 result.ISuccessed = false;
                 return result;
 
             }
-
             result.Message = " Product By ID";
-            result.Data = ProductRepo.GetByID(id);
-
-
-
+            result.Data = product;
             return result;
 
         }
@@ -131,6 +186,11 @@ namespace Final_Project.Controllers
             {
                 x.category = Cat;
             }
+            User saller =Context.Users.Where(s=>s.Id==product.CurrentSupplierID).FirstOrDefault();
+                if (saller != null)
+            {
+                product.supplier = saller;
+            }
             ProductRepo.Add(x);
             Images im = new Images();
 
@@ -142,6 +202,22 @@ namespace Final_Project.Controllers
             UnitOfWork.Save();
             
             result.Data = product;
+
+            return result;
+        }
+        [HttpPost("addimages")]
+        public ResultViewModel addimages(Images image)
+        {
+            var res = image;
+            result.Message = "Add Images for Product";
+            Product pro = ProductRepo.Get().Where(p => p.ID == image.CurrentProductID).FirstOrDefault();
+            if (pro != null)
+            {
+                image.product = pro;
+            }
+            ImageRepo.Add(image);
+            UnitOfWork.Save();
+            result.Data = image;
 
             return result;
         }
@@ -197,19 +273,78 @@ namespace Final_Project.Controllers
             return result;
         }
 
-        [HttpGet("storesById/{id}")]
-        public ResultViewModel storesById(int id)
+        //[HttpGet("storesById/{id}")]
+        //public ResultViewModel storesById(int id)
+        //{
+        //    Store store = StoreRepo.GetByID(id);
+        //    if (store == null)
+        //    {
+        //        result.ISuccessed = false;
+        //        return result;
+        //    }
+        //    result.Message = " Store By ID";
+        //    result.Data = StoreRepo.GetByID(id);
+        //    return result;
+        //}
+
+        //[HttpPost("addStore")]
+        //public ResultViewModel addStore(StoreViewModel sto)
+        //{
+        //    result.Message = "Add Store";
+        //    var store = new Store();
+        //    store.Name = sto.Name;
+        //    store.Address = sto.Address;
+        //    store.Phone = sto.Phone;
+
+
+        //    StoreRepo.Add(store);
+        //    UnitOfWork.Save();
+        //    result.Data = store;
+
+        //    return result;
+
+        //}
+        //[HttpPut("editStore")]
+        //public ResultViewModel editStore(int id, StoreViewModel sto)
+        //{
+        //    var store = StoreRepo.GetByID(id);
+        //    result.Data = ProductRepo.GetByID(id).ToViewModel();
+
+        //    store.Name = sto.Name;
+        //    store.Address = sto.Address;
+        //    store.Phone = sto.Phone;
+
+        //    if (store == null)
+        //    {
+        //        result.Message = "NotFound Store";
+        //    }
+        //    result.Data = store;
+        //    StoreRepo.Update(store);
+        //    UnitOfWork.Save();
+        //    return result;
+        //}
+
+
+        //[HttpDelete("deleteStore/{id}")]
+        //public ResultViewModel deleteStore(int id)
+        //{
+        //    result.Data = StoreRepo.GetByID(id);
+        //    StoreRepo.Remove(StoreRepo.GetByID(id));
+        //    UnitOfWork.Save();
+        //    result.Message = "Store Deleted";
+        //    return result;
+        //}
+
+
+        [HttpGet("category")]
+        public ResultViewModel Getcategory()
         {
-            Store store = StoreRepo.GetByID(id);
-            if (store == null)
-            {
-                result.ISuccessed = false;
-                return result;
-            }
-            result.Message = " Store By ID";
-            result.Data = StoreRepo.GetByID(id);
+
+            result.Message = "All category";
+            result.Data = CategoryRepo.Get();
             return result;
         }
+
 
        }
     }

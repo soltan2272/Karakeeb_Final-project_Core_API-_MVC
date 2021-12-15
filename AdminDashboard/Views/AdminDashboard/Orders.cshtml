@@ -3,8 +3,9 @@
 @{
     ViewData["Title"] = "Orders";
 }
-
-@model List<Models.Order>
+@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<Models.Order>
 
 <h1>Orders</h1>
 
@@ -25,17 +26,31 @@
 
         @foreach (var item in Model)
         {
-        <tr>
-            <th scope="row">1</th>
-            <td>@item.Quantity</td>
-            <td>@item.Delivery_Status</td>
-            <td>@item.CurrentPaymentID</td>
-            <td>@item.Order_Date</td>
-            <td>@Html.ActionLink("Update Order", "editOrder", @item, new { @class = "btn btn-danger" })</td>
-            <td>@Html.ActionLink("Delete Order", "deleteOrders", new { ID =item.ID }, new { @class = "btn btn-danger" })</td>
-           
-        </tr>
+            <tr>
+                <th scope="row">1</th>
+                <td>@item.Quantity</td>
+                <td>@item.Delivery_Status</td>
+                <td>@item.CurrentPaymentID</td>
+                <td>@item.Order_Date</td>
+                <td>@Html.ActionLink("Update Order", "editOrder", @item, new { @class = "btn btn-danger" })</td>
+                <td>@Html.ActionLink("Delete Order", "deleteOrders", new { ID = item.ID }, new { @class = "btn btn-danger" })</td>
+
+            </tr>
         }
+        <div class="custom-pagination">
+
+            <ul class="pagination">
+
+                @for (int i = 1; i <= Model.PageCount; i++)
+                {
+                    <li class="@(i == Model.PageNumber ? "page-item active" : "page-item")">
+                        <a class="page-link" href="@Url.Action("Orders", new { p = i })">@i</a>
+                    </li>
+
+                }
+
+            </ul>
+        </div>
     </tbody>
 </table>
 
@@ -46,97 +61,6 @@
 
 
 
-
-
-
-
-
-
-
-
-@*<table class="table">
-=======
-@section Orders
-{
-    active
-}
-<table class="table">
->>>>>>> 2d68eb011ea5204e67e68e210ffd5af35dcbee1c
-    <thead>
-        <tr>
-
-            <th scope="col">Index</th>
-            <th scope="col">Quantity</th>
-            <th scope="col">Delivery_Status</th>
-            <th scope="col">CurrentPaymentID</th>
-            <th scope="col">Order_Date</th>
-            <th scope="col">Display</th>
-            <th scope="col">Update</th>
-            <th scope="col">Delete</th>
-        </tr>
-    </thead>
-    <tbody id="Orders">
-    </tbody>
-</table>
-
-<script>
-    function Display(id) {
-        $.get("https://localhost:44354/User/" + id, function (data, status) {
-            var Data = data.data;
-            console.log(Data);
-        })
-    }
-    function Update(id) {
-        $.get("https://localhost:44354/User/" + id, function (data, status) {
-            var Data = data.data;
-            console.log(Data);
-        })
-    }
-    function Delete(id) {
-        $.post("https://localhost:44354/User/delete" + id, function (data, status) {
-            var Data = data.data;
-            console.log(Data);
-        })
-    }
-    $(document).ready(function () {
-        $("#btn").click(function () {
-            $.get("https://localhost:44354/User", function (data, status) {
-                var Data = data.data;
-                var i = 0;
-                Data.forEach(function (dt) {
-                    $("#Orders").append("<tr>" +
-                        "<td>" + i + 1 + "</td>" +
-                        "<td>" + dt.Quantity + "</td>" +
-                        "<td>" + dt.Delivery_Status + "</td>" +
-                        "<td>" + dt.CurrentPaymentID + "</td>" +
-                        "<td>" + dt.Order_Date + "</td>" +
-                        "<td><button class='btn btn-dark'onclick='Display(" + dt.id + ")'>Display </button> </td>" +
-                        "<td><button class='btn btn-primary'onclick='Update(" + dt.id + ")'>Update </button> </td>" +
-                        "<td><button class='btn btn-danger'onclick='Delete(" + dt.id + ")'>Delete </button> </td>" +
-                        "<td><a class='btn btn-dark' asp-action='Detiles' asp-route=" + dt.id + ">Display</a></td>"
-
-
-                        + "</tr>")
-                })
-            })
-        })
-    })
-            //function viewProduct() {
-            //    $.ajax({
-            //        url: "https://localhost:44354/product",
-            //        method: "Get",
-            //        success: function (data) {
-            //            console.log(data);
-            //            $(".id").append("<tr><td>" + data + "<td/> </tr>");
-
-            //        },
-            //        error: function (error) {
-            //            console.error(error);
-
-            //        },
-            //    })
-            //}
-</script>*@
 
 
 

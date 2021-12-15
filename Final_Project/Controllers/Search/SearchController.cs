@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Data;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Reposotries;
@@ -17,79 +18,166 @@ namespace Final_Project.Controllers
     {
         IGenericRepostory<Product> ProductRepo;
         IUnitOfWork UnitOfWork;
+        Project_Context Context;
 
         ResultViewModel result = new ResultViewModel();
-        public SearchController(IUnitOfWork unitOfWork)
+        public SearchController(IUnitOfWork unitOfWork, Project_Context context)
         {
             UnitOfWork = unitOfWork;
             ProductRepo = UnitOfWork.GetProductRepo();
+            Context = context;
         }
-        [HttpGet("{Name}")]
+
+        [HttpGet("Name/{Name}")]
         public ResultViewModel Name(string Name)
         {
-
-            result.Message = "All Products have Name: " + Name;
-            result.Data = ProductRepo.Get().Where(p => p.Name.Contains(Name)).Select(p => p.ToViewModel());
+            var res = ProductRepo.Get().Where(p => p.Name.Contains(Name)).Select(p => p.ToViewModel());
+            if (res != null)
+            {
+                result.Message = "All Products have Name: " + Name;
+                result.Data = res;
+            }
+            else
+            {
+                result.ISuccessed = false;
+                result.Message = " not found ";
+            }
             return result;
         }
 
-        [HttpGet("{price}")]
+        [HttpGet("PriceLessThan/{price}")]
         public ResultViewModel PriceLessThan(int price)
         {
-
-
-            result.Message = "Products Less Than "+price;
-            result.Data = ProductRepo.Get().Where(p => p.Price<=price).Select(p => p.ToViewModel());
+            var res = ProductRepo.Get().Where(p => p.Price<=price).Select(p => p.ToViewModel());
+            if (res != null)
+            {
+                result.Message = "Products Less Than " + price;
+                result.Data = res;
+            }
+            else
+            {
+                result.ISuccessed = false;
+                result.Message = "not found";
+            }
             return result;
-
         }
 
-        [HttpGet("{price}")]
+        [HttpGet("Pricerange/{price}/{price2}")]
+        public ResultViewModel PriceLessThan(int price , int price2 )
+        {
+            var res = ProductRepo.Get().Where(p => p.Price >= price&&p.Price<=price2).Select(p => p.ToViewModel());
+            if (res != null)
+            {
+                result.Message = "Products Less Than " + price;
+                result.Data = res;
+            }
+            else
+            {
+                result.ISuccessed = false;
+                result.Message = "not found";
+            }
+            return result;
+        }
+
+        [HttpGet("PriceMoreThan/{price}")]
         public ResultViewModel PriceMoreThan(int price)
         {
+           var res = ProductRepo.Get().Where(p => p.Price >= price).Select(p => p.ToViewModel());
 
-            result.Message = "Products Less Than " + price;
-            result.Data = ProductRepo.Get().Where(p => p.Price >= price).Select(p => p.ToViewModel());
+            if (res != null)
+            {
+                result.Message = "Products Less Than " + price;
+                result.Data = res;
+            }
+            else
+            {
+                result.ISuccessed = false;
+                result.Message = "not found";
+            }
             return result;
-
         }
 
-        [HttpGet("{Rate}")]
+        [HttpGet("Rate/{Rate}")]
         public ResultViewModel Rate(int Rate)
         {
             if(Rate<=5&& Rate >= 0)
             {
                 result.Message = "Products Where Rate = " + Rate;
-                result.Data = ProductRepo.Get().Where(p => p.Rate == Rate).Select(p => p.ToViewModel());
+                result.Data = ProductRepo.Get().Where(p => p.Rate <= Rate).Select(p => p.ToViewModel());
 
             }
             else
             {
                 result.ISuccessed = false;
-                result.Data = "error Rate not valied ";
+                result.Message = "error not valied ";
 
             }
             return result;
-
         }
 
-        [HttpGet("{Category}")]
+        [HttpGet("Category/{Category}")]
         public ResultViewModel Category(int Category)
         {
-
-            result.Message = "Products By Category Name ";
-            result.Data = ProductRepo.Get().Where(p => p.CurrentCategoryID == Category).Select(p => p.ToViewModel());
+            var res = ProductRepo.Get().Where(p => p.CurrentCategoryID == Category).Select(p => p.ToViewModel());
+            if (res != null)
+            {
+                result.Message = "Products By Category Name ";
+                result.Data = res;
+            }
+            else
+            {
+                result.ISuccessed = false;
+                result.Message = "not found";
+            }
             return result;
-
         }
-        [HttpGet("{Seller}")]
+        [HttpGet("Category/{Category}/{search}")]
+        public ResultViewModel CategorySearch(int Category,string search)
+        {
+            var res = ProductRepo.Get().Where(p => p.CurrentCategoryID == Category).Select(p => p.ToViewModel()).Where(pro=>pro.Name.Contains(search));
+            if (res != null)
+            {
+                result.Message = "Products By Category Name ";
+                result.Data = res;
+            }
+            else
+            {
+                result.ISuccessed = false;
+                result.Message = "not found";
+            }
+            return result;
+        }
+
+        [HttpGet("Seller/{Seller}")]
         public ResultViewModel Seller(int Seller)
         {
+            var res = result.Data = Context.Products.Where(p => p.CurrentSupplierID == Seller).Select(p => new
+            {
+                p.ID,
+                p.Name,
+                p.Price,
+                p.ProductOffers,
+                p.category,
+                p.Description,
+                p.productFeedbacks,
+                p.Rate,
+                p.supplier,
+                p.Product_Images,
+                p.Quantity,
+                p.productOrders,
+            });
 
-            result.Message = "Products By Seller Name ";
-            result.Data = ProductRepo.Get().Where(p => p.CurrentSupplierID == Seller).Select(p => p.ToViewModel());
+            if (res != null)
+            {
+                result.Message = "Products By Seller Name ";
+                result.Data = res;
+            }
+            else
+            {
+                result.ISuccessed = false;
+                result.Message = "not found";
+            }
             return result;
-
         }
     }
 }

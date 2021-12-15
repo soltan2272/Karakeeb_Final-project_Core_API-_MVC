@@ -23,7 +23,7 @@
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
                                 <div id="myTabContent1" class="tab-content">
                                     <div class="product-tab-list tab-pane fade active in" id="single-tab1">
-                                        <img src=@Model.Product_Images alt="" />
+                                        <img src="@Model.Product_Images[0].Image_URL" alt="" />
                                     </div>
                                 </div>
                             </div>
@@ -102,9 +102,20 @@
                                     <p>
                                         @Model.Description
                                     </p>
+
+                                    <div class="product-tab-list tab-pane fade active in" id="single-tab1">
+                                        @foreach (var image in Model.Product_Images)
+                                        {
+                                            <img width="30%" src="@image.Image_URL" alt="" />
+                                        }
+                                    </div>
+                                    <br>
                                 </div>
 
-                                @Html.ActionLink("Delete", "DeleteProStore", new { id = Model.ID }, new { @class = "btn btn-danger text-uppercase mr-2 px-4" })
+                                <div style="float:right">
+                                    @Html.ActionLink("Delete", "DeleteProStore", new { ID = @Model.ID, saller = @Model.CurrentSupplierID }, new { @class = "btn btn-danger" })
+
+                                </div>
 
                             </div>
                         </div>

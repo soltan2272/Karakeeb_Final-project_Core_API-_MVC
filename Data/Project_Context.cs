@@ -41,9 +41,10 @@ namespace Data
        
         public DbSet<AdminProduct> AdminProducts { get; set; }
 
-      //  public DbSet<AdminStore> AdminStores { get; set; }
+        //  public DbSet<AdminStore> AdminStores { get; set; }
 
         public DbSet<Images> Images { get; set; }
+        public DbSet<ContactUs> ContactUs { get; set; }
 
 
 

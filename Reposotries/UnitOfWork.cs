@@ -26,12 +26,18 @@ namespace Reposotries
         IGenericRepostory<Payment> PaymentRepo;
         IGenericRepostory<Product> ProductRepo;
         IGenericRepostory<Store> StoreRepo;
+        IGenericRepostory<Images> ImagesRepo;
+        IGenericRepostory<ContactUs> ContactRepo;
+
         IGenericRepostory<Images> ImgRepo;
         public UnitOfWork(Project_Context context,
                             IGenericRepostory<Category> categoryRepo,// IGenericRepostory<Contact> contactRepo,
                             IGenericRepostory<Courier> courierRepo, IGenericRepostory<Feedback> feedbackRepo,
                             IGenericRepostory<Offer> offerRepo, IGenericRepostory<Order> orderRepo,
                             IGenericRepostory<Payment> paymentRepo, IGenericRepostory<Product> productRepo,
+                            IGenericRepostory<Store> storeRepo, IGenericRepostory<Images> imagesRepo,
+                            IGenericRepostory<ContactUs> contactRepo
+)
                             IGenericRepostory<Images> imgRepo)
         {
             Context = context;
@@ -43,6 +49,10 @@ namespace Reposotries
             OrderRepo = orderRepo;
             PaymentRepo = paymentRepo;
             ProductRepo = productRepo;
+            StoreRepo = storeRepo;
+            ImagesRepo = imagesRepo;
+            //UserRepo = userRepo;
+            ContactRepo = contactRepo;
            
             //UserRepo = userRepo;
             ImgRepo = imgRepo;
@@ -64,6 +74,9 @@ namespace Reposotries
             return FeedbackRepo;
 
         }
+
+        
+
         public IGenericRepostory<Offer> GetOfferRepo()
         {
             return OfferRepo;
@@ -84,6 +97,10 @@ namespace Reposotries
             return ProductRepo;
 
         }
+        public IGenericRepostory<Images> GetImagesRepo()
+        {
+            return ImagesRepo;
+        }
         public IGenericRepostory<Store> GetStoreRepo()
         {
             return StoreRepo;
@@ -99,6 +116,11 @@ namespace Reposotries
         public async Task Save()
         {
             await Context.SaveChangesAsync();
+        }
+
+        public IGenericRepostory<ContactUs> GetContactRepo()
+        {
+            return ContactRepo;
         }
     }
 }
