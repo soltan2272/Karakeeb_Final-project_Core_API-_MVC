@@ -21,8 +21,6 @@ using Models.Models;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 
-
-
 namespace AdminDashboard.Controllers
 {
 
@@ -95,7 +93,7 @@ namespace AdminDashboard.Controllers
 
         }
 
-        public IActionResult Users()
+        public IActionResult Users(int? p=1)
         {
             if (HttpContext.Request.Cookies["UserToken"] != "")
             {
@@ -116,7 +114,7 @@ namespace AdminDashboard.Controllers
 
                     users = JsonConvert.DeserializeObject<IList<User>>(jsonString);
                 }
-                return View(users);
+                return View(users.ToPagedList((p ?? 1), 7));
             }
             else
             {
@@ -127,7 +125,7 @@ namespace AdminDashboard.Controllers
 
         }
 
-        public IActionResult Suppliers()
+        public IActionResult Suppliers(int? p=1)
         {
             if (HttpContext.Request.Cookies["UserToken"] != "")
             {
@@ -146,7 +144,7 @@ namespace AdminDashboard.Controllers
                     Sellers = JsonConvert.DeserializeObject<IList<User>>(jsonString);
                 }
 
-                return View(Sellers);
+                return View(Sellers.ToPagedList((p ?? 1), 7));
             }
             else
             {
@@ -154,7 +152,7 @@ namespace AdminDashboard.Controllers
             }
 
         }
-        public IActionResult Admins()
+        public IActionResult Admins(int? p=1)
         {
             if (HttpContext.Request.Cookies["UserToken"] != "")
             {
@@ -175,7 +173,7 @@ namespace AdminDashboard.Controllers
 
                     Admins = JsonConvert.DeserializeObject<IList<User>>(jsonString);
                 }
-                return View(Admins);
+                return View(Admins.ToPagedList((p ?? 1), 7));
             }
             else
             {
@@ -233,7 +231,7 @@ namespace AdminDashboard.Controllers
             }
         }
 
-        public IActionResult Orders()
+        public IActionResult Orders(int ? p=1)
         {
             if (HttpContext.Request.Cookies["UserToken"] != "")
             {
@@ -253,7 +251,7 @@ namespace AdminDashboard.Controllers
                     Orders = JsonConvert.DeserializeObject<IList<Order>>(jsonString);
                 }
 
-                return View(Orders);
+                return View(Orders.ToPagedList((p ?? 1), 7));
             }
             else
             {
@@ -317,15 +315,15 @@ namespace AdminDashboard.Controllers
         }
 
         [HttpGet]
-        public IActionResult Products()
+        public IActionResult Products(int? p=1)
         {
             if (HttpContext.Request.Cookies["UserToken"] != "")
             {
                 IEnumerable<Product> products = null;
                 HttpClient http = new HttpClient();
                 http.BaseAddress = new Uri(Global.API);
-                //var productcontroller = http.GetAsync("product/AdminProducts/" + 1);
-                var productcontroller = http.GetAsync("Product/userProducts");
+                var productcontroller = http.GetAsync("product/AdminProducts/");
+                //var productcontroller = http.GetAsync("Product/AdminProducts");
                 productcontroller.Wait();
                 var resltproduct = productcontroller.Result;
                 if (resltproduct.IsSuccessStatusCode)
@@ -338,7 +336,7 @@ namespace AdminDashboard.Controllers
 
                     products = JsonConvert.DeserializeObject<IList<Product>>(jsonString);
                 }
-                return View(products);
+                return View(products.ToPagedList((p ?? 1), 7));
             }
 
             else
@@ -485,34 +483,10 @@ namespace AdminDashboard.Controllers
             return View();
         }
 
-            public IActionResult Profile()
+        public IActionResult AddAdmin()
         {
-            if (HttpContext.Request.Cookies["UserToken"] != "")
-            {
-                User user = null;
-                HttpClient http = new HttpClient();
-                http.BaseAddress = new Uri(Global.API);
-                var userID = HttpContext.Request.Cookies["UserID"];
-                var Usercontroller = http.GetAsync("User/getuser/" + userID);
-                Usercontroller.Wait();
-                var resltuser = Usercontroller.Result;
-                if (resltuser.IsSuccessStatusCode)
-                {
-                    var tabel = resltuser.Content.ReadAsAsync<ResultViewModel>();
-                    tabel.Wait();
-                    if (tabel.Result.ISuccessed == false)
-                        return View("NotFound");
-                    var data = tabel.Result.Data;
-                    string jsonString = JsonConvert.SerializeObject(data);
-                    user = JsonConvert.DeserializeObject<User>(jsonString);
-                }
-                return View(user);
+            return View();
 
-            }
-            else
-            {
-                return Redirect("/AdminDashboard/Login");
-            }
         }
         public IActionResult ChangePasswoed()
         {
@@ -534,52 +508,59 @@ namespace AdminDashboard.Controllers
             return Redirect("/AdminDashboard/Login");
         }
 
-        public IActionResult Stores()
+        public IActionResult Stores(int? p=1)
         {
             if (HttpContext.Request.Cookies["UserToken"] != "")
             {
-                IEnumerable<Store> Stores = null;
+                IEnumerable<User> Sellers = null;
                 HttpClient http = new HttpClient();
                 http.BaseAddress = new Uri(Global.API);
-                var storecontroller = http.GetAsync("product/stores");
-                storecontroller.Wait();
-                var resltstore = storecontroller.Result;
-                if (resltstore.IsSuccessStatusCode)
+                var sellerscontroller = http.GetAsync("Seller/getsellers");
+                sellerscontroller.Wait();
+                var resltuser = sellerscontroller.Result;
+                if (resltuser.IsSuccessStatusCode)
                 {
-                    var tabel = resltstore.Content.ReadAsAsync<ResultViewModel>();
+                    var tabel = resltuser.Content.ReadAsAsync<ResultViewModel>();
                     tabel.Wait();
-                    var serialiaze = tabel.Result.Data;
-                    string jsonString = JsonConvert.SerializeObject(serialiaze);
-
-
-
-                    Stores = JsonConvert.DeserializeObject<IList<Store>>(jsonString);
+                    var ser = tabel.Result.Data;
+                    string jsonString = JsonConvert.SerializeObject(ser);
+                    Sellers = JsonConvert.DeserializeObject<IList<User>>(jsonString);
                 }
 
-
-
-                return View(Stores);
+                return View(Sellers.ToPagedList((p ?? 1), 7));
             }
             else
             {
                 return Redirect("/AdminDashboard/Login");
+
+               
             }
         }
-
-
-
         [HttpGet]
-        public IActionResult DeletStore(int id)
+        public IActionResult StoreProduct(int id,int? p=1)
         {
             if (HttpContext.Request.Cookies["UserToken"] != "")
             {
+                IEnumerable<Product> products = null;
                 HttpClient http = new HttpClient();
                 http.BaseAddress = new Uri(Global.API);
-                var response = http.DeleteAsync("product/deleteStore/" + id);
-                response.Wait();
+                var productcontroller = http.GetAsync("search/Seller/" + id);
+                //var productcontroller = http.GetAsync("Product/AdminProducts");
+                productcontroller.Wait();
+                var resltproduct = productcontroller.Result;
+                if (resltproduct.IsSuccessStatusCode)
+                {
+                    var tabel = resltproduct.Content.ReadAsAsync<ResultViewModel>();
+                    tabel.Wait();
+                    var ser = tabel.Result.Data;
+                    string jsonString = JsonConvert.SerializeObject(ser);
 
-                return Redirect("/AdminDashboard/Stores");
+
+                    products = JsonConvert.DeserializeObject<IList<Product>>(jsonString);
+                }
+                return View(products.ToPagedList((p ?? 1), 7));
             }
+
             else
             {
                 return Redirect("/AdminDashboard/Login");
@@ -587,10 +568,10 @@ namespace AdminDashboard.Controllers
         }
 
 
-
+       
 
         [HttpGet]
-        public IActionResult StoreDetiles(int id)
+        public IActionResult StoreDetiles(int id )
         {
             if (HttpContext.Request.Cookies["UserToken"] != "")
             {
@@ -636,7 +617,7 @@ namespace AdminDashboard.Controllers
                 var response = http.DeleteAsync("product/Delete/" + id);
                 response.Wait();
 
-                return Redirect("/AdminDashboard/StoreDetiles");
+                return Redirect("/AdminDashboard/Stores");
             }
             else
             {
@@ -655,11 +636,27 @@ namespace AdminDashboard.Controllers
                 return Redirect("/AdminDashboard/Login");
             }
         }
-        public IActionResult ContactUs()
+        public IActionResult ContactUs(int? p=1)
         {
             if (HttpContext.Request.Cookies["UserToken"] != "")
             {
-                return View();
+                IEnumerable<ContactUs> ContactUs = null;
+                HttpClient http = new HttpClient();
+                http.BaseAddress = new Uri(Global.API);
+                var Usercontroller = http.GetAsync("User/getContactUs");
+                Usercontroller.Wait();
+                var resltproduct = Usercontroller.Result;
+                if (resltproduct.IsSuccessStatusCode)
+                {
+                    var tabel = resltproduct.Content.ReadAsAsync<ResultViewModel>();
+                    tabel.Wait();
+                    var ser = tabel.Result.Data;
+                    string jsonString = JsonConvert.SerializeObject(ser);
+
+
+                    ContactUs = JsonConvert.DeserializeObject<IList<ContactUs>>(jsonString);
+                }
+                    return View(ContactUs.ToPagedList((p ?? 1), 7));
             }
             else
             {

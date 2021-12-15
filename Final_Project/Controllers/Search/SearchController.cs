@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Data;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Reposotries;
@@ -17,12 +18,14 @@ namespace Final_Project.Controllers
     {
         IGenericRepostory<Product> ProductRepo;
         IUnitOfWork UnitOfWork;
+        Project_Context Context;
 
         ResultViewModel result = new ResultViewModel();
-        public SearchController(IUnitOfWork unitOfWork)
+        public SearchController(IUnitOfWork unitOfWork, Project_Context context)
         {
             UnitOfWork = unitOfWork;
             ProductRepo = UnitOfWork.GetProductRepo();
+            Context = context;
         }
 
         [HttpGet("Name/{Name}")]
@@ -148,7 +151,22 @@ namespace Final_Project.Controllers
         [HttpGet("Seller/{Seller}")]
         public ResultViewModel Seller(int Seller)
         {
-            var res= ProductRepo.Get().Where(p => p.CurrentSupplierID == Seller).Select(p => p.ToViewModel());
+            var res = result.Data = Context.Products.Where(p => p.CurrentSupplierID == Seller).Select(p => new
+            {
+                p.ID,
+                p.Name,
+                p.Price,
+                p.ProductOffers,
+                p.category,
+                p.Description,
+                p.productFeedbacks,
+                p.Rate,
+                p.supplier,
+                p.Product_Images,
+                p.Quantity,
+                p.productOrders,
+            });
+
             if (res != null)
             {
                 result.Message = "Products By Seller Name ";

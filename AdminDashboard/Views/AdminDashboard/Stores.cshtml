@@ -1,10 +1,12 @@
-﻿ @*@using Models;
-@model IList<Store>;
+﻿ @using Models;
+@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<User>;
 
 @{
     ViewData["Title"] = "Stores";
-}*@
- <!--
+}
+ 
 <style>
     .checked {
         color: orange;
@@ -19,56 +21,54 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="product-status-wrap">
                         <h4>Store List</h4>
-                        @*<div class="add-product">
-                                @Html.ActionLink("Add Product", "AddProduct")
 
-                                <a href="product-edit.html"></a>
-                            </div>*@
                         <table>
                             <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Address</th>
+                                <th scope="col">Store Name</th>
                                 <th scope="col">Phone</th>
+                                <th scope="col">Email</th>
                                 <th scope="col">Display</th>
-                                <th scope="col">Delete</th>
                             </tr>
 
-                       @*     @foreach (Store store in Model)
+                            @foreach (User saller in Model)
                             {
                                 <tr>
-                                    <td>@store.Name</td>
-                                    <td>@store.Address</td>
-                                    <td>@store.Phone</td>
-                                    
+                                    <td>@saller.Full_Name Store</td>
+                                    <td>0@saller.Phone</td>
+                                    <td>@saller.Email</td>
+
+
                                     <td>
-                                        @Html.ActionLink("Display", "StoreProduct", new { StoreProduct = store.StoresProducts }, new { @class = "btn btn-primary" })
+                                        @Html.ActionLink("Display", "StoreProduct", new { @saller.Id }, new { @class = "btn btn-primary" })
 
                                     </td>
-                                 
-                                    <td>
-                                        @Html.ActionLink("Delete", "DeletStore", new { ID = @store.ID }, new { @class = "btn btn-danger" })
 
-                                    </td>
+
                                 </tr>
                             }
-*@
+
 
 
                         </table>
-                        <div class="custom-pagination">
-                            <ul class="pagination">
-                                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                            </ul>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="custom-pagination">
 
+        <ul class="pagination">
+
+            @for (int i = 1; i <= Model.PageCount; i++)
+            {
+                <li class="@(i == Model.PageNumber ? "page-item active" : "page-item")">
+                    <a class="page-link" href="@Url.Action("Stores", new { p = i })">@i</a>
+                </li>
+
+            }
+
+        </ul>
+    </div>
 </div>
-     -->
+     

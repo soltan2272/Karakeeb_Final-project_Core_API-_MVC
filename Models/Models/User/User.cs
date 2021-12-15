@@ -20,13 +20,9 @@ namespace Models
         public string Date_Of_Birth { set; get; }
         public ICollection<Order> Orders { get; set; }
         public ICollection<Feedback> Feedbacks { get; set; }
-      
-
         public IList<AdminProduct> AdminProducts { get; set; }
        // public IList<AdminStore> AdminStores { get; set; }
-
        // public IList<SupplierStore> SupllierStores { get; set; }
-
         public ICollection<Product> Products { get; set; }
 
       

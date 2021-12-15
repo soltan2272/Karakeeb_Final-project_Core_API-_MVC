@@ -1,9 +1,6 @@
 ﻿@using Models;
-
-
-
 @*@model IPagedList<Product>;*@
-@model List<Product>
+@model IPagedList<Product>
 @using PagedList.Mvc;
 @using PagedList;
 @*@Html.PagedListPager(Model, page => Url.Action("index", new { page }));*@
@@ -29,11 +26,13 @@
                             <tr>
                                 <th>Image</th>
                                 <th>Product Name</th>
+                                <th>Category</th>
+                                <th>Saller</th>
                                 <th>Price</th>
                                 <th>Quantity</th>
                                 <th>Rate</th>
                                 <th>Display</th>
-                                <th>Edit</th>
+                                @*<th>Edit</th>*@
                                 <th>Delete</th>
                             </tr>
 
@@ -41,11 +40,13 @@
                             {
                         <tr>
                             <td>
-                                <img src="@product.Product_Images.FirstOrDefault()" />
-                            
+                                <img src="@product.Product_Images[0].Image_URL.ToString()" />
+
                             </td>
 
                             <td>@product.Name</td>
+                            <td>@product.category.Name</td>
+                            <td>@product.supplier.Full_Name</td>
                             <td>@product.Price LE</td>
                             <td>@product.Quantity </td>
                             <td>
@@ -102,17 +103,14 @@
                             <td>
                                 @Html.ActionLink("Display", "Detiles", new { ID = @product.ID }, new { @class = "btn btn-primary" })
 
-<<<<<<< HEAD
                             </td>
-                            <td>
-                                @Html.ActionLink("Update", "Update", @product, new { @class = "btn btn-success" })
-=======
-                                    </td>
-                                    <td>
-                                        @Html.ActionLink("Update", "editProduct", new { ID = @product.ID , @product} , new { @class = "btn btn-success" })
->>>>>>> 3e47709c2b5165a4066edf75b11897983cde968c
+                            @*<td>
+        @Html.ActionLink("Update", "Update", @product, new { @class = "btn btn-success" })
+            </td>*@
+                            @*<td>
+                                @Html.ActionLink("Update", "editProduct", new { ID = @product.ID, @product }, new { @class = "btn btn-success" })
 
-                            </td>
+                            </td>*@
                             <td>
                                 @Html.ActionLink("Delete", "Delete", new { ID = @product.ID }, new { @class = "btn btn-danger" })
 
@@ -128,11 +126,15 @@
                         <div class="custom-pagination">
 
                             <ul class="pagination">
-                                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+
+                                @for (int i = 1; i <= Model.PageCount; i++)
+                                {
+                                    <li class="@(i == Model.PageNumber ? "page-item active" : "page-item")">
+                                        <a class="page-link" href="@Url.Action("products", new { p = i })">@i</a>
+                                    </li>
+
+                                }
+                                
                             </ul>
                         </div>
                     </div>
@@ -149,87 +151,3 @@
     }
 </style>
 
-@*@section Products
-    {
-        active
-    }*@
-@*<script>
-        function Display(id) {
-            $.get("https://localhost:44354/api/product/" + id, function (data, status) {
-                var Data = data.data;
-                console.log(Data);
-            })
-        }
-        function Update(id) {
-            $.get("https://localhost:44354/api/product/" + id, function (data, status) {
-                var Data = data.data;
-                console.log(Data);
-            })
-        }
-        function Delete(id) {
-            //$.post("https://localhost:44354/product/delete" + id, function (data, status) {
-            //    var Data = data.data;
-            //    console.log(Data);
-            //})
-        }
-        fetch("https://localhost:44354/api/product").then((res) => {
-            return res.data.json();
-        }).then((resjson) => {
-
-            let tbody = document.getElementById("products");
-
-            resjson.forEach(dt => {
-                let tr = document.createElement("tr");
-                tr.innerHTML = "<td>" + dt.id + "</td>" +
-                    "<td>" + dt.name + "</td>" +
-                    "<td>" + dt.price + "</td>" +
-                    "<td>" + dt.rate + "</td>" +
-                    "<td><img width='30vw' height='30vw' src='" + dt.image + "' /></td>" +
-                    "<td><button class='btn btn-dark'onclick='Display(" + dt.id + ")'>Display </button> </td>" +
-                    "<td><button class='btn btn-primary'onclick='Update(" + dt.id + ")'>Update </button> </td>" +
-                    "<td><button class='btn btn-danger'onclick='Delete(" + dt.id + ")'>Delete </button> </td>";
-                tbody.append(tr);
-
-            });
-            $(document).ready(function () {
-                $("#btn").click(function () {
-                    $.get("https://localhost:44354/api/product", function (data, status) {
-                        var Data = data.data;
-
-                        Data.forEach(function (dt) {
-                            $("#products").append("<tr>" +
-                                "<td>" + dt.id + "</td>" +
-                                "<td>" + dt.name + "</td>" +
-                                "<td>" + dt.price + "</td>" +
-                                "<td>" + dt.rate + "</td>" +
-                                "<td><img width='30vw' height='30vw' src='" + dt.image + "' /></td>" +
-                                "<td><button class='btn btn-dark'onclick='Display(" + dt.id + ")'>Display </button> </td>" +
-                                "<td><button class='btn btn-primary'onclick='Update(" + dt.id + ")'>Update </button> </td>" +
-                                "<td><button class='btn btn-danger'onclick='Delete(" + dt.id + ")'>Delete </button> </td>" +
-
-
-
-
-
-
-                                + "</tr>")
-                        })
-                    })
-                })
-            })
-        //function viewProduct() {
-        //    $.ajax({
-        //        url: "https://localhost:44354/product",
-        //        method: "Get",
-        //        success: function (data) {
-        //            console.log(data);
-        //            $(".id").append("<tr><td>" + data + "<td/> </tr>");
-
-        //        },
-        //        error: function (error) {
-        //            console.error(error);
-
-        //        },
-        //    })
-        //}
-    </script>*@

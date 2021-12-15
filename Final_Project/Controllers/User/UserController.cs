@@ -15,7 +15,6 @@ using ViewModels;
 using ViewModels.User;
 using ViewModels.Userr;
 
-
 namespace Final_Project.Controllers
 {
     [Route("api/[controller]")]
@@ -31,15 +30,19 @@ namespace Final_Project.Controllers
         Project_Context Context;
 
         IUnitOfWork UnitOfWork;
+        IGenericRepostory<ContactUs> ContactRepo;
+
         ResultViewModel result = new ResultViewModel();
         
         public UserController(IUserRepository userRepository,
-            IUnitOfWork unitOfWork, Project_Context context)
+            IUnitOfWork unitOfWork, Project_Context context, IGenericRepostory<ContactUs> contactRepo)
         {
             UnitOfWork = unitOfWork;
             UserRepository = userRepository;
             OrderRepo = UnitOfWork.GetOrderRepo();
             FeedbackRepo = UnitOfWork.GetFeedbackRepo();
+            ContactRepo = UnitOfWork.GetContactRepo();
+
             Context = context;
             
         }
@@ -146,7 +149,38 @@ namespace Final_Project.Controllers
 
             return result;
 
-        }   
+        }
+        [HttpPost("addContactUs")]
+        public ResultViewModel AddContactUs(ContactUs contactUs)
+        {
+            result.Message = "Add  ContactUs";
+
+            ContactRepo.Add(contactUs);
+            UnitOfWork.Save();
+            result.Data = contactUs;
+
+            return result;
+
+        }
+        [HttpDelete("deleteContactUs")]
+        public ResultViewModel DeleteContactUs(int id)
+        {
+            result.Message = " ContactUs Deleted";
+            result.Data = ContactRepo.GetByID(id);
+            ContactRepo.Remove(ContactRepo.GetByID(id));
+            UnitOfWork.Save();
+
+            return result;
+
+        }
+        [HttpGet("getContactUs")]
+        public ResultViewModel GetContactUs()
+        {
+            result.Message = " get ContactUs";
+            result.Data = ContactRepo.Get();
+            UnitOfWork.Save();
+            return result;
+        }
 
     }
 }

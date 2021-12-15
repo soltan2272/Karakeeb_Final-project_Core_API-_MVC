@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Data;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using Reposotries;
 using System;
 using System.Collections.Generic;
@@ -17,10 +19,13 @@ namespace Final_Project.Controllers
     public class SellerController : ControllerBase
     {
         IUserRepository UserRepository;
+        Project_Context Context;
+
         ResultViewModel result = new ResultViewModel();
-        public SellerController(IUserRepository userRepository, IUnitOfWork unitOfWork)
+        public SellerController(Project_Context context,IUserRepository userRepository, IUnitOfWork unitOfWork)
         {
             UserRepository = userRepository;
+            Context = context;
 
         }
 
@@ -75,7 +80,6 @@ namespace Final_Project.Controllers
         [HttpGet("getsellers")]
         public async Task<dynamic> GetAllUsers()
         {
-
             var res = await UserRepository.GetSellersAsync();
             result.Data = res;
             result.Message = "Succedd";

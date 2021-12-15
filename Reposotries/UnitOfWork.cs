@@ -27,12 +27,16 @@ namespace Reposotries
         IGenericRepostory<Product> ProductRepo;
         IGenericRepostory<Store> StoreRepo;
         IGenericRepostory<Images> ImagesRepo;
+        IGenericRepostory<ContactUs> ContactRepo;
+
         public UnitOfWork(Project_Context context,
                             IGenericRepostory<Category> categoryRepo,// IGenericRepostory<Contact> contactRepo,
                             IGenericRepostory<Courier> courierRepo, IGenericRepostory<Feedback> feedbackRepo,
                             IGenericRepostory<Offer> offerRepo, IGenericRepostory<Order> orderRepo,
                             IGenericRepostory<Payment> paymentRepo, IGenericRepostory<Product> productRepo,
-                            IGenericRepostory<Store> storeRepo, IGenericRepostory<Images> imagesRepo)
+                            IGenericRepostory<Store> storeRepo, IGenericRepostory<Images> imagesRepo,
+                            IGenericRepostory<ContactUs> contactRepo
+)
         {
             Context = context;
             CategoryRepo = categoryRepo;
@@ -46,6 +50,7 @@ namespace Reposotries
             StoreRepo = storeRepo;
             ImagesRepo = imagesRepo;
             //UserRepo = userRepo;
+            ContactRepo = contactRepo;
         }
 
         public IGenericRepostory<Category> GetCategoryRepo()
@@ -100,6 +105,11 @@ namespace Reposotries
         public async Task Save()
         {
             await Context.SaveChangesAsync();
+        }
+
+        public IGenericRepostory<ContactUs> GetContactRepo()
+        {
+            return ContactRepo;
         }
     }
 }
